@@ -14,6 +14,7 @@ const Home: NextPage = () => {
         <h1>
           Welcome to wcedmisten.fyi
         </h1>
+        <p>Check back soon for more content!</p>
       </main>
     </div >
   )
