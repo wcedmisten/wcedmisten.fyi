@@ -21,5 +21,6 @@ jobs:
         uses: shimataro/ssh-key-action@v2.3.1
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
       - run: ssh-keyscan -H ${{ secrets.DEPLOY_IP }} >> ~/.ssh/known_hosts
       - run: ssh root@${{ secrets.DEPLOY_IP }} ls
