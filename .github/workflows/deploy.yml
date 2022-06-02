@@ -23,4 +23,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: unnecessary
       - run: ssh-keyscan -H ${{ secrets.DEPLOY_IP }} >> ~/.ssh/known_hosts
-      - run: rsync -avz ./out/ {{ secrets.SSH_USER }}@${{ secrets.DEPLOY_IP }}:/www/data
+      - run: rsync -avz ./out/ ${{ secrets.SSH_USER }}@${{ secrets.DEPLOY_IP }}:/www/data
