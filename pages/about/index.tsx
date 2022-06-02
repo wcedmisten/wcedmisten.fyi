@@ -14,6 +14,10 @@ function AboutPage() {
                         will give me more accountability to complete them. I also
                         hope to document my progress in a way that might be helpful
                         for others.</p>
+
+                    <p>
+                        My hobbies include programming, gardening, cooking, and hiking.
+                    </p>
                 </Col>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
                     <Image
