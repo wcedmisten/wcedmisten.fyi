@@ -21,7 +21,7 @@ function AboutPage() {
                 </Col>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
                     <Image
-                        src="william.jpg"
+                        src="/william.jpg"
                         rounded={true}
                         fluid={true}
                         alt="William pointing at a lime tree at Lewis Ginter Botanical Gardens" />
