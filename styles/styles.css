@@ -7,9 +7,10 @@ body {
 }
 
 .navbar-brand {
-    font-family: 'Rubik'
+    font-family: 'Rubik';
+    font-size: 1.75rem;
 }
 
 .navbar {
-    font-family: 'Rubik'
+    font-family: 'Rubik';
 }
