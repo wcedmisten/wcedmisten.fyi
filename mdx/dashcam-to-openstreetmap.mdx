@@ -1,0 +1,214 @@
+# Integrating Dashcam Data with Openstreetmap
+
+
+## Background
+
+In my car, I use a Viofo A119 dashcam to record what's in front of me while I drive.
+Recently, I've been exploring how to use this video data to help augment OpenStreetMap.
+
+The dashcam records videos at 60 fps at 1440p resolution. The images it records look like:
+
+<img src="/dashcam-to-openstreetmap/dashcam.jpg" width="100%"/>
+
+This resolution is sufficient to capture the detail on street signs and buildings, but it
+would require manually reviewing the videos to capture the semantics of this information.
+I want something more automated.
+
+## Goal
+
+I want to use video files from my dashcam to automatically detect missing openstreetmap features.
+These might be things like speed limits, businesses, road names, addresses and any other textual
+information that's available from the street.
+
+## Current capabilities
+
+Using a remix of Python and Bash scripts I found hosted on other blogs, I was able to extract the GPS
+information embedded in the video data.
+
+I can parse a dashcam video into a GPX file, which tracks my car's location at different points
+in time. GPX is an XML based format which contains coordinates and timestamps.
+
+```
+<trk><name>dashcam/dashcam.gpx</name>
+    <trkseg>
+	<trkpt lat="36.687606" lon="-80.885767">
+            <time>2022-05-31T18:10:27Z</time>
+            <speed>0.000000</speed>
+            <course>227.550003</course>
+        </trkpt>
+		<trkpt lat="36.687606" lon="-80.885767">
+            <time>2022-05-31T18:10:28Z</time>
+            <speed>0.000000</speed>
+            <course>227.550003</course>
+        </trkpt>
+		<trkpt lat="36.687606" lon="-80.885767">
+            <time>2022-05-31T18:10:29Z</time>
+            <speed>0.000000</speed>
+            <course>227.550003</course>
+        </trkpt>
+...
+
+    </trkseg>
+</trk>
+```
+
+When visualized with a tool such as `gpxviewer`, the GPX track can be overlayed
+on openstreetmap data. For example:
+
+<img src="/dashcam-to-openstreetmap/gpx-viewer.png" width="100%"/>
+
+## Optical Character Recognition
+
+The process of extracting textual information from an image is called optical character recognition
+(OCR). To extract semantic information from these dashcam videos, I'll try running some OCR tools
+on the images that are extracted.
+
+### Tesseract
+
+One such OCR tool is Tesseract, which is maintained by Google. This was my first attempt to harvest
+the text from my dashcam images. However, this tool is mostly trained on black and white text documents,
+rather than text in a real world "scene".
+
+After installing tesseract, I attempted to run it on this image:
+
+<img src="/dashcam-to-openstreetmap/dashcam-tesseract.jpg" width="100%"/>
+
+There are several large signs visible that I hoped would be discovered by tesseract:
+
+* 1022
+* Family Dental Care
+* U.S. Cellular
+* smaller text that I was less hopeful for 
+
+I ran tesseract with the basic settings on this image:
+
+```
+tesseract ~/piofo/20220531181027_004969/20220531181027_004969_078.jpg dashcam
+```
+
+but unfortunately, the only extracted text was:
+
+```
+cat dashcam.txt
+
+60 KM/H N36.683732 W80. 891121 VIOFO A119 V3 31/05/2022 18:11:44
+```
+
+This was the text burned into the video by the dashcam itself. No dice.
+
+### keras-ocr
+
+After googling around for other OCR tools that might be better trained for real-world text, I landed
+on keras-ocr. This python project provides OCR for text in real-world scenes, which fits my use-case 
+much better.
+
+This project uses a Convolutional Neural Network (CNN) in two stages to detect and classify text. As a 
+CNN, it runs better on a GPU to accelerate the floating point math used for this detection.
+
+Luckily, I have a 1080 TI which has 12GB of VRAM, which allowed me to run this locally much faster than
+if it was running on a CPU.
+
+After some wrestling with nvidia drivers to get CUDA installed, I was able to run their getting started
+example on my dashcam images.
+
+I also modified my script to crop out the burned in text at the bottom of the image.
+
+<img src="/dashcam-to-openstreetmap/dashcam-keras.png" width="100%"/>
+
+Somewhat better results, but still a lot of false positives and partial matches.
+
+The model successfully detected:
+
+* dental
+* care
+* uscellular (almost)
+* a lot of gibberish
+
+Running it on another image, I get slightly better results. The model captured "speed", "limit", "35".
+
+Cool! I can use this data.
+
+<img src="/dashcam-to-openstreetmap/dashcam-keras2.png" width="100%"/>
+
+Since Neural Network models work best when trained on real-world conditions, I could probably improve these
+results by training on images from my exact dashcam. However, that would require a lot of manual data entry
+to collect that data initially, which I want to avoid.
+
+## Processing a Whole Video
+
+To process an entire video, I modified the script slightly, to read all the JPG files from the directory.
+
+```python
+import json
+import glob
+
+import keras_ocr
+
+pipeline = keras_ocr.pipeline.Pipeline(scale=1)
+
+images = glob.glob("/home/wedmisten/piofo/20220531181027_004969/*.jpg")
+
+print(len(images))
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+data = {}
+
+for group in chunks(images, 6):
+    # Get a set of three example images
+    images = [
+        keras_ocr.tools.read(url) for url in group
+    ]
+
+    # Each list of predictions in prediction_groups is a list of
+    # (word, box) tuples.
+    prediction_groups = pipeline.recognize(images)
+
+    for filename, prediction in zip(group, prediction_groups):
+        data[filename] = list(map(lambda pred: pred[0], prediction))
+
+with open('data.json', 'w') as f:
+    json.dump(data, f, sort_keys=True, indent=4)
+```
+
+Running this file parses all the words found in each image into a dictionary where
+the filename is the key and a list of words is the value. This is dumped to JSON.
+
+```bash
+time python3 src/ocr.py
+
+real	1m46.679s
+user	1m51.528s
+sys	0m8.141s
+```
+
+This took about 107 seconds to process 179 images (sampled once per second from a 3 minute video).
+This averages out to about .6 seconds per frame. Not the fastest, but not terrible.
+
+An excerpt from the data for this image:
+
+<img src="/dashcam-to-openstreetmap/dashcam-131.jpg" width="100%"/>
+
+```json
+"/home/wedmisten/piofo/20220531181027_004969/20220531181027_004969_131.jpg": [
+        "boagles",
+        "usda",
+        "service",
+        "center",
+        "cnlun",
+        "department",
+        "us",
+        "agriculture",
+        "of",
+        "somnog",
+        "kin",
+        "bun",
+        "caenlodsins"
+],
+```
+
+This data is mostly from the sign on the right, but also an attempt at parsing "Bojangles" in its
+unique font.
