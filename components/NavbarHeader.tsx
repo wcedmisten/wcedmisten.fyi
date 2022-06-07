@@ -11,9 +11,9 @@ export default function NavbarHeader() {
                         <img
                             alt=""
                             src="/logo.png"
-                            width="50"
-                            height="50"
-                        // className="d-inline-block align-top"
+                            width="50px"
+                            height="50px"
+                            className="navbar-image"
                         />
                         {' '}
                         William Edmisten

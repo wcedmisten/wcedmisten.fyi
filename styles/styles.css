@@ -12,9 +12,14 @@ img {
     margin: 0 auto;
 }
 
+.navbar-image {
+    padding: 0px 0px 0px 0px;
+}
+
 .navbar-brand {
     font-family: 'Rubik';
     font-size: 1.75rem;
+    padding: 0px 0px 0px 0px;
 }
 
 .navbar {
