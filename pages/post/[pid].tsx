@@ -1,7 +1,10 @@
 import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote } from 'next-mdx-remote'
+import rehypeHighlight from 'rehype-highlight'
 import path from 'path';
 import { promises as fs } from 'fs';
+
+import "highlight.js/styles/atom-one-dark.css";
 
 import { useRouter } from 'next/router'
 
@@ -62,7 +65,12 @@ export async function getStaticProps() {
 
         return {
             filename,
-            mdx: await serialize(fileContents),
+            mdx: await serialize(fileContents,
+                                {
+                                    mdxOptions: {
+                                        rehypePlugins: [rehypeHighlight],
+                                      },
+                                }),
         }
     })
     // By returning { props: { posts } }, the Blog component
