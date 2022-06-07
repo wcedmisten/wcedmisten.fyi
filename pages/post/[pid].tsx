@@ -15,8 +15,6 @@ export default function TestPage(props: { sources: any }) {
 
     const source = props.sources.find((x: any) => x.filename == pid)
 
-    console.log(pid as string)
-    console.log(source.mdx)
     return (
         <>
             <div className="wrapper">
@@ -31,13 +29,7 @@ export async function getStaticPaths() {
     const filenames = await fs.readdir(postsDirectory)
 
     const posts = filenames.map(async (filename) => {
-        const filePath = path.join(postsDirectory, filename)
-        const fileContents = await fs.readFile(filePath, 'utf8')
-
-        // Generally you would parse/transform the contents
-        // For example you can transform markdown to HTML here
-
-        return filename
+        return path.parse(filename).name
     })
 
     const x = await Promise.all(posts)
@@ -64,7 +56,7 @@ export async function getStaticProps() {
         // For example you can transform markdown to HTML here
 
         return {
-            filename,
+            filename: path.parse(filename).name,
             mdx: await serialize(fileContents,
                                 {
                                     mdxOptions: {
