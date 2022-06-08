@@ -1,6 +1,8 @@
 import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote } from 'next-mdx-remote'
 import rehypeHighlight from 'rehype-highlight'
+import rehypeSlug from 'rehype-slug';
+
 import path from 'path';
 import { promises as fs } from 'fs';
 
@@ -60,7 +62,7 @@ export async function getStaticProps() {
             mdx: await serialize(fileContents,
                                 {
                                     mdxOptions: {
-                                        rehypePlugins: [rehypeHighlight],
+                                        rehypePlugins: [rehypeHighlight, rehypeSlug],
                                       },
                                 }),
         }
