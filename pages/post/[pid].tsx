@@ -3,6 +3,9 @@ import { MDXRemote } from 'next-mdx-remote'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug';
 
+import {BsCalendar4, BsClockFill} from 'react-icons/bs'
+import readingTime from 'reading-time';
+
 import path from 'path';
 import { promises as fs } from 'fs';
 
@@ -20,6 +23,7 @@ export default function TestPage(props: { sources: any }) {
     return (
         <>
             <div className="wrapper">
+                <p><BsClockFill/> {source.readingStats.text} <BsCalendar4/> June 8, 2022</p>
                 <MDXRemote {...source.mdx} />
             </div>
         </>
@@ -42,7 +46,6 @@ export async function getStaticPaths() {
     };
 }
 
-
 // This function gets called at build time on server-side.
 // It won't be called on client-side, so you can even do
 // direct database queries.
@@ -57,14 +60,19 @@ export async function getStaticProps() {
         // Generally you would parse/transform the contents
         // For example you can transform markdown to HTML here
 
+        const stats = readingTime(fileContents);
+
         return {
             filename: path.parse(filename).name,
+
             mdx: await serialize(fileContents,
                                 {
                                     mdxOptions: {
                                         rehypePlugins: [rehypeHighlight, rehypeSlug],
                                       },
                                 }),
+
+            readingStats: stats
         }
     })
     // By returning { props: { posts } }, the Blog component

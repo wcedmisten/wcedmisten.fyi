@@ -12,6 +12,10 @@ img {
     margin: 0 auto;
 }
 
+h1 {
+    padding-bottom: 30px
+}
+
 h2 {
     padding-top: 30px
 }
@@ -33,4 +37,17 @@ h3 {
 
 .navbar {
     font-family: 'Rubik';
+}
+
+.post-thumbnail {
+    padding: 0px 0px 0px 0px;
+}
+
+.footer {
+    padding-top: 50px;
+    max-width: none;
+}
+
+.footer-source-link {
+    color:inherit;
 }

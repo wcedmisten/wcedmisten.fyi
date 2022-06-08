@@ -19,6 +19,8 @@ export default function NavbarHeader() {
                         William Edmisten
                     </Navbar.Brand>
                 </Link>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav activeKey="/">
                     <Link href="/" passHref>
                         <Nav.Link>Home</Nav.Link>
@@ -27,6 +29,7 @@ export default function NavbarHeader() {
                         <Nav.Link>About</Nav.Link>
                     </Link>
                 </Nav>
+                </Navbar.Collapse>
             </Container>
         </Navbar>)
 }
