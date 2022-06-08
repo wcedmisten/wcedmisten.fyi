@@ -20,7 +20,7 @@ export default function NavbarHeader() {
                     </Navbar.Brand>
                 </Link>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav">
+                <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
                 <Nav activeKey="/">
                     <Link href="/" passHref>
                         <Nav.Link>Home</Nav.Link>
