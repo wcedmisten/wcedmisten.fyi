@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 // import { Navbar } from "react-bootstrap/navbar";
 
 export default function NavbarHeader() {
+    const [expanded, setExpanded] = useState(false);
+
+
     return (
-        <Navbar expand="lg" className="py-5">
+        <Navbar expand="lg" expanded={expanded} className="py-5">
             <Container>
                 <Link href="/" passHref>
                     <Navbar.Brand>
@@ -19,16 +23,18 @@ export default function NavbarHeader() {
                         William Edmisten
                     </Navbar.Brand>
                 </Link>
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Toggle
+                    onClick={() => setExpanded(true)}
+                    aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
-                <Nav activeKey="/">
-                    <Link href="/" passHref>
-                        <Nav.Link>Home</Nav.Link>
-                    </Link>
-                    <Link href="/about" passHref>
-                        <Nav.Link>About</Nav.Link>
-                    </Link>
-                </Nav>
+                    <Nav activeKey="/" onSelect={() => setExpanded(false)}>
+                        <Link href="/" passHref>
+                            <Nav.Link>Home</Nav.Link>
+                        </Link>
+                        <Link href="/about" passHref>
+                            <Nav.Link>About</Nav.Link>
+                        </Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>)
