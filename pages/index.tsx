@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
+
 import { ListGroup } from 'react-bootstrap'
 import PostItem from '../components/PostItem'
 
@@ -12,7 +11,7 @@ const Home: NextPage = () => {
         <ListGroup variant="flush">
           <PostItem
             href="/post/dashcam-to-openstreetmap"
-            thumbnailURL="/dashcam-to-openstreetmap/thumbnail.png"
+            thumbnailURL="/thumbnails/dashcam-to-openstreetmap.png"
             thumbnailAlt="Dashcam screenshots visualized over openstreetmap"
             title="Integrating Dashcam Data with Openstreetmap"
             description='Searching for OpenStreetMap features with dashcam imagery enhanced with OCR.'
