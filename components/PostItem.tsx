@@ -13,12 +13,17 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                     <Col xs={12} md={4} >
                         <Container fluid className="justify-content-md-center">
                             <Row>
-                                <Image
-                                    src={thumbnailURL}
-                                    fluid
-                                    rounded
-                                    alt={thumbnailAlt}
-                                    className="post-thumbnail"></Image>
+                                <Link href={href}>
+                                    <a>
+                                        <Image
+                                            src={thumbnailURL}
+                                            fluid
+                                            width={200}
+                                            rounded
+                                            alt={thumbnailAlt}
+                                            className="post-thumbnail"></Image>
+                                    </a>
+                                </Link>
                             </Row>
                         </Container>
                     </Col>
