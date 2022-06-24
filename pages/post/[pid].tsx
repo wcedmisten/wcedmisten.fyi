@@ -20,10 +20,13 @@ export default function TestPage(props: { sources: any }) {
 
     const source = props.sources.find((x: any) => x.filename == pid)
 
+    const metadata = source.mdx.frontmatter
+
     return (
         <>
             <div className="wrapper">
-                <p><BsClockFill/> {source.readingStats.text} <BsCalendar4/> June 8, 2022</p>
+                <h1>{metadata.title}</h1>
+                <p><BsClockFill/> {source.readingStats.text} <BsCalendar4/> {metadata.date} </p>
                 <MDXRemote {...source.mdx} />
             </div>
         </>
@@ -70,6 +73,7 @@ export async function getStaticProps() {
                                     mdxOptions: {
                                         rehypePlugins: [rehypeHighlight, rehypeSlug],
                                       },
+                                    parseFrontmatter: true,
                                 }),
 
             readingStats: stats
