@@ -8,13 +8,14 @@ export default function Footer() {
                 <Row>
                     <Col>
                         <a className="footer-source-link"
-                         href="https://github.com/wcedmisten/wcedmisten.fyi"><BsGithub/></a>
+                            aria-label="Github Source"
+                            href="https://github.com/wcedmisten/wcedmisten.fyi"><BsGithub /></a>
                     </Col>
                     <Col xs={10}>
                         <p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a></p>
                     </Col>
                 </Row>
-            </Container> 
+            </Container>
         </div>
     )
 }

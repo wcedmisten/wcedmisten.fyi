@@ -41,6 +41,7 @@ h3 {
 
 .post-thumbnail {
     padding: 0px 0px 0px 0px;
+    max-width: max-content;
 }
 
 .footer {
@@ -49,5 +50,5 @@ h3 {
 }
 
 .footer-source-link {
-    color:inherit;
+    color: inherit;
 }
