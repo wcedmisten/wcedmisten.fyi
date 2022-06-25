@@ -1,0 +1,244 @@
+---
+title: "Integrating Dashcam Data with Openstreetmap Part 2"
+date: "2022-06-23"
+---
+
+# Previously
+
+In [Part 1](/post/dashcam-to-openstreetmap/), we were able to extract text from geo-located dashcam footage using an OCR model.
+In this section, we'll explore how to search OSM data for this text to find missing features.
+
+# Downloading the Data
+
+To start off with, we'll need data to query. Openstreetmap's terms and conditions limit use of their servers solely for editing purposes.
+Altough my goal is to eventually improve the OSM dataset, I'd prefer to run my queries locally, to save them some compute on my behalf.
+
+To do this, I need to download some data!
+
+OSM data is available in a few different shapes and sizes:
+
+## .osm 
+
+The .osm format is an XML based format, which means it is more verbose.
+
+### .osm.pbf
+
+The .osm.pbf format uses Google's protobuf data format to compress the data a bit more. The format is binary, rather than text-based like XML, which allows for more compression.
+This is what I'm looking for.
+
+### Region Extracts 
+
+OSM data is pretty big by local computing standards. It's about 64 GB (compressed as .pbf) for a snapshot of the entire world.
+Downloading the entire planet would be overkill for my purposes, because I've only driven my car around a few states in the U.S.
+
+One option would be to first download the entire planet and then extract data just for my region using a tool like [osmium](https://osmcode.org/osmium-tool/).
+
+Another would be to find my region's extract available for download. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
+OSM data, hosts regional extracts freely on their website. So I was able to easily download a sub-region of the U.S. bounding all the area my car has been:
+
+<img src="/dashcam-to-speed-limits/us-south-boundaries.png" width="100%"/>
+
+This dataset was only 2.9GB, much more managable for downloading and processing.
+
+## Querying the Data
+
+The data was still in a highly compressed .pbf format, which didn't lend itself well to direct querying. After doing some research, I found
+a tool called [osm2pgsql](https://osm2pgsql.org/), which provides a simple CLI for extracting .pbf data into PostgreSQL, a relational database.
+
+The tool also required the use of an extension called PostGIS, which provides some geospatial capabilities on top of PostgreSQL's native performance.
+
+### Setting up PostgreSQL
+
+To help set up PostgreSQL faster, I used the official postgis docker image, within a docker-compose file. This allowed me to store the configuration needed
+for mounting the DB locally without much trouble.
+
+This also allowed me to tune the PostgreSQL configuration as suggested by the osm2pgsql documentation.
+
+Once I had PostgreSQL running with `docker-compose up`, I could run the command to import the DB.
+
+### Importing the data
+
+```bash
+PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-south.osm.pbf
+```
+
+This import took about 25 minutes to run on my machine.
+
+
+### Inspecting the data
+
+Once I had the data, I was able to query the new tables containing OSM data:
+
+* planet_osm_line
+* planet_osm_point
+* planet_osm_polygon
+* planet_osm_roads
+
+My main interest was roads, so I inspected the planet_osm_line table in my database client:
+
+```
+postgres=# SELECT name, osm_id FROM planet_osm_line LIMIT 5;
+       name       |  osm_id  
+------------------+----------
+                  | 41053108
+                  | 41069347
+ Bailey Farm Road | 16617188
+                  | 41071649
+ Snow Creek       | 41071714
+```
+
+In addition to roads, this table contains all line features, including administrative boundaries, fences, railroads, and powerlines.
+
+To filter for actual roads, I used the `highway` tag, which is non-null for actual roads.
+
+```
+postgres=# SELECT name, osm_id FROM planet_osm_line WHERE highway IS NOT NULL LIMIT 5;
+        name        |  osm_id   
+--------------------+-----------
+ Bailey Farm Road   |  16617188
+                    | 848723891
+                    | 830724385
+                    | 872817376
+ Wilkesboro Highway | 758444187
+```
+
+This OSM ID can be used to uniquely identify a feature. It can also be used to generate a URL linking directly to the feature in the web editor.
+
+For instance, the URL for Bailey Farm Road, near Statesville, North Carolina:
+
+[https://www.openstreetmap.org/way/16617188](https://www.openstreetmap.org/way/16617188)
+
+### Importing custom tags
+
+By default, osm2pgsql only imports a subset of all tags into PostgreSQL. To add additional tags, I had to edit the "style" configuration file used.
+
+Adding the following line to the configuration file allowed me to add the "maxspeed" tag, which denotes the speed limit of a road.
+
+```
+node,way   maxspeed     text         linear
+```
+
+After re-reunning the import (which took another 25 minutes), I could query for speed limit in PostgreSQL.
+
+```
+postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS NOT NULL AND maxspeed IS NOT NULL LIMIT 5;
+        name        |  osm_id   | maxspeed 
+--------------------+-----------+----------
+ Wilkesboro Highway | 758444187 | 55 mph
+ Snow Creek Road    | 839047937 | 55 mph
+                    | 172469390 | 70 mph
+                    | 172469935 | 70 mph
+                    | 172469934 | 70 mph
+```
+
+To find the roads with the slowest speed limits:
+
+```
+postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS NOT NULL AND maxspeed IS NOT NULL ORDER BY maxspeed LIMIT 5;
+           name            |   osm_id   | maxspeed 
+---------------------------+------------+----------
+ Old Fort Worth Road       |  814591400 | 0
+ private road              |  923662638 | 0 mph
+ APC Farley Spur           | 1058071899 | 0 mph
+ Jefferson Drive (Private) |   16246127 | 1
+ Edisto Court              |   25550546 | 1
+```
+
+Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear power plant near Dothan, Alabama.
+
+[https://www.openstreetmap.org/way/1058071899](https://www.openstreetmap.org/way/1058071899)
+
+### Finding the Nearest Road to a Point 
+
+This is where PostGIS really starts to come in handy. Vanilla PostgreSQL can easily handle queries on text or numerical data,
+but if I want to efficiently run geospatial queries, I'm going to need PostGIS.
+
+This will let me answer questions like:
+
+* What's the closest road to my car?
+* What features are within a certain distance of my car?
+
+### Note on Projections
+
+#### EPSG:4326
+
+Also called World Geodetic System 1984 or WGS84, is a projection of points on a ellipsoid. It deals with units as degrees. It gets used by GPS.
+
+#### EPSG:3857
+
+Also called Web Mercator, is a projection of points on a flat surface (e.g. a map). This projection is used by Google Maps, Openstreetmap, as well as other map services.
+
+Data in one projection needs to be converted before it can be compared to points in another system. Which is exactly this situation, because I want to compare 
+GPS coordinates to openstreetmap coordinates.
+
+To represent a point in 4326 format, I can use `ST_GeomFromText('POINT(<longitude> <latitude>)',4326)`
+
+Finally, the PostGIS distance operator `<->`, can be used to get the distance between two geospatial features. For example, a point and a line.
+
+To convert it to 3857, I can use the `ST_Transform` function. So to query for roads near the point `36.627738°, -81.491764°`, I can use a query like: 
+
+```
+postgres=# SELECT osm_id, name, highway, 
+    way <-> ST_Transform(ST_GeomFromText('POINT(-81.491764 36.627738)',4326),3857) AS dist
+    FROM planet_osm_line
+    WHERE highway IS NOT NULL
+    ORDER BY dist
+    LIMIT 5;
+  osm_id   |          name          |   highway    |       dist        
+-----------+------------------------+--------------+-------------------
+  20275195 | Grayson Highland Lane  | unclassified | 2.951101491357545
+  20259224 | Sugarlands Overlook    | unclassified |  262.064941626682
+ 487216899 | Sugarland Overlook     | service      | 483.5457804347282
+ 485524834 | Stamper's Branch Trail | path         | 755.9664853168923
+ 487235851 |                        | service      | 896.6745788308451
+```
+
+Which indicates the closest road to my car was at this point was:
+
+[https://www.openstreetmap.org/way/20275195](https://www.openstreetmap.org/way/20275195)
+
+Here's an overlay of the gps track (pink) from my dashcam on top of this road (grey):
+
+<img src="/dashcam-to-speed-limits/gpx-track-overlayed.png" width="100%"/>
+
+Success! I'm able to find the road I'm on in OSM!
+
+## Searching for Missing Speed Limits 
+
+Putting this all together, I wrote some python scripts to:
+
+* extract the GPS track from a dashcam clip
+* extract corresponding images for each point
+* run OCR on each image 
+* if a "speed limit" sign is found in the image, check OSM to see if the road has "maxspeed" set
+* if a missing speed limit is found, output a link to the image, and the OSM feature
+
+## Results
+
+After running this script on the video explored in part 1, I got several hits!
+
+```bash
+python3 src/pipeline.py ~/Videos/dashcam_2/20220531181027_004969.MP4
+
+...
+
+WARNING! NO SPEED LIMIT TAGGED IN OSM,
+BUT OCR FOUND THE FOLLOWING TEXT:
+['speed', 'limit', '35', 'hot', 'tar', 'scurco', 'lerean']
+Check feature:
+https://www.openstreetmap.org/way/20578703
+Image:
+file:///home/wedmisten/piofo/workspace/20220531181027_004969/20220531181027_004969_098.jpg
+```
+
+Sure enough, looking at the road listed [East Stuart Drive in Galax, Virginia](https://www.openstreetmap.org/way/20578703),
+there's no speed limit set.
+
+<img src="/dashcam-to-speed-limits/no-speed-limit.png" width="100%"/>
+
+And the screenshot from my dashcam shows the speed limit here is 35.
+
+<img src="/dashcam-to-speed-limits/speed-limit.jpg" width="100%"/>
+
+
+After this discovery was made, I added the tag to this road here.
