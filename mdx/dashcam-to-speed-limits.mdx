@@ -1,62 +1,68 @@
 ---
-title: "Integrating Dashcam Data with Openstreetmap Part 2"
-date: "2022-06-23"
+title: "Find Missing Speed Limits in Openstreetmap from Dashcam Footage"
+date: "2022-06-25"
 ---
 
 # Previously
 
-In [Part 1](/post/dashcam-to-openstreetmap/), we were able to extract text from geo-located dashcam footage using an OCR model.
-In this section, we'll explore how to search OSM data for this text to find missing features.
+In [my previous post](/post/dashcam-to-openstreetmap/), I was able to extract text from geo-located dashcam footage using an OCR model.
+In this section, I'll explore how to search OSM data for this text to find missing data. Specifically: *missing speed limits.*
 
 # Downloading the Data
 
-To start off with, we'll need data to query. Openstreetmap's terms and conditions limit use of their servers solely for editing purposes.
-Altough my goal is to eventually improve the OSM dataset, I'd prefer to run my queries locally, to save them some compute on my behalf.
+To start off with, I'll need data to query. Openstreetmap's terms and conditions limit use of their servers solely for editing purposes.
+So instead of making these queries to their API, I'll be making them on a local dataset.
+Although my goal is to eventually improve the OSM dataset, I'd prefer to save them some compute on my behalf.
 
-To do this, I need to download some data!
+So, I need to download some data!
 
-OSM data is available in a few different shapes and sizes:
+OSM data is available in a few different formats:
+
+## .osm.pbf
+
+The .osm.pbf format uses Google's protobuf data format to serialize the data into a binary format. The disadvantage is that the data is not 
+human readable, but that doesn't matter for my use-case.
 
 ## .osm 
 
-The .osm format is an XML based format, which means it is more verbose.
+The .osm format is an XML based format, which is human readable, but also more verbose.
 
-### .osm.pbf
+# Region Extracts 
 
-The .osm.pbf format uses Google's protobuf data format to compress the data a bit more. The format is binary, rather than text-based like XML, which allows for more compression.
-This is what I'm looking for.
-
-### Region Extracts 
-
-OSM data is pretty big by local computing standards. It's about 64 GB (compressed as .pbf) for a snapshot of the entire world.
+OSM data is pretty big compared to the amount of RAM I have in my computer (16 GB).
+It's about 64 GB (in the more compact .pbf format) for a snapshot of the entire world.
 Downloading the entire planet would be overkill for my purposes, because I've only driven my car around a few states in the U.S.
 
-One option would be to first download the entire planet and then extract data just for my region using a tool like [osmium](https://osmcode.org/osmium-tool/).
+To get the regional extract I need I could either:
 
-Another would be to find my region's extract available for download. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
-OSM data, hosts regional extracts freely on their website. So I was able to easily download a sub-region of the U.S. bounding all the area my car has been:
+* download the entire planet and then extract data just for my region using a tool like [osmium](https://osmcode.org/osmium-tool/)
+
+OR
+
+* Find my region's extract available for download. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
+OSM data, hosts regional extracts freely on their website. So I was able to easily download a sub-region of the U.S. bounding all the area my car has been (and then some):
 
 <img src="/dashcam-to-speed-limits/us-south-boundaries.png" width="100%"/>
 
 This dataset was only 2.9GB, much more managable for downloading and processing.
 
-## Querying the Data
+# Querying the Data
 
-The data was still in a highly compressed .pbf format, which didn't lend itself well to direct querying. After doing some research, I found
-a tool called [osm2pgsql](https://osm2pgsql.org/), which provides a simple CLI for extracting .pbf data into PostgreSQL, a relational database.
+The data was still in a binary .pbf format, which doesn't lend itself well to querying directly. After doing some research, I found
+a tool called [osm2pgsql](https://osm2pgsql.org/), which provides a simple CLI for extracting OSM data into PostgreSQL, a relational database.
 
-The tool also required the use of an extension called PostGIS, which provides some geospatial capabilities on top of PostgreSQL's native performance.
+The tool also required the use of an extension called PostGIS, which provides some geospatial capabilities on top of PostgreSQL.
 
-### Setting up PostgreSQL
+## Setting up PostgreSQL
 
-To help set up PostgreSQL faster, I used the official postgis docker image, within a docker-compose file. This allowed me to store the configuration needed
+To help set up PostGIS faster, I used the official Postgis docker image, within a docker-compose file. This allowed me to store the configuration needed
 for mounting the DB locally without much trouble.
 
 This also allowed me to tune the PostgreSQL configuration as suggested by the osm2pgsql documentation.
 
 Once I had PostgreSQL running with `docker-compose up`, I could run the command to import the DB.
 
-### Importing the data
+## Importing the data
 
 ```bash
 PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-south.osm.pbf
@@ -65,14 +71,14 @@ PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-sout
 This import took about 25 minutes to run on my machine.
 
 
-### Inspecting the data
+## Inspecting the data
 
 Once I had the data, I was able to query the new tables containing OSM data:
 
-* planet_osm_line
-* planet_osm_point
-* planet_osm_polygon
-* planet_osm_roads
+* planet_osm_line - contains lines: e.g. roads, fences, power lines, railroads, and administrative boundaries
+* planet_osm_point - contains points: e.g. buildings, trees, telephone poles, etc.
+* planet_osm_polygon - contains polygon features: e.g. land use, buildings, etc.
+* planet_osm_roads - contains features necessary for high-level rendering, e.g. major roads, administrative boundaries, etc.
 
 My main interest was roads, so I inspected the planet_osm_line table in my database client:
 
@@ -108,7 +114,7 @@ For instance, the URL for Bailey Farm Road, near Statesville, North Carolina:
 
 [https://www.openstreetmap.org/way/16617188](https://www.openstreetmap.org/way/16617188)
 
-### Importing custom tags
+## Importing custom tags
 
 By default, osm2pgsql only imports a subset of all tags into PostgreSQL. To add additional tags, I had to edit the "style" configuration file used.
 
@@ -148,7 +154,7 @@ Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear p
 
 [https://www.openstreetmap.org/way/1058071899](https://www.openstreetmap.org/way/1058071899)
 
-### Finding the Nearest Road to a Point 
+## Finding the Nearest Road to a Point 
 
 This is where PostGIS really starts to come in handy. Vanilla PostgreSQL can easily handle queries on text or numerical data,
 but if I want to efficiently run geospatial queries, I'm going to need PostGIS.
@@ -158,15 +164,21 @@ This will let me answer questions like:
 * What's the closest road to my car?
 * What features are within a certain distance of my car?
 
-### Note on Projections
+## A Note on Projections
 
-#### EPSG:4326
+### EPSG:4326
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" width="50%"/>
 
 Also called World Geodetic System 1984 or WGS84, is a projection of points on a ellipsoid. It deals with units as degrees. It gets used by GPS.
 
-#### EPSG:3857
+### EPSG:3857
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Mercator_projection_Square.JPG" width="50%"/>
 
 Also called Web Mercator, is a projection of points on a flat surface (e.g. a map). This projection is used by Google Maps, Openstreetmap, as well as other map services.
+
+### Conversion
 
 Data in one projection needs to be converted before it can be compared to points in another system. Which is exactly this situation, because I want to compare 
 GPS coordinates to openstreetmap coordinates.
@@ -241,4 +253,20 @@ And the screenshot from my dashcam shows the speed limit here is 35.
 <img src="/dashcam-to-speed-limits/speed-limit.jpg" width="100%"/>
 
 
-After this discovery was made, I added the tag to this road here.
+I consider this project a success! Now I can run the script on all my dashcam files to help improve openstreetmap.
+After this discovery was made, I added the tag to this road.
+
+
+## Appendix
+
+### osm2pgsql-docker 
+
+This project stores the needed configuration to import OSM data into a PostGIS database.
+
+[Link](https://github.com/wcedmisten/osm2pgsql-docker)
+
+### piofo
+
+This project contains the code for running the pipeline from dashcam video file -> missing tag detection.
+
+[Link](https://github.com/wcedmisten/piofo)
