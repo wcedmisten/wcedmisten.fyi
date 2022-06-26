@@ -5,8 +5,8 @@ date: "2022-06-25"
 
 # Previously
 
-In [my previous post](/post/dashcam-to-openstreetmap/), I was able to extract text from geo-located dashcam footage using an OCR model.
-In this section, I'll explore how to search OSM data for this text to find missing data. Specifically: *missing speed limits.*
+In [my previous post](/post/dashcam-to-openstreetmap/), I was able to extract street sign text from geo-located dashcam footage using an OCR model.
+In this section, I'll explore how to search Openstreetmap (OSM) data using PostGIS to find missing data. Specifically: *missing speed limits.*
 
 # Downloading the Data
 
@@ -33,22 +33,22 @@ OSM data is pretty big compared to the amount of RAM I have in my computer (16 G
 It's about 64 GB (in the more compact .pbf format) for a snapshot of the entire world.
 Downloading the entire planet would be overkill for my purposes, because I've only driven my car around a few states in the U.S.
 
-To get the regional extract I need I could either:
+To get the regional extract, I could either:
 
-* download the entire planet and then extract data just for my region using a tool like [osmium](https://osmcode.org/osmium-tool/)
+* Download the entire planet and then extract data just for my region using a tool like [osmium](https://osmcode.org/osmium-tool/)
 
 OR
 
-* Find my region's extract available for download. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
-OSM data, hosts regional extracts freely on their website. So I was able to easily download a sub-region of the U.S. bounding all the area my car has been (and then some):
+* Download my region's extract directly. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
+OSM data, hosts regional extracts freely on their website. So I could easily download a dataset bounding all the area my car has been (and then some):
 
 <img src="/dashcam-to-speed-limits/us-south-boundaries.png" width="100%"/>
 
-This dataset was only 2.9GB, much more managable for downloading and processing.
+This dataset is only 2.9GB, much more managable for downloading and processing.
 
 # Querying the Data
 
-The data was still in a binary .pbf format, which doesn't lend itself well to querying directly. After doing some research, I found
+Now I had the data, but the binary .pbf format doesn't lend itself well to direct queries. After doing some research, I found
 a tool called [osm2pgsql](https://osm2pgsql.org/), which provides a simple CLI for extracting OSM data into PostgreSQL, a relational database.
 
 The tool also required the use of an extension called PostGIS, which provides some geospatial capabilities on top of PostgreSQL.
@@ -60,6 +60,23 @@ for mounting the DB locally without much trouble.
 
 This also allowed me to tune the PostgreSQL configuration as suggested by the osm2pgsql documentation.
 
+```yaml
+version: "3.9"
+services:
+  postgis:
+    container_name: postgis
+    image: postgis/postgis
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - type: bind
+        source: ./postgresql.conf
+        target: /etc/postgresql.conf
+    command: ["postgres", "-c", "config_file=/etc/postgresql.conf"]
+```
+
 Once I had PostgreSQL running with `docker-compose up`, I could run the command to import the DB.
 
 ## Importing the data
@@ -68,34 +85,22 @@ Once I had PostgreSQL running with `docker-compose up`, I could run the command 
 PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-south.osm.pbf
 ```
 
-This import took about 25 minutes to run on my machine.
-
+This import took about 25 minutes to run on my machine. I attribute some of this slowness to the fact that my linux install
+is still on a hard drive, rather than an SSD, which would improve I/O speed.
 
 ## Inspecting the data
 
-Once I had the data, I was able to query the new tables containing OSM data:
+Once I had the data, I was able to query the new tables that were imported:
 
-* planet_osm_line - contains lines: e.g. roads, fences, power lines, railroads, and administrative boundaries
-* planet_osm_point - contains points: e.g. buildings, trees, telephone poles, etc.
-* planet_osm_polygon - contains polygon features: e.g. land use, buildings, etc.
-* planet_osm_roads - contains features necessary for high-level rendering, e.g. major roads, administrative boundaries, etc.
+* planet_osm_line - contains lines: roads, fences, power lines, railroads, and administrative boundaries
+* planet_osm_point - contains points: buildings, trees, telephone poles, etc.
+* planet_osm_polygon - contains polygon features: land use, buildings, etc.
+* planet_osm_roads - contains only features necessary for low-zoom tile rendering: major roads, administrative boundaries, etc.
 
-My main interest was roads, so I inspected the planet_osm_line table in my database client:
+I initially made the mistake of querying planet_osm_roads, but after reading the documentation, I realized the table only contains a subset of roads
+needed for rendering low-zoom tiles.
 
-```
-postgres=# SELECT name, osm_id FROM planet_osm_line LIMIT 5;
-       name       |  osm_id  
-------------------+----------
-                  | 41053108
-                  | 41069347
- Bailey Farm Road | 16617188
-                  | 41071649
- Snow Creek       | 41071714
-```
-
-In addition to roads, this table contains all line features, including administrative boundaries, fences, railroads, and powerlines.
-
-To filter for actual roads, I used the `highway` tag, which is non-null for actual roads.
+Instead of looking at planet_osm_roads, I used a query on planet_osm_line filtering for the `highway` tag, which is used to indicate roads.
 
 ```
 postgres=# SELECT name, osm_id FROM planet_osm_line WHERE highway IS NOT NULL LIMIT 5;
@@ -116,15 +121,17 @@ For instance, the URL for Bailey Farm Road, near Statesville, North Carolina:
 
 ## Importing custom tags
 
-By default, osm2pgsql only imports a subset of all tags into PostgreSQL. To add additional tags, I had to edit the "style" configuration file used.
+By default, osm2pgsql only imports a subset of all tags into the database.
+To add additional tags, I had to edit the "style" configuration file used, and re-import the data.
 
-Adding the following line to the configuration file allowed me to add the "maxspeed" tag, which denotes the speed limit of a road.
+Adding the following line to the configuration file included the "maxspeed" tag, which denotes the speed limit of a road.
 
 ```
+# OsmType, Tag, DataType, Flags
 node,way   maxspeed     text         linear
 ```
 
-After re-reunning the import (which took another 25 minutes), I could query for speed limit in PostgreSQL.
+After re-reunning the import (which took another 25 minutes), I could query for speed limits in the database. Great!
 
 ```
 postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS NOT NULL AND maxspeed IS NOT NULL LIMIT 5;
@@ -151,12 +158,13 @@ postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS N
 ```
 
 Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear power plant near Dothan, Alabama.
-
 [https://www.openstreetmap.org/way/1058071899](https://www.openstreetmap.org/way/1058071899)
+
+<img src="/dashcam-to-speed-limits/nuclear-plant.png" width="100%"/>
 
 ## Finding the Nearest Road to a Point 
 
-This is where PostGIS really starts to come in handy. Vanilla PostgreSQL can easily handle queries on text or numerical data,
+This is where PostGIS really starts to come in handy. Out of the box, PostgreSQL can easily handle queries on text or numerical data,
 but if I want to efficiently run geospatial queries, I'm going to need PostGIS.
 
 This will let me answer questions like:
@@ -166,13 +174,13 @@ This will let me answer questions like:
 
 ## A Note on Projections
 
-### EPSG:4326
+### [EPSG:4326](https://epsg.io/4326)
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" width="50%"/>
 
 Also called World Geodetic System 1984 or WGS84, is a projection of points on a ellipsoid. It deals with units as degrees. It gets used by GPS.
 
-### EPSG:3857
+### [EPSG:3857]((https://epsg.io/3857))
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Mercator_projection_Square.JPG" width="50%"/>
 
@@ -180,14 +188,22 @@ Also called Web Mercator, is a projection of points on a flat surface (e.g. a ma
 
 ### Conversion
 
-Data in one projection needs to be converted before it can be compared to points in another system. Which is exactly this situation, because I want to compare 
-GPS coordinates to openstreetmap coordinates.
+Data in one projection needs to be converted before it can be compared to points in another system. Which was necessary here, because I want to compare 
+GPS coordinates from my dashcam (4326) to openstreetmap coordinates (3857).
 
-To represent a point in 4326 format, I can use `ST_GeomFromText('POINT(<longitude> <latitude>)',4326)`
+I also realized later that osm2pgsql has a flag to use a different projection, but I didn't want to wait for another import to run.
+
+To represent a point in 4326 format, I can use 
+
+```
+ST_GeomFromText('POINT(<longitude> <latitude>)',4326)
+```
+
+To convert it to 3857, I can use the `ST_Transform` function.
 
 Finally, the PostGIS distance operator `<->`, can be used to get the distance between two geospatial features. For example, a point and a line.
 
-To convert it to 3857, I can use the `ST_Transform` function. So to query for roads near the point `36.627738°, -81.491764°`, I can use a query like: 
+ So to find roads near the point `36.627738°, -81.491764°`, I can use a query like: 
 
 ```
 postgres=# SELECT osm_id, name, highway, 
@@ -205,15 +221,14 @@ postgres=# SELECT osm_id, name, highway,
  487235851 |                        | service      | 896.6745788308451
 ```
 
-Which indicates the closest road to my car was at this point was:
-
+Which indicates the closest road to my car was at this point was Grayson Highland Lane:
 [https://www.openstreetmap.org/way/20275195](https://www.openstreetmap.org/way/20275195)
 
 Here's an overlay of the gps track (pink) from my dashcam on top of this road (grey):
 
 <img src="/dashcam-to-speed-limits/gpx-track-overlayed.png" width="100%"/>
 
-Success! I'm able to find the road I'm on in OSM!
+This indicates I found an exact match to the road in OSM. Success!
 
 ## Searching for Missing Speed Limits 
 
