@@ -3,7 +3,7 @@ import { MDXRemote } from 'next-mdx-remote'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug';
 
-import {BsCalendar4, BsClockFill} from 'react-icons/bs'
+import {BsCalendarFill, BsClockFill} from 'react-icons/bs'
 import readingTime from 'reading-time';
 
 import path from 'path';
@@ -26,7 +26,7 @@ export default function TestPage(props: { sources: any }) {
         <>
             <div className="wrapper">
                 <h1>{metadata.title}</h1>
-                <p><BsClockFill/> {source.readingStats.text} <BsCalendar4/> {metadata.date} </p>
+                <p><BsCalendarFill/> {metadata.date} <BsClockFill/> {source.readingStats.text}</p>
                 <MDXRemote {...source.mdx} />
             </div>
         </>
