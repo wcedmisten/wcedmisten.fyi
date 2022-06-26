@@ -13,6 +13,12 @@ import "highlight.js/styles/atom-one-dark.css";
 
 import { useRouter } from 'next/router'
 
+const components = {
+    img: (props: any) => (
+        <img {...props} width="100%"/>
+    )
+  };
+
 export default function TestPage(props: { sources: any }) {
     const router = useRouter()
 
@@ -27,7 +33,7 @@ export default function TestPage(props: { sources: any }) {
             <div className="wrapper">
                 <h1>{metadata.title}</h1>
                 <p><BsCalendarFill/> {metadata.date} <BsClockFill/> {source.readingStats.text}</p>
-                <MDXRemote {...source.mdx} />
+                <MDXRemote {...source.mdx} components={components}/>
             </div>
         </>
     )

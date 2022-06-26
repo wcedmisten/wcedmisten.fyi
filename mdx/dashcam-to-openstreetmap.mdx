@@ -24,7 +24,7 @@ information that's available from the street.
 My dashcam is a Viofo A119, which records videos at 60 fps at 1440p resolution.
 It records images like this:
 
-<img src="/dashcam-to-openstreetmap/dashcam.jpg" width="100%"/>
+![Dashcam Screenshot](/dashcam-to-openstreetmap/dashcam.jpg)
 
 This resolution is sufficient to capture the detail on street signs and buildings, but it
 would require manually reviewing the videos to capture the semantics of this information.
@@ -67,7 +67,7 @@ in time. GPX is an XML based format which contains coordinates and timestamps.
 When visualized with a tool such as `gpxviewer`, the GPX track can be overlayed
 on OpenStreetMap data. For example:
 
-<img src="/dashcam-to-openstreetmap/gpx-viewer.png" width="100%"/>
+![GPX Track Showing the Path of My Car Along a Road](/dashcam-to-openstreetmap/gpx-viewer.png)
 
 ## Optical Character Recognition
 
@@ -84,7 +84,7 @@ rather than text in a real world "scene", like the billboards I'm interested in.
 
 After installing tesseract, I attempted to run it on this image:
 
-<img src="/dashcam-to-openstreetmap/dashcam-tesseract.jpg" width="100%"/>
+![Dashcam Screenshot](/dashcam-to-openstreetmap/dashcam-tesseract.jpg)
 
 There are several large signs visible that I hoped would be discovered by tesseract:
 
@@ -124,7 +124,7 @@ example on my dashcam images.
 
 I also modified the ffmpeg command to crop out the burned-in text at the bottom of the image.
 
-<img src="/dashcam-to-openstreetmap/dashcam-keras.png" width="100%"/>
+![Dashcam Screenshot Overlayed with OCR Detections](/dashcam-to-openstreetmap/dashcam-keras.png)
 
 This gave better results, but there were still a lot of false positives and partial matches.
 
@@ -139,7 +139,7 @@ Running it on another image, I get slightly better results. The model captured "
 
 Cool! I can use this data.
 
-<img src="/dashcam-to-openstreetmap/dashcam-keras2.png" width="100%"/>
+![Dashcam Screenshot with OCR Text Overlay](/dashcam-to-openstreetmap/dashcam-keras2.png)
 
 Since Neural Network models work best when trained on real-world conditions, I could probably improve these
 results by training on images from my exact dashcam. However, that would require a lot of manual data entry
@@ -202,7 +202,7 @@ about 6 hours to process the video data I have currently stored on my computer.
 
 An excerpt from the data for this image:
 
-<img src="/dashcam-to-openstreetmap/dashcam-131.jpg" width="100%"/>
+![Dashcam Screenshot with Sign Text Visible](/dashcam-to-openstreetmap/dashcam-131.jpg)
 
 ```json
 "/home/wedmisten/piofo/20220531181027_004969/20220531181027_004969_131.jpg": [
@@ -249,7 +249,7 @@ folium_map.fit_bounds(boundary, padding=(5, 5))
 folium_map.save('test.html')
 ```
 
-<img src="/dashcam-to-openstreetmap/visualization1.png" width="100%"/>
+![GPX Track Viewed on Map](/dashcam-to-openstreetmap/visualization1.png)
 
 Since we have an image for each point along this segment, we can also add code to display it.
 
@@ -278,7 +278,7 @@ for idx, latlon in enumerate(gpx_points):
 ...
 ```
 
-<img src="/dashcam-to-openstreetmap/visualization3.png" width="100%"/>
+![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails](/dashcam-to-openstreetmap/visualization3.png)
 
 Finally, we can add in our OCR data for each image by reading from the data.json file created previously.
 
@@ -307,7 +307,7 @@ for idx, latlon in enumerate(gpx_points):
 ...
 ```
 
-<img src="/dashcam-to-openstreetmap/visualization4.png" width="100%"/>
+![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails and OCR Text](/dashcam-to-openstreetmap/visualization4.png)
 
 Awesome! We can see that the OCR data includes matches for nearby features:
 

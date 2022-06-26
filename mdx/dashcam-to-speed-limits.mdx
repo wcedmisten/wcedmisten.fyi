@@ -42,7 +42,7 @@ OR
 * Download my region's extract directly. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
 OSM data, hosts regional extracts freely on their website. So I could easily download a dataset bounding all the area my car has been (and then some):
 
-<img src="/dashcam-to-speed-limits/us-south-boundaries.png" width="100%"/>
+![US South OSM Dataset Boundaries](/dashcam-to-speed-limits/us-south-boundaries.png)
 
 This dataset is only 2.9GB, much more managable for downloading and processing.
 
@@ -160,7 +160,7 @@ postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS N
 Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear power plant near Dothan, Alabama.
 [https://www.openstreetmap.org/way/1058071899](https://www.openstreetmap.org/way/1058071899)
 
-<img src="/dashcam-to-speed-limits/nuclear-plant.png" width="100%"/>
+![Farley Nuclear Plant in OSM](/dashcam-to-speed-limits/nuclear-plant.png)
 
 ## Finding the Nearest Road to a Point 
 
@@ -176,15 +176,13 @@ This will let me answer questions like:
 
 ### [EPSG:4326](https://epsg.io/4326)
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg" width="50%"/>
-
 Also called World Geodetic System 1984 or WGS84, is a projection of points on a ellipsoid. It deals with units as degrees. It gets used by GPS.
 
 ### [EPSG:3857]((https://epsg.io/3857))
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Mercator_projection_Square.JPG" width="50%"/>
-
 Also called Web Mercator, is a projection of points on a flat surface (e.g. a map). This projection is used by Google Maps, Openstreetmap, as well as other map services.
+
+![EPSG:4326 vs. EPSG:3857 Visualized](/dashcam-to-speed-limits/projections-compared.jpg "Source: https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg and https://upload.wikimedia.org/wikipedia/commons/7/73/Mercator_projection_Square.JPG")
 
 ### Conversion
 
@@ -203,7 +201,7 @@ To convert it to 3857, I can use the `ST_Transform` function.
 
 Finally, the PostGIS distance operator `<->`, can be used to get the distance between two geospatial features. For example, a point and a line.
 
- So to find roads near the point `36.627738°, -81.491764°`, I can use a query like: 
+So to find roads near the point `36.627738°, -81.491764°`, I can use a query like: 
 
 ```
 postgres=# SELECT osm_id, name, highway, 
@@ -226,7 +224,7 @@ Which indicates the closest road to my car was at this point was Grayson Highlan
 
 Here's an overlay of the gps track (pink) from my dashcam on top of this road (grey):
 
-<img src="/dashcam-to-speed-limits/gpx-track-overlayed.png" width="100%"/>
+![Dashcam GPX Track Overlayed on Road](/dashcam-to-speed-limits/gpx-track-overlayed.png)
 
 This indicates I found an exact match to the road in OSM. Success!
 
@@ -261,11 +259,11 @@ file:///home/wedmisten/piofo/workspace/20220531181027_004969/20220531181027_0049
 Sure enough, looking at the road listed [East Stuart Drive in Galax, Virginia](https://www.openstreetmap.org/way/20578703),
 there's no speed limit set.
 
-<img src="/dashcam-to-speed-limits/no-speed-limit.png" width="100%"/>
+![Speed Limit Missing from East Stuart Drive](/dashcam-to-speed-limits/no-speed-limit.png)
 
 And the screenshot from my dashcam shows the speed limit here is 35.
 
-<img src="/dashcam-to-speed-limits/speed-limit.jpg" width="100%"/>
+![Speed Limit Sign on East Stuart Drive](/dashcam-to-speed-limits/speed-limit.jpg)
 
 
 I consider this project a success! Now I can run the script on all my dashcam files to help improve openstreetmap.
