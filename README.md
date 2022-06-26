@@ -37,3 +37,20 @@ scp nginx.conf /etc/nginx/nginx.conf
 sudo systemctl start nginx.service
 sudo systemctl enable nginx.service
 ```
+
+# Resizing Images
+
+Images in posts should be a maximum of 1000px wide, and JPG format. To convert the images automatically, copy the full-sized images to `images/`, then run:
+
+You need imagemagick to run these commands.
+
+```bash
+# assuming you have a directory under public with the original images, set IMGDIR to it
+export IMGDIR="dashcam-to-speed-limits"
+
+cp public/$IMGDIR images
+
+# convert the jpgs and pngs to jpg, and downscale them if they're wider than 1000px
+convert 'images/'$IMGDIR'/*.jpg[1000x>]' -set filename:base "%[basename]" "public/$IMGDIR/%[filename:base].jpg"
+convert 'images/'$IMGDIR'/*.png[1000x>]' -set filename:base "%[basename]" "public/$IMGDIR/%[filename:base].jpg"
+```

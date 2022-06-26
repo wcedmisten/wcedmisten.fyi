@@ -42,7 +42,7 @@ OR
 * Download my region's extract directly. Luckily, [Geofabrik](https://download.geofabrik.de/), a German corporation based around
 OSM data, hosts regional extracts freely on their website. So I could easily download a dataset bounding all the area my car has been (and then some):
 
-![US South OSM Dataset Boundaries](/dashcam-to-speed-limits/us-south-boundaries.png)
+![US South OSM Dataset Boundaries](/dashcam-to-speed-limits/us-south-boundaries.jpg)
 
 This dataset is only 2.9GB, much more managable for downloading and processing.
 
@@ -160,7 +160,7 @@ postgres=# SELECT name, osm_id, maxspeed FROM planet_osm_line WHERE highway IS N
 Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear power plant near Dothan, Alabama.
 [https://www.openstreetmap.org/way/1058071899](https://www.openstreetmap.org/way/1058071899)
 
-![Farley Nuclear Plant in OSM](/dashcam-to-speed-limits/nuclear-plant.png)
+![Farley Nuclear Plant in OSM](/dashcam-to-speed-limits/nuclear-plant.jpg)
 
 ## Finding the Nearest Road to a Point 
 
@@ -224,7 +224,7 @@ Which indicates the closest road to my car was at this point was Grayson Highlan
 
 Here's an overlay of the gps track (pink) from my dashcam on top of this road (grey):
 
-![Dashcam GPX Track Overlayed on Road](/dashcam-to-speed-limits/gpx-track-overlayed.png)
+![Dashcam GPX Track Overlayed on Road](/dashcam-to-speed-limits/gpx-track-overlayed.jpg)
 
 This indicates I found an exact match to the road in OSM. Success!
 
@@ -259,7 +259,7 @@ file:///home/wedmisten/piofo/workspace/20220531181027_004969/20220531181027_0049
 Sure enough, looking at the road listed [East Stuart Drive in Galax, Virginia](https://www.openstreetmap.org/way/20578703),
 there's no speed limit set.
 
-![Speed Limit Missing from East Stuart Drive](/dashcam-to-speed-limits/no-speed-limit.png)
+![Speed Limit Missing from East Stuart Drive](/dashcam-to-speed-limits/no-speed-limit.jpg)
 
 And the screenshot from my dashcam shows the speed limit here is 35.
 

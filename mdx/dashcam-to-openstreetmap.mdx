@@ -67,7 +67,7 @@ in time. GPX is an XML based format which contains coordinates and timestamps.
 When visualized with a tool such as `gpxviewer`, the GPX track can be overlayed
 on OpenStreetMap data. For example:
 
-![GPX Track Showing the Path of My Car Along a Road](/dashcam-to-openstreetmap/gpx-viewer.png)
+![GPX Track Showing the Path of My Car Along a Road](/dashcam-to-openstreetmap/gpx-viewer.jpg)
 
 ## Optical Character Recognition
 
@@ -124,7 +124,7 @@ example on my dashcam images.
 
 I also modified the ffmpeg command to crop out the burned-in text at the bottom of the image.
 
-![Dashcam Screenshot Overlayed with OCR Detections](/dashcam-to-openstreetmap/dashcam-keras.png)
+![Dashcam Screenshot Overlayed with OCR Detections](/dashcam-to-openstreetmap/dashcam-keras.jpg)
 
 This gave better results, but there were still a lot of false positives and partial matches.
 
@@ -139,7 +139,7 @@ Running it on another image, I get slightly better results. The model captured "
 
 Cool! I can use this data.
 
-![Dashcam Screenshot with OCR Text Overlay](/dashcam-to-openstreetmap/dashcam-keras2.png)
+![Dashcam Screenshot with OCR Text Overlay](/dashcam-to-openstreetmap/dashcam-keras2.jpg)
 
 Since Neural Network models work best when trained on real-world conditions, I could probably improve these
 results by training on images from my exact dashcam. However, that would require a lot of manual data entry
@@ -249,7 +249,7 @@ folium_map.fit_bounds(boundary, padding=(5, 5))
 folium_map.save('test.html')
 ```
 
-![GPX Track Viewed on Map](/dashcam-to-openstreetmap/visualization1.png)
+![GPX Track Viewed on Map](/dashcam-to-openstreetmap/visualization1.jpg)
 
 Since we have an image for each point along this segment, we can also add code to display it.
 
@@ -278,7 +278,7 @@ for idx, latlon in enumerate(gpx_points):
 ...
 ```
 
-![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails](/dashcam-to-openstreetmap/visualization3.png)
+![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails](/dashcam-to-openstreetmap/visualization3.jpg)
 
 Finally, we can add in our OCR data for each image by reading from the data.json file created previously.
 
@@ -307,7 +307,7 @@ for idx, latlon in enumerate(gpx_points):
 ...
 ```
 
-![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails and OCR Text](/dashcam-to-openstreetmap/visualization4.png)
+![GPX Track Viewed on Map With Dashcam Screenshot Thumbnails and OCR Text](/dashcam-to-openstreetmap/visualization4.jpg)
 
 Awesome! We can see that the OCR data includes matches for nearby features:
 
