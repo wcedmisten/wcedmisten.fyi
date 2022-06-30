@@ -3,7 +3,7 @@ import { MDXRemote } from 'next-mdx-remote'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug';
 
-import {BsCalendarFill, BsClockFill} from 'react-icons/bs'
+import { BsCalendarFill, BsClockFill } from 'react-icons/bs'
 import readingTime from 'reading-time';
 
 import path from 'path';
@@ -15,9 +15,16 @@ import { useRouter } from 'next/router'
 
 const components = {
     img: (props: any) => (
-        <img {...props} width="100%"/>
+        <img {...props} width="100%" />
     )
-  };
+};
+
+const toPrettyDate = (date: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    // hack to force UTC timezone
+    // https://stackoverflow.com/a/69673926
+    return new Date(date + "T12:00:00").toLocaleDateString('US', options)
+}
 
 export default function TestPage(props: { sources: any }) {
     const router = useRouter()
@@ -32,8 +39,8 @@ export default function TestPage(props: { sources: any }) {
         <>
             <div className="wrapper">
                 <h1>{metadata.title}</h1>
-                <p><BsCalendarFill/> {metadata.date} <BsClockFill/> {source.readingStats.text}</p>
-                <MDXRemote {...source.mdx} components={components}/>
+                <p><BsCalendarFill /> {toPrettyDate(metadata.date)} <BsClockFill /> {source.readingStats.text}</p>
+                <MDXRemote {...source.mdx} components={components} />
             </div>
         </>
     )
@@ -75,12 +82,12 @@ export async function getStaticProps() {
             filename: path.parse(filename).name,
 
             mdx: await serialize(fileContents,
-                                {
-                                    mdxOptions: {
-                                        rehypePlugins: [rehypeHighlight, rehypeSlug],
-                                      },
-                                    parseFrontmatter: true,
-                                }),
+                {
+                    mdxOptions: {
+                        rehypePlugins: [rehypeHighlight, rehypeSlug],
+                    },
+                    parseFrontmatter: true,
+                }),
 
             readingStats: stats
         }
