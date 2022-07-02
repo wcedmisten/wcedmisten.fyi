@@ -16,6 +16,12 @@ const Layout: React.FC<LayoutProps> = ({
             <title>wcedmisten.fyi</title>
             <meta name="description" content="William Edmisten's Developer Blog" />
             <link rel="icon" href="/favicon.ico" />
+            <link
+                rel="alternate"
+                type="application/rss+xml"
+                title="RSS Feed for wcedmisten.fyi"
+                href="/feed.xml"
+            />
         </Head>
         <NavbarHeader />
         <main>{children}</main>

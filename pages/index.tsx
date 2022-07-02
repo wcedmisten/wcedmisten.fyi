@@ -10,6 +10,8 @@ import { promises as fs } from 'fs';
 import { ListGroup } from 'react-bootstrap'
 import PostItem from '../components/PostItem'
 
+import generateRSS from "../utils/RSS"
+
 interface HomeType {
   sources: any;
 }
@@ -79,12 +81,17 @@ export async function getStaticProps() {
           parseFrontmatter: true,
         }),
     }
-  })
+  });
+  const sources = await Promise.all(posts);
+  const postList = getPosts(sources);
+
+  generateRSS(postList);
+
   // By returning {props: {posts} }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
-      sources: await Promise.all(posts),
+      sources
     },
   }
 }
