@@ -12,8 +12,8 @@ function ArtPage() {
                         thumbnailURL="/thumbnails/pulleys.png"
                         thumbnailAlt="Pulleys inspired by Piet Mondrian"
                         title="Pulleys"
-                        description='A system of pulleys inspired by Piet Mondrian'
-                        date='June 12, 2022' />
+                        description='A system of pulleys inspired by Piet Mondrian.'
+                        date='2022-06-12' />
 
                     <PostItem
                         href="https://wcedmisten.github.io/genart/sunset/"
@@ -21,7 +21,7 @@ function ArtPage() {
                         thumbnailAlt="An Appalachian sunset"
                         title="Sunset"
                         description='An Appalachian sunset.'
-                        date='August 15, 2021' />
+                        date='2021-08-15' />
                 </ListGroup>
             </main>
         </div >

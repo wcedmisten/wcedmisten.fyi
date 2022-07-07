@@ -5,7 +5,7 @@ import PostMetadata from "./PostMetadata";
 
 
 export default function PostItem({ href, thumbnailURL, title, description, date, thumbnailAlt, readingLength }:
-    { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength: string }) {
+    { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength?: string }) {
     return (
         <ListGroup.Item className="post-item">
             <Container fluid className="justify-content-md-center">
