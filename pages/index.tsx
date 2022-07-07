@@ -11,6 +11,7 @@ import { ListGroup } from 'react-bootstrap'
 import PostItem from '../components/PostItem'
 
 import generateRSS from "../utils/RSS"
+import readingTime from 'reading-time';
 
 interface HomeType {
   sources: any;
@@ -19,18 +20,12 @@ interface HomeType {
 const getPosts: any = (sources: any) => {
   return sources.map((source: any) => ({
     filename: source.filename,
+    readingLength: source.readingStats.text,
     meta: source.mdx.frontmatter
   })).sort((a: any, b: any) => { // sort by date (assuming ISO 8601 format)
     return b.meta.date.localeCompare(a.meta.date)
   });
 };
-
-const toPrettyDate = (date: string) => {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  // hack to force UTC timezone
-  // https://stackoverflow.com/a/69673926
-  return new Date(date + "T12:00:00").toLocaleDateString('US', options)
-}
 
 const Home: NextPage<HomeType> = (props) => {
   const postData = getPosts(props.sources)
@@ -43,7 +38,8 @@ const Home: NextPage<HomeType> = (props) => {
       thumbnailAlt={post.meta.thumbnailAlt}
       title={post.meta.title}
       description={post.meta.description}
-      date={toPrettyDate(post.meta.date)} />)
+      date={post.meta.date}
+      readingLength={post.readingLength} />)
 
   return (
     <div>
@@ -70,6 +66,8 @@ export async function getStaticProps() {
     const filePath = path.join(postsDirectory, filename)
     const fileContents = await fs.readFile(filePath, 'utf8')
 
+    const stats = readingTime(fileContents);
+
     return {
       filename: path.parse(filename).name,
 
@@ -80,6 +78,8 @@ export async function getStaticProps() {
           },
           parseFrontmatter: true,
         }),
+
+      readingStats: stats
     }
   });
   const sources = await Promise.all(posts);

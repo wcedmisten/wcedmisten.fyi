@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
 
-import { BsCalendar4 } from "react-icons/bs"
+import PostMetadata from "./PostMetadata";
 
 
-export default function PostItem({ href, thumbnailURL, title, description, date, thumbnailAlt }:
-    { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string }) {
+export default function PostItem({ href, thumbnailURL, title, description, date, thumbnailAlt, readingLength }:
+    { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength: string }) {
     return (
-        <ListGroup.Item>
+        <ListGroup.Item className="post-item">
             <Container fluid className="justify-content-md-center">
                 <Row>
                     <Col xs={12} md={4} >
@@ -18,10 +18,10 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                                         <Image
                                             src={thumbnailURL}
                                             fluid
-                                            width={200}
+                                            width={"100%"}
                                             rounded
                                             alt={thumbnailAlt}
-                                            className="post-thumbnail"></Image>
+                                            className="post-thumbnail border"></Image>
                                     </a>
                                 </Link>
                             </Row>
@@ -35,9 +35,7 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                                 </Link>
                             </Row>
                             <Row>
-                                <p>
-                                    <BsCalendar4 /> {date}
-                                </p>
+                                <PostMetadata date={date} readingLength={readingLength}/>
                             </Row>
                             <Row>
                                 <p>
