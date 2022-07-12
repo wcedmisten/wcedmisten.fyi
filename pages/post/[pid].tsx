@@ -12,11 +12,27 @@ import { promises as fs } from 'fs';
 import "highlight.js/styles/atom-one-dark.css";
 
 import { useRouter } from 'next/router'
+import { Col, Row, Container } from 'react-bootstrap';
 
 const components = {
     img: (props: any) => (
-        <img {...props} width="100%" />
-    )
+        <img {...props} />
+    ),
+    Container,
+    Col,
+    Row,
+    p: (props: any) => (
+        <p {...props} />
+    ),
+    ol: (props: any) => (
+        <ol {...props} />
+    ),
+    li: (props: any) => (
+        <li {...props} />
+    ),
+    figure: (props: any) => (
+        <figure {...props} />
+    ),
 };
 
 const toPrettyDate = (date: string) => {

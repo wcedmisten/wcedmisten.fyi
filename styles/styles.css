@@ -10,18 +10,44 @@ body {
 img {
     padding: 30px 0px 30px 0px;
     margin: 0 auto;
+    max-width: 100%;
+}
+
+figure {
+    display: flex;
+    flex-flow: column;
+    padding: 5px;
+    max-width: 300px;
+    margin: auto;
+}
+
+.captioned-img {
+    padding: 30px 0px 0px 0px;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+figcaption {
+    background-color: #222;
+    color: #fff;
+    /* font: italic smaller sans-serif;
+    padding: 3px; */
+    text-align: center;
 }
 
 h1 {
-    padding-bottom: 30px
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 h2 {
-    padding-top: 30px
+    padding-top: 30px;
+    padding-bottom: 20px;
 }
 
 h3 {
-    padding-top: 20px
+    padding-top: 20px;
+    padding-bottom: 15px;
 }
 
 
