@@ -48,7 +48,7 @@ You need imagemagick to run these commands.
 # assuming you have a directory under public with the original images, set IMGDIR to it
 export IMGDIR="dashcam-to-speed-limits"
 
-cp public/$IMGDIR images
+cp -r public/$IMGDIR images
 
 # convert the jpgs and pngs to jpg, and downscale them if they're wider than 1000px
 convert 'images/'$IMGDIR'/*.jpg[1000x>]' -set filename:base "%[basename]" "public/$IMGDIR/%[filename:base].jpg"
