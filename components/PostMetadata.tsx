@@ -8,19 +8,19 @@ const toPrettyDate = (date: string) => {
     return new Date(date + "T12:00:00").toLocaleDateString('US', options)
 }
 
-export default function PostMetadata ({ date, readingLength }:
+export default function PostMetadata({ date, readingLength }:
     { date: string, readingLength?: string }) {
     return (
         <Container fluid className="justify-content-md-center">
             <Row>
-                                {/* Use all columns if readingLength is omited */}
-                <Col xs={12} md={readingLength ? 4 : 12} >
+                {/* Use all columns if readingLength is omited */}
+                <Col xs={12} md={readingLength ? 6 : 12} >
                     <p><BsCalendarFill /> {toPrettyDate(date)}</p>
                 </Col>
                 {readingLength &&
-                <Col xs={12} md={4} >
-                    <p><BsClockFill /> {readingLength}</p>
-                </Col>}
+                    <Col xs={12} md={4} >
+                        <p><BsClockFill /> {readingLength}</p>
+                    </Col>}
             </Row>
         </Container>
     )
