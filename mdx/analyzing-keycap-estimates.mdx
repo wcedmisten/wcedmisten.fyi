@@ -1,6 +1,6 @@
 ---
 title: "Evaluating Mechanical Keyboard Delivery Estimates with Python Web Scraping"
-date: "2022-07-12"
+date: "2022-07-13"
 thumbnail: "/thumbnails/analyzing-keycap-estimates.png"
 thumbnailAlt: "Novelkeys.com product updates page"
 description: "Evaluating the accuracy of Novelkeys.com's delivery estimates using beautifulsoup and matplotlib."
@@ -11,14 +11,14 @@ tags: ["python", "web scraping", "data visualization", "matplotlib", "beautifuls
 A few years ago, I entered the hobbyist world of mechanical keyboards.
 To some, keyboards are just a means of putting symbols into a computer.
 But there are droves in the hobbyist community obsessed with the little details
-of keyboards: from their sound, the activation force of each key press,
+of keyboards: their sound, the activation force of each keypress,
 and most especially the visual *A E S T H E T I C* of the keyboards.
 The most devoted hobbyists even machine, assemble, solder, and program
-their own keyboards from scratch.
+their keyboards from scratch.
 
 Even though I'm an amateur, it's a fun hobby to get into.
 
-The hobby is frequently discussed on the Reddit at
+The hobby is frequently discussed on Reddit at
 [/r/MechanicalKeyboards](https://reddit.com/r/mechanicalKeyboards/).
 The community features users showing off their keyboards, discussing new releases,
 and interacting with designers and manufacturers.
@@ -32,7 +32,7 @@ and interacting with designers and manufacturers.
 
 Custom keycaps are of particular interest to the community.
 These small plastic covers provide a means for endless creativity and customization.
-They are mostly a standard size, and can be swapped out easily to give your keyboard 
+They are mostly a standard size and can be swapped out easily to give your keyboard 
 a new look. As such, they are a popular product in the community.
 
 ### Group Buys
@@ -40,9 +40,9 @@ a new look. As such, they are a popular product in the community.
 Because the hobby is relatively niche, custom keycap designers and manufacturers use
 a unique model for selling new products: a Group Buy.
 
-A Group Buy involves collecting orders (and payments) for a limited time period,
-before any product has even been manufactured. Once the buy in period is over,
-the designer and manufacturer work together to actually create the product.
+A Group Buy involves collecting orders (and payments) for a limited time period
+before any product has even been manufactured. Once the buy-in period is over,
+the designer and manufacturer work together to create the product.
 This business model is similar to a Kickstarter campaign.
 
 Sometimes these products are even bought by speculators, hoping to resell
@@ -50,25 +50,25 @@ them for a much higher price than the cost of the Group Buy. Aftermarket prices 
 hundreds of dollars more than the original cost of the product,
 due to limited availability.
 
-### Buy In 
+### Buy-in 
 
-In February of 2021, I saw a group buy posted on Reddit for new run of keycaps that I had my 
+In February of 2021, I saw a group buy posted on Reddit for a new run of keycaps that I had my 
 eyes on for a while: GMK Dots. These were sold by a well-reputed company according to
 /r/MechanicalKeyboards, called novelkeys.com
 
-The keycaps are basically dots of varying colors, replacing all the
+The keycaps are styled as dots of varying colors, replacing all the
 symbols on the keyboard. My current set of keycaps have no markings at all,
 so this appealed to me, and many others on /r/MechanicalKeyboards.
 
 ![GMK Dots. Source: https://www.reddit.com/r/MechanicalKeyboards/comments/fbt9u0/gmk_dots/](/analyzing-keycap-estimates/gmk-dots.jpg)
 
-Perhaps bored from a year of pandemic isolation, I went all in, and ordered a set.
+Perhaps bored from a year of pandemic isolation, I went all in and ordered a set.
 It took a leap of faith to buy a product that wouldn't even exist for another year.
 
 ### Delays
 
 The initial estimated delivery when I ordered these keycaps was Q1 2022.
-That estimate, along many other product estimates, has since slipped.
+That estimate, along with many other product estimates, has since slipped.
 As of July 2022, the estimated delivery is for Q3 of this year.
 
 Novelkeys.com posts their delivery estimates and other product information 
@@ -78,7 +78,7 @@ on a webpage that looks like this:
 
 # Analyzing the Data
 
-This got my curious to know how far other delivery estimates have slipped.
+This got me curious to know how far other delivery estimates have slipped.
 So I decided to scrape the product updates page and 
 all historical snapshots of the page that have been saved on archive.org.
 
@@ -94,7 +94,7 @@ waybackpack https://novelkeys.com/pages/product-updates \
     -d ~/Downloads/novelkeys-wayback
 ```
 
-This downloaded a bunch of html pages in a path like:
+This downloaded a bunch of HTML pages in a path like:
 
 `~/Downloads/novelkeys-wayback/20220307063439/novelkeys.com/pages/product-updates`
 
@@ -187,9 +187,9 @@ category_data = [_get_product_info(soup, category)
 ### Scraping novelkeys.xyz
 
 Unlike the new design, the old website design made scraping much harder
-by using randomly generated class names, with hard to find patterns. This
-was probably a result of using a styling system like CSS modules, which
-relies on generated unique class names.
+because it used randomly generated class names, rather than meaningful ones.
+This was probably a result of using a styling system like CSS modules, which
+relies on uniquely generated class names.
 
 ![Novelkeys.xyz update page web elements](/analyzing-keycap-estimates/novelkeys-xyz-inspected.png)
 
@@ -397,7 +397,7 @@ name_cleanup = {
 }
 ```
 
-I also used the following snippit to identify groups of similar names:
+I also used the following snippet to identify groups of similar names:
 
 ```python
 import difflib
@@ -453,12 +453,12 @@ Names before cleaning:  194
 Names after cleaning:  162
 ```
 
-Just what we expect, there were previously 194 names, we consolidated
+Just what we expected: there were previously 194 names, we consolidated
 32 of them, for a total of 162 unique canonical product names.
 
 ## Flattening the Data
 
-Currently the data is in a hierachical structure, but we want to 
+Currently, the data is in a hierarchical structure, but we want to 
 convert it into flat rows. In other words, convert from this:
 
 ```JSON
@@ -493,7 +493,7 @@ df = pd.DataFrame(data=flattened_data)
 ## Plotting the Data 
 
 This dataframe was used with the data visualization library `matplotlib`
-to analyze the data in a number of ways. The source code for all of this is available
+to analyze the data in several ways. The source code for all of this is available
 [here](https://github.com/wcedmisten/novelkeys-analyzer),
 but most of the code is fairly basic filtering and aggregation with pandas.
 
@@ -517,7 +517,7 @@ This frequency should still be close enough for ballpark purposes.
 
 This plot shows every unique product, and when it was added/removed from the 
 updates page. Not all products were officially stated as "completed", but I'm
-making the assumption that products no longer on the updates page have been completed.
+assuming that products no longer on the updates page have been completed.
 
 This graph is a little hard to read, so let's break down the data more.
 
@@ -535,28 +535,28 @@ design did not. I was able to deduce "deskpads" from the product name:
 e.g. "Colorchrome Deskpad".
 But the rest of the products fell into the "unknown" category. 
 From manual inspection, most of these 
-are keycaps, but even the product images don't really show a difference.
+are keycaps, but even the product images don't show a difference.
 The keycaps are also shown on a keyboard, not standalone.
 
 ![Timeline of all products by category with estimates](/analyzing-keycap-estimates/timeline-all-by-category-with-estimates.png)
 
 We can also take a look at the initial estimates of each product. In this plot, the 
 "worst case" estimate is shown for each product. This is found by looking at either the
-monthly or quarterly estimate, and using the last day in that period. For example an 
-estimated delivery of August translates to August 31, worst case. A "Q3" estimate 
+monthly or quarterly estimate and using the last day in that period. For example, an 
+estimated delivery of "August" translates to August 31. A "Q3" estimate 
 translates to September 30.
 
 As we can see in the graph, the provided estimates are usually optimistic.
 Because I only have data going back to November 2019, it's not clear whether this is 
-a recent phenomenon caused by COVID-19 supply chain issues, or if the Novelkeys 
-generally understimates delivery times.
+a recent phenomenon caused by COVID-19 supply chain issues, or if Novelkeys 
+generally underestimates delivery times.
 
 ![Timeline of Completed Products](/analyzing-keycap-estimates/timeline-completed.png)
 
-We can also filter this data more, to include only products that we have all 
-of the data for. This means products which we didn't see until after the first snapshot,
+We can also filter this data more, to include only products that we have seen from
+start to finish. This means products that we didn't see added until after the first snapshot,
 and we saw completed before our last snapshot. This will help us get a more accurate
-understanding of delivery times.
+understanding of delivery times by omitting incomplete product runs in the data.
 
 This plot shows only products that we had a full picture of.
 
@@ -578,9 +578,9 @@ together their completion date. It does the same with the average estimated (wor
 delivery time.
 
 Interestingly, this shows a trend of a decreasing average delivery time, but I think this 
-is really just selection bias. Because we're filtering out the in progress products here,
-we're losing all the data points from recent in progress products, and biasing the 
-data towards the products that completed early.
+is just selection bias. Because we're filtering out the in progress products here,
+we're losing all the data points from recent in progress products and biasing the 
+data towards products that completed early.
 
 I think the only way to correct for this is to wait for all the 
 currently in-progress products to complete, and re-run this plot with all the data.
@@ -600,7 +600,7 @@ most of the products being delivered past the initial estimate.
 ![Timeline of Completed Products](/analyzing-keycap-estimates/estimates-over-time.png)
 
 I was also curious if the increased delivery time affected the estimates, so 
-I plotted each estimated delivery time over time, and plotted the line of 
+I plotted each estimated delivery time over time and plotted the line of 
 best fit.
 
 It generally shows that, to Novelkeys' credit,
@@ -608,7 +608,7 @@ the estimated delivery time is increasing to reflect reality.
 
 ![Timeline of Completed Products](/analyzing-keycap-estimates/total-delivery-status.png)
 
-I also wanted to see the cumulative trends on delivery estimates.
+I also wanted to see the cumulative trends of delivery estimates.
 This plot shows four categories:
 
 * Delivered Early: these products were delivered before the initial estimated date
@@ -618,7 +618,7 @@ This plot shows four categories:
 
 Overall, these plots show that Novelkeys is pretty bad at keeping their estimates. 
 To be fair, the data I'm analyzing is only available through an unprecedented 
-pandemic which disrupted supply chains, especially to China (which these products
+pandemic which disrupted supply chains, especially in China (which these products
 depend on.)
 
 # Conclusion
