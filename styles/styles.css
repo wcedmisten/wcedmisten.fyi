@@ -62,6 +62,7 @@ h3 {
 }
 
 .navbar {
+    padding-bottom: 50px;
     font-family: 'Rubik';
 }
 
@@ -86,4 +87,22 @@ p,
 div,
 .post-item {
     background-color: #f8f7f2;
+}
+
+.container .graphsvg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 110px;
+    padding: 10px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
 }

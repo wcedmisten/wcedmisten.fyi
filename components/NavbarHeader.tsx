@@ -8,7 +8,7 @@ export default function NavbarHeader() {
 
 
     return (
-        <Navbar expand="lg" expanded={expanded} className="py-5">
+        <Navbar expand="lg" expanded={expanded}>
             <Container>
                 <Link href="/" passHref>
                     <Navbar.Brand>
