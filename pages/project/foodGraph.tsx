@@ -25,7 +25,15 @@ function runForceGraph(
 
     console.log(width, height);
 
-    const color = () => { return "#9D79A0"; };
+    const getRBGVal = () => {
+        return (100 + Math.floor(Math.random() * 155)).toString(16);
+    }
+
+    const color = () => {
+        const ret = "#" + getRBGVal() + getRBGVal() + getRBGVal();
+        console.log(ret);
+        return ret
+    };
 
     const drag = (simulation) => {
         const dragstarted = (event, d) => {
@@ -95,10 +103,14 @@ function runForceGraph(
 
     const simulation = d3
         .forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-150))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY());
+        .force("link", d3.forceLink(links)
+            .id(d => d.id)
+            // .strength((d) => d.value))
+        )
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("collide", d3.forceCollide())
+        .force("x", d3.forceX(200))
+        .force("y", d3.forceY(150));
 
     const svg = d3
         .select(container)
@@ -123,16 +135,16 @@ function runForceGraph(
         .data(links)
         .join("line")
         .attr("stroke", "#000000")
-        .attr("stroke-opacity", 0.6)
+        .attr("stroke-opacity", (d) => d.value)
         .attr("stroke-width", 2);
 
     const node = g
-        .attr("stroke", "#fff")
+        // .attr("stroke", "#fff")
         .attr("stroke-width", 2)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 12)
+        .attr("r", (d) => d.size / 10.0)
         .attr("fill", color)
         .call(drag(simulation));
 
@@ -144,6 +156,7 @@ function runForceGraph(
         .append("text")
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
+        .attr("fill", "black")
         .text(d => { return d.id; })
         .call(drag(simulation));
 
@@ -202,7 +215,7 @@ export const FoodGraph = () => {
 
 
     const nodeHoverTooltip = React.useCallback((node) => {
-        return `<div>${node.name}</div>`;
+        return `<div>${node.id}</div>`;
     }, []);
 
     const containerRef = React.useRef(null);
