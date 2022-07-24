@@ -43,12 +43,10 @@ const Home: NextPage<HomeType> = (props) => {
 
   return (
     <div>
-      <main>
-        <h1>Posts</h1>
-        <ListGroup variant="flush">
-          {posts}
-        </ListGroup>
-      </main>
+      <h1 className="post-title">Posts</h1>
+      <ListGroup variant="flush">
+        {posts}
+      </ListGroup>
     </div >
   )
 }

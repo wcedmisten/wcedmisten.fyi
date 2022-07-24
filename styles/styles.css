@@ -2,9 +2,17 @@ body {
     font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
         'Arial', sans-serif;
     font-size: 1.25em;
-    padding: 20px 20px 20px 20px;
-    max-width: 900px;
     margin: 0 auto;
+}
+
+.post-wrapper {
+    margin: auto;
+    max-width: 900px;
+    padding: 20px 20px 20px 20px;
+}
+
+.post-title {
+    padding-left: 50px;
 }
 
 img {
@@ -62,7 +70,7 @@ h3 {
 }
 
 .navbar {
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; */
     font-family: 'Rubik';
 }
 
@@ -72,7 +80,7 @@ h3 {
 }
 
 .footer {
-    padding-top: 50px;
+    /* padding-top: 50px; */
     max-width: none;
 }
 

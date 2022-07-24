@@ -46,7 +46,7 @@ export default function TestPage(props: { sources: any }) {
 
     return (
         <>
-            <div className="wrapper">
+            <div className="post-wrapper">
                 <h1>{metadata.title}</h1>
                 <PostMetadata date={metadata.date} readingLength={source.readingStats.text} />
                 <MDXRemote {...source.mdx} components={components} />

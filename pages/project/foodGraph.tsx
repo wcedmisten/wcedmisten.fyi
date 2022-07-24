@@ -1,8 +1,12 @@
 import * as d3 from "d3";
 import React, { useEffect, useState } from "react";
 
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-// import styles from "./forceGraph.module.css";
+import { Col, Row, Container } from 'react-bootstrap';
+
+// graph dynamic constants
+const REPEL_STRENGTH = -500
+const ATTRACT_POINT_X = 250
+const ATTRACT_POINT_Y = 150
 
 function runForceGraph(
     container,
@@ -62,13 +66,13 @@ function runForceGraph(
 
     // Add the tooltip element to the graph
     const tooltip = document.querySelector("#graph-tooltip");
-    if (!tooltip) {
-        const tooltipDiv = document.createElement("div");
-        tooltipDiv.classList.add("tooltip");
-        tooltipDiv.style.opacity = "0";
-        tooltipDiv.id = "graph-tooltip";
-        document.body.appendChild(tooltipDiv);
-    }
+    // if (!tooltip) {
+    //     const tooltipDiv = document.createElement("div");
+    //     tooltipDiv.classList.add("tooltip");
+    //     tooltipDiv.style.opacity = "0";
+    //     tooltipDiv.id = "graph-tooltip";
+    //     document.body.appendChild(tooltipDiv);
+    // }
     const div = d3.select("#graph-tooltip");
 
     const toggleTooltip = (hoverTooltip, d, x, y) => {
@@ -90,8 +94,6 @@ function runForceGraph(
             .style("opacity", 0.9);
         div
             .html(hoverTooltip(d))
-            .style("left", `${x}px`)
-            .style("top", `${y - 28}px`);
     }
 
     const removeTooltip = () => {
@@ -107,18 +109,16 @@ function runForceGraph(
             .id(d => d.id)
             // .strength((d) => d.value))
         )
-        .force("charge", d3.forceManyBody().strength(-300))
+        .force("charge", d3.forceManyBody().strength(REPEL_STRENGTH))
         .force("collide", d3.forceCollide())
-        .force("x", d3.forceX(200))
-        .force("y", d3.forceY(150));
+        .force("x", d3.forceX(ATTRACT_POINT_X))
+        .force("y", d3.forceY(ATTRACT_POINT_Y));
 
     const svg = d3
         .select(container)
         .append("svg")
-        .attr("width", 1000).attr("height", 1000)
-        .attr("class", "graphsvg")
-    // .attr("viewBox", [-width / 2, -height / 2, width, height])
-    // .call(zoom);
+        .attr("width", 800).attr("height", 600)
+        .attr("class", "graphsvg");
 
     var selectedToolkitNode = null;
 
@@ -144,7 +144,7 @@ function runForceGraph(
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", (d) => d.size / 10.0)
+        .attr("r", (d) => Math.sqrt(d.size) * 1.6)
         .attr("fill", color)
         .call(drag(simulation));
 
@@ -157,6 +157,7 @@ function runForceGraph(
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
         .attr("fill", "black")
+        .attr("font-size", (d) => Math.floor(Math.sqrt(d.size) * 1.5))
         .text(d => { return d.id; })
         .call(drag(simulation));
 
@@ -231,7 +232,16 @@ export const FoodGraph = () => {
         return destroyFn;
     }, [graphData]);
 
-    return <div ref={containerRef} className="container" />;
+    return <Container>
+        <Row>
+            <Col xs={12} md={2}>
+                <div id="graph-tooltip"><p>Click on a node to see more.</p></div>
+            </Col>
+            <Col>
+                <div ref={containerRef} className="container" />
+            </Col>
+        </Row>
+    </Container>
 };
 
 export default FoodGraph
