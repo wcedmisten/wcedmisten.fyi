@@ -241,11 +241,17 @@ export const FoodGraph = () => {
         <Row>
             <Col xs={12} md={3}>
                 <div id="graph-tooltip">
-                    <h2 id="name">
+                    <p id="name">
                         Click on a node to see more information.
                         <br></br><br></br>
                         Drag to pan and scroll to zoom.
-                    </h2>
+                        <br></br><br></br>
+                        Node area is proportional to the number of
+                        recipes containing that ingredient.
+                        <br></br>
+                        An edge indicates two ingredients are shared
+                        in a recipe. Only the top 3 edges are shown.
+                    </p>
                     <p id="count" style={{ visibility: "hidden" }}></p>
                     <p id="best-recipe" style={{ visibility: "hidden" }}>
                         Best recipe containing this ingredient:
