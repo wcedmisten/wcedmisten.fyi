@@ -5,14 +5,14 @@ import { Col, Row, Container } from 'react-bootstrap';
 
 // graph dynamic constants
 const REPEL_STRENGTH = -500
-const ATTRACT_POINT_X = 250
+const ATTRACT_POINT_X = 150
 const ATTRACT_POINT_Y = 150
+
 
 function runForceGraph(
     container,
     linksData,
-    nodesData,
-    nodeHoverTooltip
+    nodesData
 ) {
     const links = linksData.map((d) => Object.assign({}, d));
     const nodes = nodesData.map((d) => Object.assign({}, d));
@@ -64,36 +64,46 @@ function runForceGraph(
             .on("end", dragended);
     };
 
-    // Add the tooltip element to the graph
-    const tooltip = document.querySelector("#graph-tooltip");
-    // if (!tooltip) {
-    //     const tooltipDiv = document.createElement("div");
-    //     tooltipDiv.classList.add("tooltip");
-    //     tooltipDiv.style.opacity = "0";
-    //     tooltipDiv.id = "graph-tooltip";
-    //     document.body.appendChild(tooltipDiv);
-    // }
     const div = d3.select("#graph-tooltip");
 
-    const toggleTooltip = (hoverTooltip, d, x, y) => {
-        console.log(d)
-
+    const toggleTooltip = (d) => {
         if (d.id === selectedToolkitNode) {
             selectedToolkitNode = null;
             removeTooltip();
         } else {
             selectedToolkitNode = d.id;
-            addToolTip(hoverTooltip, d, x, y)
+            addToolTip(d)
         }
     };
 
-    const addToolTip = (hoverTooltip, d, x, y) => {
+    const addToolTip = (d) => {
         div
             .transition()
             .duration(200)
             .style("opacity", 0.9);
         div
-            .html(hoverTooltip(d))
+            .select('#name')
+            .text(d.id)
+
+        div
+            .select('#count')
+            .style("visibility", "visible")
+
+        div
+            .select("#best-recipe")
+            .style("visibility", "visible")
+
+        div
+            .select("#best-recipe-link")
+            .attr("href", d["best_recipe"].url)
+            .text(d["best_recipe"].title)
+
+        const numRecipes = d.size.toLocaleString();
+        const percentRecipes = Math.round((d.size / 91458.0 * 100) * 100) / 100
+
+        div
+            .select('#count')
+            .text(`Found ${numRecipes} recipes with this ingredient (${percentRecipes}%)`)
     }
 
     const removeTooltip = () => {
@@ -107,7 +117,6 @@ function runForceGraph(
         .forceSimulation(nodes)
         .force("link", d3.forceLink(links)
             .id(d => d.id)
-            // .strength((d) => d.value))
         )
         .force("charge", d3.forceManyBody().strength(REPEL_STRENGTH))
         .force("collide", d3.forceCollide())
@@ -117,7 +126,8 @@ function runForceGraph(
     const svg = d3
         .select(container)
         .append("svg")
-        .attr("width", 800).attr("height", 600)
+        .attr("style", "outline: thin solid black;")
+        .attr("width", 800).attr("height", 550)
         .attr("class", "graphsvg");
 
     var selectedToolkitNode = null;
@@ -136,7 +146,7 @@ function runForceGraph(
         .join("line")
         .attr("stroke", "#000000")
         .attr("stroke-opacity", (d) => d.value)
-        .attr("stroke-width", 2);
+        .attr("stroke-width", 3);
 
     const node = g
         // .attr("stroke", "#fff")
@@ -144,7 +154,7 @@ function runForceGraph(
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", (d) => Math.sqrt(d.size) * 1.6)
+        .attr("r", (d) => Math.sqrt(d.size) * 0.16)
         .attr("fill", color)
         .call(drag(simulation));
 
@@ -157,12 +167,12 @@ function runForceGraph(
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
         .attr("fill", "black")
-        .attr("font-size", (d) => Math.floor(Math.sqrt(d.size) * 1.5))
+        .attr("font-size", (d) => Math.floor(Math.sqrt(d.size) * .15))
         .text(d => { return d.id; })
         .call(drag(simulation));
 
     label.on("click", (event, d) => {
-        toggleTooltip(nodeHoverTooltip, d, event.pageX, event.pageY);
+        toggleTooltip(d, event.pageX, event.pageY);
     })
 
     simulation.on("tick", () => {
@@ -214,18 +224,13 @@ export const FoodGraph = () => {
         });
     }, [])
 
-
-    const nodeHoverTooltip = React.useCallback((node) => {
-        return `<div>${node.id}</div>`;
-    }, []);
-
     const containerRef = React.useRef(null);
 
     React.useEffect(() => {
         let destroyFn;
 
         if (containerRef.current && graphData) {
-            const { destroy } = runForceGraph(containerRef.current, graphData.links, graphData.nodes, nodeHoverTooltip);
+            const { destroy } = runForceGraph(containerRef.current, graphData.links, graphData.nodes);
             destroyFn = destroy;
         }
 
@@ -234,14 +239,26 @@ export const FoodGraph = () => {
 
     return <Container>
         <Row>
-            <Col xs={12} md={2}>
-                <div id="graph-tooltip"><p>Click on a node to see more.</p></div>
+            <Col xs={12} md={3}>
+                <div id="graph-tooltip">
+                    <h2 id="name">
+                        Click on a node to see more information.
+                        <br></br><br></br>
+                        Drag to pan and scroll to zoom.
+                    </h2>
+                    <p id="count" style={{ visibility: "hidden" }}></p>
+                    <p id="best-recipe" style={{ visibility: "hidden" }}>
+                        Best recipe containing this ingredient:
+                        <br></br>
+                        <a id="best-recipe-link" target="_blank">Test</a>
+                    </p>
+                </div>
             </Col>
             <Col>
-                <div ref={containerRef} className="container" />
+                <div ref={containerRef} className="svgcontainer" />
             </Col>
         </Row>
-    </Container>
+    </Container >
 };
 
 export default FoodGraph

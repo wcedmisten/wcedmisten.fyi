@@ -1,8 +1,8 @@
 import { Container, Row, Col, Image } from "react-bootstrap";
 
 function AboutPage() {
-    return (<>
-        <Container>
+    return (<div className="post-wrapper">
+        <Container >
             <Row><Col><h1>About</h1></Col></Row>
             <Row>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
@@ -30,7 +30,7 @@ function AboutPage() {
                 </Col>
             </Row>
         </Container>
-    </>)
+    </div>)
 }
 
 export default AboutPage

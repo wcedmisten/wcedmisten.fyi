@@ -3,7 +3,7 @@ import PostItem from "../components/PostItem";
 
 function ArtPage() {
     return (
-        <div>
+        <div className="post-wrapper">
             <h1 className="post-title">Generative art. Refresh to get a different one!</h1>
             <ListGroup variant="flush">
                 <PostItem

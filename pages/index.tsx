@@ -42,7 +42,7 @@ const Home: NextPage<HomeType> = (props) => {
       readingLength={post.readingLength} />)
 
   return (
-    <div>
+    <div className="post-wrapper">
       <h1 className="post-title">Posts</h1>
       <ListGroup variant="flush">
         {posts}
