@@ -20,14 +20,11 @@ function runForceGraph(
 
     const containerRect = container.getBoundingClientRect();
 
-    console.log(containerRect)
     const height = containerRect.height;
     const width = containerRect.width;
 
     const xOffset = containerRect.x;
     const yOffset = containerRect.y;
-
-    console.log(width, height);
 
     const getRBGVal = () => {
         return (100 + Math.floor(Math.random() * 155)).toString(16);
@@ -35,7 +32,6 @@ function runForceGraph(
 
     const color = () => {
         const ret = "#" + getRBGVal() + getRBGVal() + getRBGVal();
-        console.log(ret);
         return ret
     };
 
@@ -97,6 +93,23 @@ function runForceGraph(
             .select("#best-recipe-link")
             .attr("href", d["best_recipe"].url)
             .text(d["best_recipe"].title)
+
+        const relatedIngredients = links.filter(
+            (link) => link.source.id === d.id
+        ).map((link) => "<li>" + link.target.id + " (" + link.count.toLocaleString() + ")</li>")
+
+        const relatedIngredientsHTML = `<p>Most commonly used with ${d.id}:</p>` +
+            "<ol>" +
+            relatedIngredients.join("") +
+            "</ol>"
+
+        div
+            .select('#related')
+            .html(relatedIngredientsHTML)
+
+        div
+            .select('#related')
+            .style("visibility", "visible")
 
         const numRecipes = d.size.toLocaleString();
         const percentRecipes = Math.round((d.size / 91458.0 * 100) * 100) / 100
@@ -212,11 +225,9 @@ export const FoodGraph = () => {
 
     useEffect(() => {
         fetch("/d3_graph.json").then(response => {
-            console.log(response);
             return response.json();
         }).then(data => {
             // Work with JSON data here
-            console.log(data);
             setGraphData(data);
         }).catch(err => {
             // Do something for an error here
@@ -241,7 +252,7 @@ export const FoodGraph = () => {
         <Row>
             <Col xs={12} md={3}>
                 <div id="graph-tooltip">
-                    <p id="name">
+                    <b><p id="name">
                         Click on a node to see more information.
                         <br></br><br></br>
                         Drag to pan and scroll to zoom.
@@ -251,13 +262,14 @@ export const FoodGraph = () => {
                         <br></br>
                         An edge indicates two ingredients are shared
                         in a recipe. Only the top 3 edges are shown.
-                    </p>
+                    </p></b>
                     <p id="count" style={{ visibility: "hidden" }}></p>
                     <p id="best-recipe" style={{ visibility: "hidden" }}>
                         Best recipe containing this ingredient:
                         <br></br>
                         <a id="best-recipe-link" target="_blank">Test</a>
                     </p>
+                    <p id="related" style={{ visibility: "hidden" }}></p>
                 </div>
             </Col>
             <Col>
