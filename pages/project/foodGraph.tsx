@@ -10,12 +10,12 @@ const ATTRACT_POINT_Y = 150
 
 
 function runForceGraph(
-    container,
-    linksData,
-    nodesData
+    container: any,
+    linksData: any[],
+    nodesData: any[]
 ) {
-    const links = linksData.map((d) => Object.assign({}, d));
-    const nodes = nodesData.map((d) => Object.assign({}, d));
+    const links = linksData.map((d: any) => Object.assign({}, d));
+    const nodes = nodesData.map((d: any) => Object.assign({}, d));
 
 
     const containerRect = container.getBoundingClientRect();
@@ -35,19 +35,19 @@ function runForceGraph(
         return ret
     };
 
-    const drag = (simulation) => {
-        const dragstarted = (event, d) => {
+    const drag = (simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>) => {
+        const dragstarted: any = (event: { active: any; }, d: { fx: any; x: any; fy: any; y: any; }) => {
             if (!event.active) simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
         };
 
-        const dragged = (event, d) => {
+        const dragged: any = (event: { x: any; y: any; }, d: { fx: any; fy: any; }) => {
             d.fx = event.x;
             d.fy = event.y;
         };
 
-        const dragended = (event, d) => {
+        const dragended: any = (event: { active: any; }, d: { fx: null; fy: null; }) => {
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
@@ -62,7 +62,7 @@ function runForceGraph(
 
     const div = d3.select("#graph-tooltip");
 
-    const toggleTooltip = (d) => {
+    const toggleTooltip = (d: any) => {
         if (d.id === selectedToolkitNode) {
             selectedToolkitNode = null;
             removeTooltip();
@@ -72,7 +72,7 @@ function runForceGraph(
         }
     };
 
-    const addToolTip = (d) => {
+    const addToolTip = (d: any) => {
         div
             .transition()
             .duration(200)
@@ -95,8 +95,8 @@ function runForceGraph(
             .text(d["best_recipe"].title)
 
         const relatedIngredients = links.filter(
-            (link) => link.source.id === d.id
-        ).map((link) => "<li>" + link.target.id + " (" + link.count.toLocaleString() + ")</li>")
+            (link: { source: { id: any; }; }) => link.source.id === d.id
+        ).map((link: { target: { id: string; }; count: { toLocaleString: () => string; }; }) => "<li>" + link.target.id + " (" + link.count.toLocaleString() + ")</li>")
 
         const relatedIngredientsHTML = `<p>Most commonly used with ${d.id}:</p>` +
             "<ol>" +
@@ -126,10 +126,10 @@ function runForceGraph(
             .style("opacity", 0);
     };
 
-    const simulation = d3
+    const simulation: any = d3
         .forceSimulation(nodes)
         .force("link", d3.forceLink(links)
-            .id(d => d.id)
+            .id((d: any) => d.id)
         )
         .force("charge", d3.forceManyBody().strength(REPEL_STRENGTH))
         .force("collide", d3.forceCollide())
@@ -143,13 +143,13 @@ function runForceGraph(
         .attr("width", 800).attr("height", 550)
         .attr("class", "graphsvg");
 
-    var selectedToolkitNode = null;
+    var selectedToolkitNode: null = null;
 
     const g = svg.append('g');
 
-    const handleZoom = (e) => g.attr('transform', e.transform);
+    const handleZoom = (e: { transform: string | number | boolean | readonly (string | number)[] | d3.ValueFn<SVGGElement, unknown, string | number | boolean | readonly (string | number)[] | null> | null; }) => g.attr('transform', e.transform);
 
-    const zoom = d3.zoom().on('zoom', handleZoom);
+    const zoom: any = d3.zoom().on('zoom', handleZoom);
 
     d3.select('svg').call(zoom);
 
@@ -169,7 +169,7 @@ function runForceGraph(
         .join("circle")
         .attr("r", (d) => Math.sqrt(d.size) * 0.16)
         .attr("fill", color)
-        .call(drag(simulation));
+        .call(drag(simulation) as any);
 
     const label = g
         .attr("class", "labels")
@@ -182,10 +182,10 @@ function runForceGraph(
         .attr("fill", "black")
         .attr("font-size", (d) => Math.floor(Math.sqrt(d.size) * .15))
         .text(d => { return d.id; })
-        .call(drag(simulation));
+        .call(drag(simulation) as any);
 
     label.on("click", (event, d) => {
-        toggleTooltip(d, event.pageX, event.pageY);
+        toggleTooltip(d);
     })
 
     simulation.on("tick", () => {
