@@ -240,8 +240,43 @@ function runForceGraph(
     };
 }
 
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-// import styles from "./forceGraph.module.css";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+function InfoModal() {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    return (
+        <>
+            <Button variant="secondary" className="d-flex justify-content-center btn-sm" onClick={handleShow}>
+                See more info
+            </Button>
+
+            <Modal show={show} onHide={handleClose} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Welcome to FoodGraph</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>This project is based on a dataset of 91,000
+                        recipes from allrecipes.com
+                    </p>
+                    <p>For more information on how this graph was
+                        created, see
+                        <a href="https://github.com/wcedmisten/foodFinder" target="_blank">my github repository</a>.
+                    </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+}
 
 export const FoodGraph = () => {
     const [graphData, setGraphData] = useState<any>();
@@ -271,32 +306,35 @@ export const FoodGraph = () => {
         return destroyFn;
     }, [graphData]);
 
-    return <Container>
-        <Row>
-            <Col xs={12} md={3}>
-                <div id="graph-tooltip">
-                    <b><p id="name">
-                        Click on a node to see more information.
-                        <br></br><br></br>
-                        Drag to pan and scroll to zoom.
-                        <br></br><br></br>
-                        Node area is proportional to the number of
-                        recipes containing that ingredient.
-                        <br></br>
-                        An edge indicates two ingredients are shared
-                        in a recipe. Only the top 3 edges are shown.
-                    </p></b>
-                    <p id="count" style={{ visibility: "hidden" }}></p>
-                    <p id="related" style={{ visibility: "hidden" }}></p>
-                    <p id="avg-rating" style={{ visibility: "hidden" }}></p>
-                    <p id="avg-weight" style={{ visibility: "hidden" }}></p>
-                </div>
-            </Col>
-            <Col>
-                <div ref={containerRef} className="svgcontainer" />
-            </Col>
-        </Row>
-    </Container >
+    return <>
+        <Container>
+            <Row>
+                <Col xs={12} md={3}>
+                    <div id="graph-tooltip">
+                        <InfoModal></InfoModal>
+                        <b><p id="name">
+                            Click on a node to see more information.
+                            <br></br><br></br>
+                            Drag to pan and scroll to zoom.
+                            <br></br><br></br>
+                            Node area is proportional to the number of
+                            recipes containing that ingredient.
+                            <br></br>
+                            An edge indicates two ingredients are shared
+                            in a recipe. Only the top 3 edges are shown.
+                        </p></b>
+                        <p id="count" style={{ visibility: "hidden" }}></p>
+                        <p id="related" style={{ visibility: "hidden" }}></p>
+                        <p id="avg-rating" style={{ visibility: "hidden" }}></p>
+                        <p id="avg-weight" style={{ visibility: "hidden" }}></p>
+                    </div>
+                </Col>
+                <Col>
+                    <div ref={containerRef} className="svgcontainer" />
+                </Col>
+            </Row>
+        </Container >
+    </>
 };
 
 export default FoodGraph
