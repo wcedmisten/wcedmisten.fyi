@@ -154,9 +154,7 @@ function runForceGraph(
         .force("link", d3.forceLink(links)
             .id((d: any) => d.id)
         )
-        // @ts-ignore
-        .force("charge", d3.forceManyBodyReuse()
-            .strength(REPEL_STRENGTH))
+        .force("charge", d3.forceManyBody().strength(REPEL_STRENGTH))
         .force("collide", d3.forceCollide())
         .force("x", d3.forceX(ATTRACT_POINT_X))
         .force("y", d3.forceY(ATTRACT_POINT_Y));
