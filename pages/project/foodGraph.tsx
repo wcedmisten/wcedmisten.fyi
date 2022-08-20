@@ -38,7 +38,7 @@ function runForceGraph(
         return hash;
     }
 
-    function mod(n, m) {
+    function mod(n: number, m: number) {
         return ((n % m) + m) % m;
     }
 
