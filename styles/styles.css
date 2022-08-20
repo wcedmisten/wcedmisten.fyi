@@ -106,9 +106,9 @@ div,
 
 .labels {
     cursor: pointer;
-    /* paint-order: stroke;
+    paint-order: stroke;
     stroke: white;
-    stroke-width: .08rem; */
+    stroke-width: .08rem;
     font-weight: 800;
 }
 
