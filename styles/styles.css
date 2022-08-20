@@ -104,6 +104,14 @@ div,
     height: 100%;
 }
 
+.labels {
+    cursor: pointer;
+    paint-order: stroke;
+    stroke: white;
+    stroke-width: .08rem;
+    font-weight: 800;
+}
+
 div.tooltip {
     position: absolute;
     text-align: center;

@@ -26,12 +26,30 @@ function runForceGraph(
     const xOffset = containerRect.x;
     const yOffset = containerRect.y;
 
-    const getRBGVal = () => {
-        return (100 + Math.floor(Math.random() * 155)).toString(16);
+    // const getRBGVal = () => {
+    //     return (100 + Math.floor(Math.random() * 155)).toString(16);
+    // }
+
+    function hashCode(str: any) { // java String#hashCode
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return hash;
     }
 
-    const color = () => {
-        const ret = "#" + getRBGVal() + getRBGVal() + getRBGVal();
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
+    function getRBGVal(i: any) {
+        const val = (50 + mod(hashCode(i), 205)).toString(16);
+        return val;
+    }
+
+    const color = (i: any) => {
+        const ret = "#" + getRBGVal("D" + i.id) +
+            getRBGVal("G" + i.id) + getRBGVal("C" + i.id);
         return ret
     };
 
@@ -86,13 +104,12 @@ function runForceGraph(
             .style("visibility", "visible")
 
         div
-            .select("#best-recipe")
+            .select("#avg-rating")
             .style("visibility", "visible")
 
         div
-            .select("#best-recipe-link")
-            .attr("href", d["best_recipe"].url)
-            .text(d["best_recipe"].title)
+            .select("#avg-weight")
+            .style("visibility", "visible")
 
         const relatedIngredients = links.filter(
             (link: { source: { id: any; }; }) => link.source.id === d.id
@@ -116,7 +133,13 @@ function runForceGraph(
 
         div
             .select('#count')
-            .text(`Found ${numRecipes} recipes with this ingredient (${percentRecipes}%)`)
+            .text(`Found ${numRecipes} recipes with this ingredient (${percentRecipes}% of total)`)
+
+        const rating = Math.round((d.avg_rating * 100)) / 100;
+
+        div
+            .select('#avg-rating')
+            .text(`Recipes with this ingredient have an average rating of ${rating} stars`)
     }
 
     const removeTooltip = () => {
@@ -168,7 +191,7 @@ function runForceGraph(
         .data(nodes)
         .join("circle")
         .attr("r", (d) => Math.sqrt(d.size) * 0.16)
-        .attr("fill", color)
+        .attr("fill", (d) => color(d))
         .call(drag(simulation) as any);
 
     const label = g
@@ -264,12 +287,9 @@ export const FoodGraph = () => {
                         in a recipe. Only the top 3 edges are shown.
                     </p></b>
                     <p id="count" style={{ visibility: "hidden" }}></p>
-                    <p id="best-recipe" style={{ visibility: "hidden" }}>
-                        Best recipe containing this ingredient:
-                        <br></br>
-                        <a id="best-recipe-link" target="_blank">Test</a>
-                    </p>
                     <p id="related" style={{ visibility: "hidden" }}></p>
+                    <p id="avg-rating" style={{ visibility: "hidden" }}></p>
+                    <p id="avg-weight" style={{ visibility: "hidden" }}></p>
                 </div>
             </Col>
             <Col>
