@@ -34,8 +34,8 @@ export default function NavbarHeader() {
                         <Link href="/about" passHref>
                             <Nav.Link>About</Nav.Link>
                         </Link>
-                        <Link href="/art" passHref>
-                            <Nav.Link>Art</Nav.Link>
+                        <Link href="/projects" passHref>
+                            <Nav.Link>Projects</Nav.Link>
                         </Link>
                     </Nav>
                 </Navbar.Collapse>
