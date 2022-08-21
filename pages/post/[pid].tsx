@@ -35,12 +35,12 @@ const components = {
     ),
 };
 
-export default function TestPage(props: { sources: any }) {
+export default function TestPage(props: { source: any }) {
     const router = useRouter()
 
     const pid = router.query.pid as string;
 
-    const source = props.sources.find((x: any) => x.filename == pid)
+    const source = props.source;
 
     const metadata = source.mdx.frontmatter
 
@@ -74,38 +74,40 @@ export async function getStaticPaths() {
 // This function gets called at build time on server-side.
 // It won't be called on client-side, so you can even do
 // direct database queries.
-export async function getStaticProps() {
+export async function getStaticProps(params: any) {
+    const pid = params.pid;
+
     const postsDirectory = path.join(process.cwd(), 'mdx')
     const filenames = await fs.readdir(postsDirectory)
 
-    const posts = filenames.map(async (filename) => {
-        const filePath = path.join(postsDirectory, filename)
-        const fileContents = await fs.readFile(filePath, 'utf8')
+    const post: any = filenames.find((x: any) => x.filename == pid);
 
-        // Generally you would parse/transform the contents
-        // For example you can transform markdown to HTML here
+    const filePath = path.join(postsDirectory, post)
+    const fileContents = await fs.readFile(filePath, 'utf8')
 
-        const stats = readingTime(fileContents);
+    // Generally you would parse/transform the contents
+    // For example you can transform markdown to HTML here
 
-        return {
-            filename: path.parse(filename).name,
+    const stats = readingTime(fileContents);
 
-            mdx: await serialize(fileContents,
-                {
-                    mdxOptions: {
-                        rehypePlugins: [rehypeHighlight, rehypeSlug],
-                    },
-                    parseFrontmatter: true,
-                }),
+    const source = {
+        filename: path.parse(post).name,
 
-            readingStats: stats
-        }
-    })
+        mdx: await serialize(fileContents,
+            {
+                mdxOptions: {
+                    rehypePlugins: [rehypeHighlight, rehypeSlug],
+                },
+                parseFrontmatter: true,
+            }),
+
+        readingStats: stats
+    }
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
     return {
         props: {
-            sources: await Promise.all(posts),
+            source
         },
     }
 }

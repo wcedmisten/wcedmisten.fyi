@@ -6,7 +6,7 @@ import NavbarHeader from './NavbarHeader'
 
 type LayoutProps = {
     children: React.ReactNode;
-    ogImagePath: string;
+    ogImagePath: string | undefined;
 }
 
 const Layout: React.FC<LayoutProps> = ({
