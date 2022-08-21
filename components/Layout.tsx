@@ -6,15 +6,18 @@ import NavbarHeader from './NavbarHeader'
 
 type LayoutProps = {
     children: React.ReactNode;
+    ogImagePath: string;
 }
 
 const Layout: React.FC<LayoutProps> = ({
     children,
+    ogImagePath,
 }) => (
     <>
         <Head>
             <title>wcedmisten.fyi</title>
             <meta name="description" content="William Edmisten's Developer Blog" />
+            {ogImagePath && <meta property="og:image" content={ogImagePath} />}
             <link rel="icon" href="/favicon.ico" />
             <link
                 rel="alternate"

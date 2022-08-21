@@ -338,3 +338,11 @@ export const FoodGraph = () => {
 };
 
 export default FoodGraph
+
+export async function getStaticProps() {
+    return {
+        props: {
+            ogImagePath: "https://wcedmisten.fyi/og-images/recipe-graph-full.png"
+        }
+    }
+}
