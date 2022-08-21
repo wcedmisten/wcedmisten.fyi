@@ -53,4 +53,7 @@ cp -r public/$IMGDIR images
 # convert the jpgs and pngs to jpg, and downscale them if they're wider than 1000px
 convert 'images/'$IMGDIR'/*.jpg[1000x>]' -set filename:base "%[basename]" "public/$IMGDIR/%[filename:base].jpg"
 convert 'images/'$IMGDIR'/*.png[1000x>]' -set filename:base "%[basename]" "public/$IMGDIR/%[filename:base].jpg"
+
+# downscape a thumbnail
+convert 'image.jpg[200x>]' -set filename:base "%[basename]" "./%[filename:base].jpg"
 ```

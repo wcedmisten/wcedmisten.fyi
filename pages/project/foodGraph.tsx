@@ -264,7 +264,7 @@ function InfoModal() {
                         recipes from allrecipes.com
                     </p>
                     <p>For more information on how this graph was
-                        created, see
+                        created, see{' '}
                         <a href="https://github.com/wcedmisten/foodFinder" target="_blank">my github repository</a>.
                     </p>
                 </Modal.Body>
