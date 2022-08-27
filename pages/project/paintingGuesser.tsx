@@ -11,7 +11,7 @@ export const Guesser = (props: { filenames: string[] }) => {
         <>
             <h1>Painting Guesser</h1>
             <h2>Can you guess the descriptions of these famous paintings?</h2>
-            <img src={`/projects/painting-guesser/${item}/00002.png`}></img>
+            <img src={`/projects/painting-guesser/${item}/00002.jpg`}></img>
         </>
     )
 }
