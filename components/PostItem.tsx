@@ -3,11 +3,12 @@ import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
 
 import PostMetadata from "./PostMetadata";
 
+import style from "./postitem.module.css"
 
 export default function PostItem({ href, thumbnailURL, title, description, date, thumbnailAlt, readingLength }:
     { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength?: string }) {
     return (
-        <ListGroup.Item className="post-item">
+        <ListGroup.Item className={style.PostThumbnail}>
             <Container fluid className="justify-content-md-center">
                 <Row>
                     <Col xs={12} md={4} >
@@ -35,7 +36,7 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                                 </Link>
                             </Row>
                             <Row>
-                                <PostMetadata date={date} readingLength={readingLength}/>
+                                <PostMetadata date={date} readingLength={readingLength} />
                             </Row>
                             <Row>
                                 <p>

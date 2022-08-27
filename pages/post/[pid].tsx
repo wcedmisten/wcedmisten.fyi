@@ -10,11 +10,11 @@ import { promises as fs } from 'fs';
 
 import "highlight.js/styles/atom-one-dark.css";
 
-import { useRouter } from 'next/router'
 import { Col, Row, Container } from 'react-bootstrap';
 import PostMetadata from '../../components/PostMetadata';
 
 import style from './post.module.css'
+import './post.module.css'
 
 const components = {
     img: (props: any) => (
@@ -33,17 +33,21 @@ const components = {
         <li {...props} />
     ),
     figure: (props: any) => (
-        <figure {...props} />
+        <figure className={style.PostFigure} {...props} />
+    ),
+    h1: (props: any) => (
+        <h1 className={style.PostH1} {...props} />
+    ),
+    h2: (props: any) => (
+        <h2 className={style.PostH2} {...props} />
+    ),
+    h3: (props: any) => (
+        <h3 className={style.PostH3} {...props} />
     ),
 };
 
 export default function TestPage(props: { source: any }) {
-    const router = useRouter()
-
-    const pid = router.query.pid as string;
-
     const source = props.source;
-
     const metadata = source.mdx.frontmatter
 
     return (

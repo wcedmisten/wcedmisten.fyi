@@ -3,12 +3,13 @@ import { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 // import { Navbar } from "react-bootstrap/navbar";
 
+import style from "./navbar.module.css"
+
 export default function NavbarHeader() {
     const [expanded, setExpanded] = useState(false);
 
-
     return (
-        <Navbar expand="lg" expanded={expanded}>
+        <Navbar className={style.Navbar} expand="lg" expanded={expanded}>
             <Container>
                 <Link href="/" passHref>
                     <Navbar.Brand>
@@ -17,14 +18,14 @@ export default function NavbarHeader() {
                             src="/logo.png"
                             width="50px"
                             height="50px"
-                            className="navbar-image"
+                            className={style.NavbarImage}
                         />
                         {' '}
                         William Edmisten
                     </Navbar.Brand>
                 </Link>
                 <Navbar.Toggle
-                    onClick={() => setExpanded(true)}
+                    onClick={() => setExpanded(!expanded)}
                     aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
                     <Nav activeKey="/" onSelect={() => setExpanded(false)}>

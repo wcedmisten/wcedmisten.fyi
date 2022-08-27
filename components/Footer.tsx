@@ -1,19 +1,21 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { BsGithub, BsRss } from "react-icons/bs";
 
+import style from "./footer.module.css";
+
 export default function Footer() {
     return (
-        <div className="footer">
+        <div className={style.Footer}>
             <Container>
                 <Row>
                     <Col>
-                        <a className="footer-icon-link"
+                        <a className={style.FooterIconLink}
                             aria-label="RSS Feed"
                             href="/feed.xml">
                             <BsRss />
                         </a>
                         {' '}
-                        <a className="footer-icon-link"
+                        <a className={style.FooterIconLink}
                             aria-label="Github Source"
                             href="https://github.com/wcedmisten/wcedmisten.fyi">
                             <BsGithub />

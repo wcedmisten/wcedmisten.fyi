@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import { Col, Row, Container } from 'react-bootstrap';
 
+import style from "./foodgraph.module.css";
+
 // graph dynamic constants
 const REPEL_STRENGTH = -500
 const ATTRACT_POINT_X = 150
@@ -164,7 +166,7 @@ function runForceGraph(
         .append("svg")
         .attr("style", "outline: thin solid black;")
         .attr("width", 800).attr("height", 550)
-        .attr("class", "graphsvg");
+        .attr("class", style.FoodGraphgraphsvg);
 
     var selectedToolkitNode: null = null;
 
@@ -195,7 +197,7 @@ function runForceGraph(
         .call(drag(simulation) as any);
 
     const label = g
-        .attr("class", "labels")
+        .attr("class", style.FoodGraphlabels)
         .selectAll("text")
         .data(nodes)
         .enter()
@@ -330,7 +332,7 @@ export const FoodGraph = () => {
                     </div>
                 </Col>
                 <Col>
-                    <div ref={containerRef} className="svgcontainer" />
+                    <div ref={containerRef} className={style.FoodGraphSvgcontainer} />
                 </Col>
             </Row>
         </Container >

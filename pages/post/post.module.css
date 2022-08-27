@@ -3,3 +3,26 @@
     margin: 0 auto;
     max-width: 100%;
 }
+
+.PostFigure {
+    display: flex;
+    flex-flow: column;
+    padding: 5px;
+    max-width: 300px;
+    margin: auto;
+}
+
+.PostH1 {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.PostH2 {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.PostH3 {
+    padding-top: 20px;
+    padding-bottom: 15px;
+}
