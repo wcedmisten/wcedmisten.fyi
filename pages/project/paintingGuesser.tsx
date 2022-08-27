@@ -4,8 +4,16 @@ import { useEffect, useState } from 'react';
 
 import style from "./paintingguesser.module.css"
 
-export const Guesser = (props: { filenames: string[] }) => {
-    const { filenames } = props;
+interface GuesserProps {
+    filenames: string[];
+    artists: string[];
+    subjects: string[];
+    descriptions: string[];
+}
+
+export const Guesser = (props: GuesserProps) => {
+    const { filenames, artists, subjects, descriptions } = props;
+
 
     const [index, setRandomNumber] = useState<number | undefined>(undefined);
 
@@ -13,7 +21,7 @@ export const Guesser = (props: { filenames: string[] }) => {
         setRandomNumber(Math.floor(Math.random() * filenames.length));
     }, []);
 
-    const item = index ? filenames[index] : "";
+    const item = index !== undefined ? filenames[index] : "";
 
     const [selectedArtist, setSelectedArtist] = useState(""); //default value
 
@@ -33,6 +41,14 @@ export const Guesser = (props: { filenames: string[] }) => {
         setSelectedDescription(event.target.value);
     }
 
+    const [answerSubmitted, setAnswerSubmitted] = useState<boolean>(false);
+    function submitAnswers(event: any) {
+        setAnswerSubmitted(true);
+    }
+
+
+    const showSubmitButton: boolean = selectedArtist !== "" && selectedSubject !== "" && selectedDescription !== "";
+
     return index !== undefined && (
         <>
             <h1 className={style.Headers}>Art Gallery Curator</h1>
@@ -45,21 +61,29 @@ export const Guesser = (props: { filenames: string[] }) => {
                 <p className={style.PlaqueText}>
                     <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
                         <option value="" disabled>Artist</option>
-                        <option value="Salvador Dali">Salvador Dali</option>
+                        {artists.map((artist: string) => {
+                            return <option value={artist}>{artist}</option>
+                        })}
                     </select> </p>
                 <p className={style.PlaqueText}>
                     Painting of a {' '}
                     <select value={selectedSubject} onChange={handleSubjectSelectChange} name="subject" id="subject">
                         <option value="" disabled>Subject</option>
-                        <option value="Dolphin">Dolphin</option>
+                        {subjects.map((subject: string) => {
+                            return <option value={subject}>{subject}</option>
+                        })}
                     </select>
                     {' '}
                     <select value={selectedDescription} onChange={handleDescriptionSelectChange} name="description" id="description">
                         <option value="" disabled>Description</option>
-                        <option value="saab">Wearing a Tophat</option>
+                        {descriptions.map((description: string) => {
+                            return <option value={description}>{description}</option>
+                        })}
                     </select>
                 </p>
             </div>
+            {showSubmitButton &&
+                <button onClick={submitAnswers}>Engrave Plaque</button>}
         </>
     )
 }
@@ -71,14 +95,33 @@ export async function getStaticProps() {
         process.cwd(),
         'public/projects/painting-guesser'
     );
-    const filenames = await fs.readdir(postsDirectory)
+    const filenames = await fs.readdir(postsDirectory);
 
-    filenames.forEach(async filename => {
+    const artists = new Set<string>();
+    const subjects = new Set<string>();
+    const descriptions = new Set<string>();
+
+    for (const filename of filenames) {
         const filePath = path.join(postsDirectory, filename)
         const fileContents = await fs.readFile(`${filePath}/prompts.txt`,
             'utf8')
-        // console.log(fileContents);
-    })
 
-    return { props: { filenames } }
+        const artist = fileContents.split("painting by ")[1].split(" of a ")[0];
+
+        const subject = fileContents.split("of a ")[1].split(" ")[0];
+
+        const description = fileContents.split("of a ")[1].split(" --plms")[0].split(' ').slice(1).join(' ')
+        artists.add(artist);
+        subjects.add(subject);
+        descriptions.add(description);
+    };
+
+    return {
+        props: {
+            filenames,
+            artists: Array.from(artists),
+            subjects: Array.from(subjects),
+            descriptions: Array.from(descriptions)
+        }
+    };
 }
