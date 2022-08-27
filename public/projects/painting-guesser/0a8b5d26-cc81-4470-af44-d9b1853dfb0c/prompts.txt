@@ -1,0 +1,1 @@
+0a8b5d26-cc81-4470-af44-d9b1853dfb0c scripts/txt2img.py --prompt painting by vincent van gogh of a kangaroo wearing a suit --plms --n_samples 1

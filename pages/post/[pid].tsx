@@ -14,9 +14,11 @@ import { useRouter } from 'next/router'
 import { Col, Row, Container } from 'react-bootstrap';
 import PostMetadata from '../../components/PostMetadata';
 
+import style from './post.module.css'
+
 const components = {
     img: (props: any) => (
-        <img {...props} />
+        <img className={style.PostImage} {...props} />
     ),
     Container,
     Col,

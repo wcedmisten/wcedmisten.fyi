@@ -15,12 +15,6 @@ body {
     padding-left: 50px;
 }
 
-img {
-    padding: 30px 0px 30px 0px;
-    margin: 0 auto;
-    max-width: 100%;
-}
-
 figure {
     display: flex;
     flex-flow: column;

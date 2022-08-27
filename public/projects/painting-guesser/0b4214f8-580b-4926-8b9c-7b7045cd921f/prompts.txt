@@ -1,0 +1,1 @@
+0b4214f8-580b-4926-8b9c-7b7045cd921f scripts/txt2img.py --prompt painting by Claude Monet of a dolphin on the moon --plms --n_samples 1
