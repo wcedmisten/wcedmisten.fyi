@@ -1,11 +1,18 @@
 import path from 'path';
 import { promises as fs } from 'fs';
+import { useEffect, useState } from 'react';
 
 
 export const Guesser = (props: { filenames: string[] }) => {
     const { filenames } = props;
 
-    var item = filenames[Math.floor(Math.random() * filenames.length)];
+    const [index, setRandomNumber] = useState<number | undefined>(undefined);
+
+    useEffect(() => {
+        setRandomNumber(Math.floor(Math.random() * filenames.length));
+    }, []);
+
+    const item = index ? filenames[index] : "";
 
     return (
         <>
