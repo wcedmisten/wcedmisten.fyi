@@ -1,0 +1,83 @@
+.PaintingImage {
+    /* padding: 30px 30px 30px 30px; */
+    /* margin: 0 auto; */
+    /* max-width: 100%; */
+    border: solid 2px;
+    border-bottom-color: #ffe;
+    border-left-color: #eed;
+    border-right-color: #eed;
+    border-top-color: #ccb;
+    max-height: 400px;
+    max-width: 400px;
+}
+
+.Headers {
+    padding: 10px 20px 0px 10px;
+    /* margin: 0 auto; */
+    /* max-width: 100%; */
+    font-family: Garamond;
+}
+
+
+.Frame {
+    background-color: #ddc;
+    border: solid 5vmin #eee;
+    border-bottom-color: #fff;
+    border-left-color: #eee;
+    border-radius: 2px;
+    border-right-color: #eee;
+    border-top-color: #ddd;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25) inset, 0 5px 10px 5px rgba(0, 0, 0, .25);
+    box-sizing: border-box;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 4vh 4vw;
+    /* height: 80vh; */
+    padding: 4vmin;
+    position: relative;
+    text-align: center;
+}
+
+.Plaque {
+    /* display: inline-block; */
+    /* width: 50px; */
+    border: 1px solid #000;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: solid 1px;
+    /* background-color: rgb(233, 233, 151); */
+    /* border-bottom-color: #ffe;
+    border-left-color: #eed;
+    border-right-color: #eed; */
+    border-color: black;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25) inset, 0 5px 10px 5px rgba(0, 0, 0, .25);
+    box-sizing: border-box;
+    /* max-height: 100%;
+    max-width: 100%; */
+    background:
+        linear-gradient(to left,
+            #878684 0%,
+            #7a7a78 8%,
+            #dcdbd9 30%,
+            #ebe9de 40%,
+            transparent 80%),
+        linear-gradient(to right,
+            #878684 0%,
+            #7a7a78 8%,
+            #dcdbd9 25%,
+            #ebe9de 62.5%,
+            #FFFFFF 100%);
+
+    display: inline-block;
+}
+
+.PlaqueText {
+    padding-top: 5px;
+    padding-bottom: 0px;
+    background: transparent;
+    font-family: Garamond;
+}
