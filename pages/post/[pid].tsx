@@ -76,13 +76,13 @@ export async function getStaticPaths() {
 // This function gets called at build time on server-side.
 // It won't be called on client-side, so you can even do
 // direct database queries.
-export async function getStaticProps(params: any) {
-    const pid = params.pid;
+export async function getStaticProps({ params }: { params: any }) {
+    const { pid } = params;
 
     const postsDirectory = path.join(process.cwd(), 'mdx')
     const filenames = await fs.readdir(postsDirectory)
 
-    const post: any = filenames.find((x: any) => x.filename == pid);
+    const post: any = filenames.find((x: any) => x === `${pid}.mdx`);
 
     const filePath = path.join(postsDirectory, post)
     const fileContents = await fs.readFile(filePath, 'utf8')
