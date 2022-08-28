@@ -40,24 +40,14 @@
 }
 
 .Plaque {
-    /* display: inline-block; */
-    /* width: 50px; */
-    border: 1px solid #000;
     text-align: center;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
     margin-left: 5px;
     margin-right: 5px;
-    border: solid 1px;
-    /* background-color: rgb(233, 233, 151); */
-    /* border-bottom-color: #ffe;
-    border-left-color: #eed;
-    border-right-color: #eed; */
-    border-color: black;
+    margin-bottom: 25px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25) inset, 0 5px 10px 5px rgba(0, 0, 0, .25);
     box-sizing: border-box;
-    /* max-height: 100%;
-    max-width: 100%; */
     background:
         linear-gradient(to left,
             #878684 0%,
@@ -80,4 +70,8 @@
     padding-bottom: 0px;
     background: transparent;
     font-family: Garamond;
+}
+
+.Button {
+    margin: 10px 10px 10px 10px;
 }

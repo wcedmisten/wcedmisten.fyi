@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { useEffect, useState } from 'react';
 
 import style from "./paintingguesser.module.css"
-import { Button } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 
 interface GuesserProps {
     solutions: any,
@@ -15,16 +15,27 @@ interface GuesserProps {
 
 type GameStatus = "guessing" | "correct" | "wrong";
 
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+// https://stackoverflow.com/a/46545530
+function shuffleArray(array: any[]) {
+    return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+}
+
 export const Guesser = (props: GuesserProps) => {
     const { filenames, artists, subjects, descriptions, solutions } = props;
 
-    const [index, setRandomNumber] = useState<number | undefined>(undefined);
+    const [shuffled, setShuffled] = useState<number[] | undefined>(undefined);
 
     useEffect(() => {
-        setRandomNumber(Math.floor(Math.random() * filenames.length));
+        setShuffled(shuffleArray(filenames));
     }, []);
 
-    const pictureId = index !== undefined ? filenames[index] : "";
+    const [index, setIndex] = useState<number>(0);
+
+    const pictureId = shuffled !== undefined ? shuffled[index] : "";
 
     const [selectedArtist, setSelectedArtist] = useState(""); //default value
 
@@ -52,6 +63,11 @@ export const Guesser = (props: GuesserProps) => {
         }
     }
 
+    function resetGame(event: any) {
+        setIndex(index + 1);
+        setGameStatus("guessing");
+    }
+
     const solution = solutions[pictureId];
     const answersCorrect: boolean = selectedArtist === solution?.artist &&
         selectedSubject === solution?.subject &&
@@ -69,53 +85,69 @@ export const Guesser = (props: GuesserProps) => {
     const buttonText = {
         "guessing": "Engrave Plaque",
         "correct": "Correct!",
-        "wrong": "Wrong!",
+        "wrong": "Try Again!",
     }[gameStatus]
 
-    return index !== undefined && (
+    return shuffled !== undefined && (
         <>
-            <h1 className={style.Headers}>Art Gallery Curator</h1>
-            <h2 className={style.Headers}>Oh no! The plaques for these famous paintings got stolen!</h2>
-            <h3 className={style.Headers}>Can you fix them?</h3>
-            <div className={style.Frame}>
-                <img className={style.PaintingImage} src={`/projects/painting-guesser/${pictureId}/00002.jpg`}></img>
-            </div>
-            <div className={style.Plaque}>
-                <p className={style.PlaqueText}>
-                    {gameStatus === "correct" ?
-                        <p className={style.PlaqueText}>{solution.artist}</p> :
-                        <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
-                            <option key="placeholder" value="" disabled>Artist</option>
-                            {artists.map((artist: string) => {
-                                return <option key={artist} value={artist}>{artist}</option>
-                            })}
-                        </select>
-                    }
-                </p>
-                <p className={style.PlaqueText}>
-                    Painting of a {' '}
-                    {gameStatus === "correct" ?
-                        solution.subject :
-                        <select value={selectedSubject} onChange={handleSubjectSelectChange} name="subject" id="subject">
-                            <option key="placeholder" value="" disabled>Subject</option>
-                            {subjects.map((subject: string) => {
-                                return <option key={subject} value={subject}>{subject}</option>
-                            })}
-                        </select>
-                    }
-                    {' '}
-                    {gameStatus === "correct" ?
-                        solution.description :
-                        <select value={selectedDescription} onChange={handleDescriptionSelectChange} name="description" id="description">
-                            <option key="placeholder" value="" disabled>Description</option>
-                            {descriptions.map((description: string) => {
-                                return <option key={description} value={description}>{description}</option>
-                            })}
-                        </select>}
-                </p>
-            </div>
-            {showSubmitButton &&
-                <Button className={buttonClass} onClick={submitAnswers}>{buttonText}</Button>}
+            <Container className="justify-content-md-center">
+                <Row><Col className="justify-content-center text-center">
+                    <h1 className={style.Headers}>Art Gallery Curator</h1>
+                    <h2 className={style.Headers}>Oh no! The plaques for these famous paintings got stolen!</h2>
+                    <h3 className={style.Headers}>Can you fix them?</h3>
+                </Col></Row>
+                <Row>
+                    <Col className="justify-content-center text-center">
+                        <div className={style.Frame}>
+                            <img className={style.PaintingImage} src={`/projects/painting-guesser/${pictureId}/00002.jpg`}></img>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="justify-content-center text-center">
+                        <div className={style.Plaque}>
+                            <p className={style.PlaqueText}>
+                                {gameStatus === "correct" ?
+                                    <p className={style.PlaqueText}>{solution.artist}</p> :
+                                    <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
+                                        <option key="placeholder" value="" disabled>Artist</option>
+                                        {artists.map((artist: string) => {
+                                            return <option key={artist} value={artist}>{artist}</option>
+                                        })}
+                                    </select>
+                                }
+                            </p>
+                            <p className={style.PlaqueText}>
+                                Painting of a {' '}
+                                {gameStatus === "correct" ?
+                                    solution.subject :
+                                    <select value={selectedSubject} onChange={handleSubjectSelectChange} name="subject" id="subject">
+                                        <option key="placeholder" value="" disabled>Subject</option>
+                                        {subjects.map((subject: string) => {
+                                            return <option key={subject} value={subject}>{subject}</option>
+                                        })}
+                                    </select>
+                                }
+                                {' '}
+                                {gameStatus === "correct" ?
+                                    solution.description :
+                                    <select value={selectedDescription} onChange={handleDescriptionSelectChange} name="description" id="description">
+                                        <option key="placeholder" value="" disabled>Description</option>
+                                        {descriptions.map((description: string) => {
+                                            return <option key={description} value={description}>{description}</option>
+                                        })}
+                                    </select>}
+                            </p>
+                        </div>
+                    </Col>
+                </Row>
+                <Row><Col className="justify-content-center text-center">
+                    {showSubmitButton &&
+                        <Button className={`${buttonClass} ${style.Button}`} onClick={submitAnswers}>{buttonText}</Button>}
+                    {gameStatus === "correct" &&
+                        <Button className={style.Button} onClick={resetGame}>Next Painting</Button>}
+                </Col></Row>
+            </Container>
         </>
     )
 }
