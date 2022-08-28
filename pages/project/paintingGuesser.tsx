@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import style from "./paintingguesser.module.css"
 import { Button, Col, Container, Row } from 'react-bootstrap';
+import { BsFillShareFill } from 'react-icons/bs';
 
 interface GuesserProps {
     solutions: any,
@@ -64,8 +65,16 @@ export const Guesser = (props: GuesserProps) => {
     }
 
     function resetGame(event: any) {
-        setIndex(index + 1);
+        setIndex((index + 1) % filenames.length);
+        setCopyButtonText("Share");
         setGameStatus("guessing");
+    }
+
+    const [copyButtonText, setCopyButtonText] = useState<string>("Share")
+
+    function copyShareLink(event: any) {
+        setCopyButtonText("Copied to clipboard")
+        navigator.clipboard.writeText(window.location.href + pictureId);
     }
 
     const solution = solutions[pictureId];
@@ -117,7 +126,7 @@ export const Guesser = (props: GuesserProps) => {
                 <Row>
                     <Col className="justify-content-center text-center">
                         <div className={style.Plaque}>
-                            <p className={style.PlaqueText}>
+                            <div className={style.PlaqueText}>
                                 {gameStatus === "correct" ?
                                     <h3 className={style.PlaqueText}>{solution.artist}</h3> :
                                     <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
@@ -127,7 +136,7 @@ export const Guesser = (props: GuesserProps) => {
                                         })}
                                     </select>
                                 }
-                            </p>
+                            </div>
                             <p className={style.PlaqueText}>
                                 Painting of a {' '}
                                 {gameStatus === "correct" ?
@@ -159,7 +168,10 @@ export const Guesser = (props: GuesserProps) => {
                         {showSubmitButton &&
                             <Button className={`${buttonClass} ${style.Button}`} onClick={submitAnswers}>{buttonText}</Button>}
                         {gameStatus === "correct" &&
-                            <Button className={style.Button} onClick={resetGame}>Next Painting</Button>}
+                            <><Button className={style.Button} onClick={resetGame}>Next Painting</Button>
+                                <Button className="btn-secondary" onClick={copyShareLink}>
+                                    <BsFillShareFill />{' ' + copyButtonText}
+                                </Button></>}
                     </Col>
                 </Row>
             </Container>
