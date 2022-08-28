@@ -27,7 +27,7 @@ function shuffleArray(array: any[]) {
 export const Guesser = (props: GuesserProps) => {
     const { filenames, artists, subjects, descriptions, solutions } = props;
 
-    const [shuffled, setShuffled] = useState<number[] | undefined>(undefined);
+    const [shuffled, setShuffled] = useState<string[] | undefined>(undefined);
 
     useEffect(() => {
         setShuffled(shuffleArray(filenames));
@@ -35,7 +35,7 @@ export const Guesser = (props: GuesserProps) => {
 
     const [index, setIndex] = useState<number>(0);
 
-    const pictureId: string = shuffled !== undefined ? shuffled[index] : "";
+    const pictureId: string | undefined = shuffled !== undefined ? shuffled[index] : "";
 
     const [selectedArtist, setSelectedArtist] = useState(""); //default value
 
