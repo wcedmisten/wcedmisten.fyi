@@ -98,16 +98,14 @@ export const Guesser = (props: GuesserProps) => {
 
     const pictureInt: number = parseInt(pictureId?.slice(-8), 16);
     const yearRange: number[] = yearRanges[solution?.artist]
-    const year: any = yearRange !== undefined ? yearRange[0] + pictureInt % (yearRange[1] - yearRange[0]) : undefined
-    console.log(year);
+    const year: any = yearRange !== undefined ? yearRange[0] + pictureInt % (yearRange[1] - yearRange[0]) : undefined;
 
     return shuffled !== undefined && (
         <>
             <Container className="justify-content-md-center">
                 <Row><Col className="justify-content-center text-center">
                     <h1 className={style.Headers}>Art Gallery Curator</h1>
-                    <h3 className={style.Headers}>Oh no! The plaques for these famous paintings got stolen!</h3>
-                    <h3 className={style.Headers}>Can you fix them?</h3>
+                    <p className={style.Headers}>Oh no! The plaques for these famous paintings got stolen! Can you fix them?</p>
                 </Col></Row>
                 <Row>
                     <Col className="justify-content-center text-center">
