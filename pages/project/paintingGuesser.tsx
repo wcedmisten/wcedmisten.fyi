@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { useEffect, useState } from 'react';
 
 import style from "./paintingguesser.module.css"
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Modal, Row } from 'react-bootstrap';
 import { BsFillShareFill } from 'react-icons/bs';
 
 interface GuesserProps {
@@ -63,6 +63,8 @@ export const Guesser = (props: GuesserProps) => {
             setGameStatus("wrong");
         }
     }
+
+    const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
     function resetGame(event: any) {
         setIndex((index + 1) % filenames.length);
@@ -174,7 +176,33 @@ export const Guesser = (props: GuesserProps) => {
                                 </Button></>}
                     </Col>
                 </Row>
+                <Row>
+                    <Col className="justify-content-center text-center">
+                        <Button className="btn-secondary" onClick={() => setShowInfoModal(true)}>More info</Button>
+                    </Col>
+                </Row>
             </Container>
+            <Modal show={showInfoModal} onHide={() => setShowInfoModal(false)} >
+                <Modal.Header closeButton>
+                    <Modal.Title>This Art Gallery Does Not Exist</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>This project uses images generated from <a target="_blank" href="https://github.com/CompVis/stable-diffusion">stable diffusion</a>,
+                        a latent diffusion machine learning model which generates images from textual descriptions.
+                    </p>
+                    <p>
+                        All images were generated using a prompt in the format of:
+                    </p>
+                    <code>
+                        {"A painting of <subject> <description> in the style of <artist>"}
+                    </code>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowInfoModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
