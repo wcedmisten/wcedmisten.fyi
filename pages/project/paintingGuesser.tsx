@@ -35,7 +35,7 @@ export const Guesser = (props: GuesserProps) => {
 
     const [index, setIndex] = useState<number>(0);
 
-    const pictureId = shuffled !== undefined ? shuffled[index] : "";
+    const pictureId: string = shuffled !== undefined ? shuffled[index] : "";
 
     const [selectedArtist, setSelectedArtist] = useState(""); //default value
 
@@ -88,12 +88,25 @@ export const Guesser = (props: GuesserProps) => {
         "wrong": "Try Again!",
     }[gameStatus]
 
+    const yearRanges: any = {
+        'Leonardo da Vinci': [1492, 1519],
+        'Vincent van Gogh': [1873, 1890],
+        'Francisco Goya': [1776, 1828],
+        'Salvador Dali': [1924, 1989],
+        'Claude Monet': [1865, 1926]
+    };
+
+    const pictureInt: number = parseInt(pictureId?.slice(-8), 16);
+    const yearRange: number[] = yearRanges[solution?.artist]
+    const year: any = yearRange !== undefined ? yearRange[0] + pictureInt % (yearRange[1] - yearRange[0]) : undefined
+    console.log(year);
+
     return shuffled !== undefined && (
         <>
             <Container className="justify-content-md-center">
                 <Row><Col className="justify-content-center text-center">
                     <h1 className={style.Headers}>Art Gallery Curator</h1>
-                    <h2 className={style.Headers}>Oh no! The plaques for these famous paintings got stolen!</h2>
+                    <h3 className={style.Headers}>Oh no! The plaques for these famous paintings got stolen!</h3>
                     <h3 className={style.Headers}>Can you fix them?</h3>
                 </Col></Row>
                 <Row>
@@ -108,7 +121,7 @@ export const Guesser = (props: GuesserProps) => {
                         <div className={style.Plaque}>
                             <p className={style.PlaqueText}>
                                 {gameStatus === "correct" ?
-                                    <p className={style.PlaqueText}>{solution.artist}</p> :
+                                    <h3 className={style.PlaqueText}>{solution.artist}</h3> :
                                     <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
                                         <option key="placeholder" value="" disabled>Artist</option>
                                         {artists.map((artist: string) => {
@@ -130,23 +143,27 @@ export const Guesser = (props: GuesserProps) => {
                                 }
                                 {' '}
                                 {gameStatus === "correct" ?
-                                    solution.description :
+                                    solution.description + ", " + year + "." :
                                     <select value={selectedDescription} onChange={handleDescriptionSelectChange} name="description" id="description">
                                         <option key="placeholder" value="" disabled>Description</option>
                                         {descriptions.map((description: string) => {
                                             return <option key={description} value={description}>{description}</option>
                                         })}
                                     </select>}
+                                {gameStatus === "correct" &&
+                                    <p className={style.PlaqueText}><i>Oil on canvas.</i></p>}
                             </p>
                         </div>
                     </Col>
                 </Row>
-                <Row><Col className="justify-content-center text-center">
-                    {showSubmitButton &&
-                        <Button className={`${buttonClass} ${style.Button}`} onClick={submitAnswers}>{buttonText}</Button>}
-                    {gameStatus === "correct" &&
-                        <Button className={style.Button} onClick={resetGame}>Next Painting</Button>}
-                </Col></Row>
+                <Row>
+                    <Col className="justify-content-center text-center">
+                        {showSubmitButton &&
+                            <Button className={`${buttonClass} ${style.Button}`} onClick={submitAnswers}>{buttonText}</Button>}
+                        {gameStatus === "correct" &&
+                            <Button className={style.Button} onClick={resetGame}>Next Painting</Button>}
+                    </Col>
+                </Row>
             </Container>
         </>
     )
@@ -175,7 +192,7 @@ export async function getStaticProps() {
             `${filePath}/prompts.txt`,
             'utf8')
 
-        const artist = fileContents.split("painting by ")[1].split(" of a ")[0];
+        const artist = fileContents.split("painting by ")[1].split(" of a ")[0].replace("vincent van gogh", "Vincent van Gogh");
 
         const subject = fileContents.split("of a ")[1].split(" ")[0];
 
