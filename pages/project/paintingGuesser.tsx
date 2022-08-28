@@ -178,7 +178,7 @@ export const Guesser = (props: GuesserProps) => {
                 </Row>
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <Button className="btn-secondary" onClick={() => setShowInfoModal(true)}>More info</Button>
+                        <Button className="btn-secondary btn-sm" onClick={() => setShowInfoModal(true)}>More info</Button>
                     </Col>
                 </Row>
             </Container>
@@ -196,6 +196,8 @@ export const Guesser = (props: GuesserProps) => {
                     <code>
                         {"A painting of <subject> <description> in the style of <artist>"}
                     </code>
+                    <p></p>
+                    <p>The results are images in the style of famous artists which don't actually exist.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowInfoModal(false)}>
