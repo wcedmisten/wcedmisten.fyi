@@ -104,7 +104,9 @@ export const Guesser = (props: GuesserProps) => {
         'Vincent van Gogh': [1873, 1890],
         'Francisco Goya': [1776, 1828],
         'Salvador Dali': [1924, 1989],
-        'Claude Monet': [1865, 1926]
+        'Claude Monet': [1865, 1926],
+        'Rembrandt': [1626, 1668],
+        'Andy Warhol': [1948, 1987],
     };
 
     const pictureInt: number = parseInt(pictureId?.slice(-8), 16);
