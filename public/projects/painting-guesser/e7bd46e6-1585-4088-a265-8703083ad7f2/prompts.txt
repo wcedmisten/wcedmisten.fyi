@@ -1,0 +1,1 @@
+e7bd46e6-1585-4088-a265-8703083ad7f2 scripts/txt2img.py --prompt painting by vincent van gogh of a dog riding a motorcycle --plms --n_samples 1

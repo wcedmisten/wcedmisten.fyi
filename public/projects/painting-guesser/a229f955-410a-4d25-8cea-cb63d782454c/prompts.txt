@@ -1,0 +1,1 @@
+a229f955-410a-4d25-8cea-cb63d782454c scripts/txt2img.py --prompt painting by Claude Monet of a cow in a park --plms --n_samples 1

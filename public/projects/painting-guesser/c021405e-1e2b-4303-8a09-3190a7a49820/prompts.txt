@@ -1,0 +1,1 @@
+c021405e-1e2b-4303-8a09-3190a7a49820 scripts/txt2img.py --prompt painting by Francisco Goya of a monkey riding a motorcycle --plms --n_samples 1

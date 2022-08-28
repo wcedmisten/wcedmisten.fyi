@@ -1,0 +1,1 @@
+2f065038-1bfe-4127-90d6-de67237ecc57 scripts/txt2img.py --prompt painting by Claude Monet of a man wearing sunglasses --plms --n_samples 1

@@ -1,0 +1,1 @@
+6a97e35b-17c3-449e-bbee-0172f5afe5d3 scripts/txt2img.py --prompt painting by vincent van gogh of a dolphin in a park --plms --n_samples 1

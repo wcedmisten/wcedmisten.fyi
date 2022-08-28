@@ -1,0 +1,1 @@
+03a11a0c-d994-4c27-a5d6-2ba671c989a3 scripts/txt2img.py --prompt painting by Claude Monet of a cat riding a motorcycle --plms --n_samples 1

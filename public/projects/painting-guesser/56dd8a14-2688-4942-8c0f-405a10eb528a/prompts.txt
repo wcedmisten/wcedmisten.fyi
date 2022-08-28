@@ -1,0 +1,1 @@
+56dd8a14-2688-4942-8c0f-405a10eb528a scripts/txt2img.py --prompt painting by Francisco Goya of a woman on the beach --plms --n_samples 1

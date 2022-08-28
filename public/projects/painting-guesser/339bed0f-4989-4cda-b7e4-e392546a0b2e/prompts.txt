@@ -1,0 +1,1 @@
+339bed0f-4989-4cda-b7e4-e392546a0b2e scripts/txt2img.py --prompt painting by Francisco Goya of a frog on the moon --plms --n_samples 1

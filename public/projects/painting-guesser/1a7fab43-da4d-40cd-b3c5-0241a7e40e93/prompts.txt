@@ -1,0 +1,1 @@
+1a7fab43-da4d-40cd-b3c5-0241a7e40e93 scripts/txt2img.py --prompt painting by Salvador Dali of a frog eating a hotdog --plms --n_samples 1

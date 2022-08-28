@@ -1,0 +1,1 @@
+30306e70-da91-4926-b6e1-5894af882106 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a kangaroo eating a hotdog --plms --n_samples 1

@@ -1,0 +1,1 @@
+397c8a85-f59a-45a6-a81c-84e0cb07a45d scripts/txt2img.py --prompt painting by Andy Warhol of a cat riding a motorcycle --plms --n_samples 1

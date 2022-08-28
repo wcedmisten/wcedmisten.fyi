@@ -1,0 +1,1 @@
+9dcc2a8d-51f1-4450-90c1-a3fe0ba99741 scripts/txt2img.py --prompt painting by vincent van gogh of a monkey on the beach --plms --n_samples 1

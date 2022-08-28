@@ -1,0 +1,1 @@
+dd7b46ad-b1f7-4ce3-992a-fcf8a9cd6eab scripts/txt2img.py --prompt painting by Andy Warhol of a dog wearing sunglasses --plms --n_samples 1

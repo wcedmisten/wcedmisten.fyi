@@ -1,0 +1,1 @@
+051fafad-fba4-495b-badb-ae27d14d67eb scripts/txt2img.py --prompt painting by Andy Warhol of a dolphin sitting in a chair --plms --n_samples 1

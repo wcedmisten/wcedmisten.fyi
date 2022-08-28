@@ -1,0 +1,1 @@
+bb3feef7-6378-45ad-a01e-c0ca0941af0f scripts/txt2img.py --prompt painting by Rembrandt of a cow in a park --plms --n_samples 1

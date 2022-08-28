@@ -1,0 +1,1 @@
+ca0d5b5c-ad4d-4716-aafa-2d18b7b2d8f3 scripts/txt2img.py --prompt painting by Andy Warhol of a cat wearing a baseball cap --plms --n_samples 1

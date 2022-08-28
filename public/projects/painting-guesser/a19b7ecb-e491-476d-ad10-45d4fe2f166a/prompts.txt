@@ -1,0 +1,1 @@
+a19b7ecb-e491-476d-ad10-45d4fe2f166a scripts/txt2img.py --prompt painting by Claude Monet of a monkey driving a car --plms --n_samples 1

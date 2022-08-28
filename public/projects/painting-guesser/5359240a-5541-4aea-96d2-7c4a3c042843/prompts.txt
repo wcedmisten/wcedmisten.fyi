@@ -1,0 +1,1 @@
+5359240a-5541-4aea-96d2-7c4a3c042843 scripts/txt2img.py --prompt painting by vincent van gogh of a frog riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+290363b1-c757-411a-b05c-762a4f44a058 scripts/txt2img.py --prompt painting by Francisco Goya of a kangaroo eating a hotdog --plms --n_samples 1

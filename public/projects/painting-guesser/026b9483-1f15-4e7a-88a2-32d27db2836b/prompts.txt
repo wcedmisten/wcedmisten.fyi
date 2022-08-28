@@ -1,0 +1,1 @@
+026b9483-1f15-4e7a-88a2-32d27db2836b scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo driving a car --plms --n_samples 1

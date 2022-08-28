@@ -1,0 +1,1 @@
+5d802d3a-821f-4be5-8f61-62c6cd034cfe scripts/txt2img.py --prompt painting by Rembrandt of a woman sitting in a chair --plms --n_samples 1

@@ -1,0 +1,1 @@
+1958e49e-8473-46e0-a7ec-e54a18acd010 scripts/txt2img.py --prompt painting by vincent van gogh of a lizard wearing a suit --plms --n_samples 1

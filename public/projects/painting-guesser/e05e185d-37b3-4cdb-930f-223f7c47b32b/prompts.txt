@@ -1,0 +1,1 @@
+e05e185d-37b3-4cdb-930f-223f7c47b32b scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo riding a motorcycle --plms --n_samples 1

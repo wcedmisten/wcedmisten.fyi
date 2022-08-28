@@ -1,0 +1,1 @@
+f416b277-98d3-4bbd-a6e6-4365a55ad856 scripts/txt2img.py --prompt painting by Claude Monet of a frog wearing a baseball cap --plms --n_samples 1

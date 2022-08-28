@@ -1,0 +1,1 @@
+c63afe96-7ee7-480e-a691-bbf2d38e2019 scripts/txt2img.py --prompt painting by Claude Monet of a cat driving a car --plms --n_samples 1

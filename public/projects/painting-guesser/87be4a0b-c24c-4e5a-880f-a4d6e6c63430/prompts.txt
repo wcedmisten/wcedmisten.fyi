@@ -1,0 +1,1 @@
+87be4a0b-c24c-4e5a-880f-a4d6e6c63430 scripts/txt2img.py --prompt painting by Salvador Dali of a woman in a park --plms --n_samples 1

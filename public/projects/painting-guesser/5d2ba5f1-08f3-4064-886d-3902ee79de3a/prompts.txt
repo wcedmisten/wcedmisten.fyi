@@ -1,0 +1,1 @@
+5d2ba5f1-08f3-4064-886d-3902ee79de3a scripts/txt2img.py --prompt painting by Claude Monet of a cat sitting in a chair --plms --n_samples 1

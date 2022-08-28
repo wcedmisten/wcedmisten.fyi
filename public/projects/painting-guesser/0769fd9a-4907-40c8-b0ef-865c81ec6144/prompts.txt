@@ -1,0 +1,1 @@
+0769fd9a-4907-40c8-b0ef-865c81ec6144 scripts/txt2img.py --prompt painting by Salvador Dali of a cow wearing a baseball cap --plms --n_samples 1

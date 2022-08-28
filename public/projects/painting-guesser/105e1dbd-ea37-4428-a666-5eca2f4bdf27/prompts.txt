@@ -1,0 +1,1 @@
+105e1dbd-ea37-4428-a666-5eca2f4bdf27 scripts/txt2img.py --prompt painting by Salvador Dali of a woman eating a hotdog --plms --n_samples 1

@@ -1,0 +1,1 @@
+6d79a8b3-d571-43fa-82dd-da41bdfb402e scripts/txt2img.py --prompt painting by Francisco Goya of a mouse wearing a suit --plms --n_samples 1

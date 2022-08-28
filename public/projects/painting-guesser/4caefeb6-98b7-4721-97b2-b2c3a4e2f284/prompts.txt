@@ -1,0 +1,1 @@
+4caefeb6-98b7-4721-97b2-b2c3a4e2f284 scripts/txt2img.py --prompt painting by vincent van gogh of a dog sitting in a chair --plms --n_samples 1

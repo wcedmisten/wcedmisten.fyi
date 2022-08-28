@@ -1,0 +1,1 @@
+6eaf9109-ee54-424c-a3d1-3c9aac02c0ab scripts/txt2img.py --prompt painting by Claude Monet of a cat in a park --plms --n_samples 1

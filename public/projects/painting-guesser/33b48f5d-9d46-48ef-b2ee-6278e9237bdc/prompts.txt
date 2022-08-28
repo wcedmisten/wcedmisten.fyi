@@ -1,0 +1,1 @@
+33b48f5d-9d46-48ef-b2ee-6278e9237bdc scripts/txt2img.py --prompt painting by Andy Warhol of a man wearing sunglasses --plms --n_samples 1

@@ -1,0 +1,1 @@
+36226562-5f2f-434c-8c2e-016e4ac97b0c scripts/txt2img.py --prompt painting by Rembrandt of a monkey riding a motorcycle --plms --n_samples 1

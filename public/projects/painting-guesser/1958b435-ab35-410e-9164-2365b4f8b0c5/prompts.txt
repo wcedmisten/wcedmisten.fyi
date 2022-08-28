@@ -1,0 +1,1 @@
+1958b435-ab35-410e-9164-2365b4f8b0c5 scripts/txt2img.py --prompt painting by vincent van gogh of a woman in a park --plms --n_samples 1

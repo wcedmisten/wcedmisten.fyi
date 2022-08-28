@@ -1,0 +1,1 @@
+db454857-5f60-4dde-9fe4-c0aefdae6e80 scripts/txt2img.py --prompt painting by vincent van gogh of a monkey riding a motorcycle --plms --n_samples 1

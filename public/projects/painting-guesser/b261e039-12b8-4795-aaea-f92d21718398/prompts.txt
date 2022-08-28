@@ -1,0 +1,1 @@
+b261e039-12b8-4795-aaea-f92d21718398 scripts/txt2img.py --prompt painting by Francisco Goya of a frog wearing sunglasses --plms --n_samples 1

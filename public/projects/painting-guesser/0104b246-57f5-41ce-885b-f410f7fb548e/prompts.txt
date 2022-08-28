@@ -1,0 +1,1 @@
+0104b246-57f5-41ce-885b-f410f7fb548e scripts/txt2img.py --prompt painting by Salvador Dali of a lizard eating a hotdog --plms --n_samples 1

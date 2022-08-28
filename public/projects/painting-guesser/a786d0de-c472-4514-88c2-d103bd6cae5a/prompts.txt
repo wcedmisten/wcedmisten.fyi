@@ -1,0 +1,1 @@
+a786d0de-c472-4514-88c2-d103bd6cae5a scripts/txt2img.py --prompt painting by Claude Monet of a monkey wearing a tophat --plms --n_samples 1

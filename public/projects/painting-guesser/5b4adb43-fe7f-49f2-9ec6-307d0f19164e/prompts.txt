@@ -1,0 +1,1 @@
+5b4adb43-fe7f-49f2-9ec6-307d0f19164e scripts/txt2img.py --prompt painting by Andy Warhol of a monkey wearing sunglasses --plms --n_samples 1

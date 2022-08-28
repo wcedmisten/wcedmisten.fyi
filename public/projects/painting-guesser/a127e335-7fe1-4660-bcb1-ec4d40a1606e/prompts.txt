@@ -1,0 +1,1 @@
+a127e335-7fe1-4660-bcb1-ec4d40a1606e scripts/txt2img.py --prompt painting by Francisco Goya of a cat wearing sunglasses --plms --n_samples 1

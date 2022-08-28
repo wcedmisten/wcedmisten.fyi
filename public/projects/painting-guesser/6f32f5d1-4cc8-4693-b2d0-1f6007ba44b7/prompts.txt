@@ -1,0 +1,1 @@
+6f32f5d1-4cc8-4693-b2d0-1f6007ba44b7 scripts/txt2img.py --prompt painting by Andy Warhol of a mouse on the beach --plms --n_samples 1

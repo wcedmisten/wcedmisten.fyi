@@ -1,0 +1,1 @@
+4ef253fb-1784-490a-bb4f-e7e2b058e77a scripts/txt2img.py --prompt painting by Claude Monet of a lizard eating a hotdog --plms --n_samples 1

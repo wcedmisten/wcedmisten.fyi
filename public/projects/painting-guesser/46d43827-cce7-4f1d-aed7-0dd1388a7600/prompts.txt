@@ -1,0 +1,1 @@
+46d43827-cce7-4f1d-aed7-0dd1388a7600 scripts/txt2img.py --prompt painting by Rembrandt of a lizard sitting in a chair --plms --n_samples 1

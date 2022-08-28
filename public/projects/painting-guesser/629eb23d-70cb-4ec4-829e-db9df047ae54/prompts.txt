@@ -1,0 +1,1 @@
+629eb23d-70cb-4ec4-829e-db9df047ae54 scripts/txt2img.py --prompt painting by Claude Monet of a woman driving a car --plms --n_samples 1

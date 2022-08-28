@@ -1,0 +1,1 @@
+6212e965-54d3-41d3-87d7-17a4cd47418d scripts/txt2img.py --prompt painting by Claude Monet of a monkey looking at the sky at night --plms --n_samples 1

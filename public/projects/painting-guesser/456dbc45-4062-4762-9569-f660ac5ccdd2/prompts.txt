@@ -1,0 +1,1 @@
+456dbc45-4062-4762-9569-f660ac5ccdd2 scripts/txt2img.py --prompt painting by Francisco Goya of a mouse on the beach --plms --n_samples 1

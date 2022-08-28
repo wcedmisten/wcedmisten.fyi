@@ -1,0 +1,1 @@
+49ef2133-8e5e-47e7-ae84-3b3740b80d1e scripts/txt2img.py --prompt painting by Andy Warhol of a cow in a park --plms --n_samples 1

@@ -1,0 +1,1 @@
+b197f90f-efcc-4e42-b484-1b263f096c81 scripts/txt2img.py --prompt painting by Salvador Dali of a cat riding a motorcycle --plms --n_samples 1

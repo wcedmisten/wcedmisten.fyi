@@ -1,0 +1,1 @@
+40469af7-79bb-4dd4-b838-0d73d8f5c589 scripts/txt2img.py --prompt painting by Francisco Goya of a woman looking at the sky at night --plms --n_samples 1

@@ -1,0 +1,1 @@
+32913669-fc24-43b6-b4c1-02c3af6e92d5 scripts/txt2img.py --prompt painting by Francisco Goya of a dog in a park --plms --n_samples 1

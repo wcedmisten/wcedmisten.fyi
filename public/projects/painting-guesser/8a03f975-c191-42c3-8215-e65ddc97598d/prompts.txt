@@ -1,0 +1,1 @@
+8a03f975-c191-42c3-8215-e65ddc97598d scripts/txt2img.py --prompt painting by Andy Warhol of a monkey jumping on a trampoline --plms --n_samples 1

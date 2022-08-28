@@ -1,0 +1,1 @@
+2a3a6c73-af22-47a7-a8eb-469bb74052c8 scripts/txt2img.py --prompt painting by Claude Monet of a mouse wearing sunglasses --plms --n_samples 1

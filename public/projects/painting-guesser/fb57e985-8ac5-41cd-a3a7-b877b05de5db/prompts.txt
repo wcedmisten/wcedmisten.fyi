@@ -1,0 +1,1 @@
+fb57e985-8ac5-41cd-a3a7-b877b05de5db scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo jumping on a trampoline --plms --n_samples 1

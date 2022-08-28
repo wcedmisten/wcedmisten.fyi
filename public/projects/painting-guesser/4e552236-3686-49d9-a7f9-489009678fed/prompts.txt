@@ -1,0 +1,1 @@
+4e552236-3686-49d9-a7f9-489009678fed scripts/txt2img.py --prompt painting by Rembrandt of a kangaroo in a park --plms --n_samples 1

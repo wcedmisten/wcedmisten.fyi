@@ -1,0 +1,1 @@
+d10c1b7e-73f7-4315-b78b-7a09ceec4b50 scripts/txt2img.py --prompt painting by Francisco Goya of a frog on the beach --plms --n_samples 1

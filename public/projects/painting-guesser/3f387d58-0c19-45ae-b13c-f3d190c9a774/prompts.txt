@@ -1,0 +1,1 @@
+3f387d58-0c19-45ae-b13c-f3d190c9a774 scripts/txt2img.py --prompt painting by Francisco Goya of a man wearing a baseball cap --plms --n_samples 1

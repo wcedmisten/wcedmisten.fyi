@@ -1,0 +1,1 @@
+19fee0f2-98a2-43c9-b898-76107eace628 scripts/txt2img.py --prompt painting by Claude Monet of a monkey in a park --plms --n_samples 1

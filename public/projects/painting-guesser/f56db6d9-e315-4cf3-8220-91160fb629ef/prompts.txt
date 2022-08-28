@@ -1,0 +1,1 @@
+f56db6d9-e315-4cf3-8220-91160fb629ef scripts/txt2img.py --prompt painting by Claude Monet of a woman in a park --plms --n_samples 1

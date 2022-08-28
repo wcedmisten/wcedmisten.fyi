@@ -1,0 +1,1 @@
+e08984c3-1ef4-4565-a8fd-095e7b97ad78 scripts/txt2img.py --prompt painting by Rembrandt of a man on the moon --plms --n_samples 1

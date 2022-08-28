@@ -1,0 +1,1 @@
+9458c1f4-3704-498c-8c65-79bdda3c6d78 scripts/txt2img.py --prompt painting by Rembrandt of a dog wearing a suit --plms --n_samples 1

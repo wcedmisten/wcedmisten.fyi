@@ -1,0 +1,1 @@
+2f5e8292-aac7-47ec-b0f2-a969d83f8a39 scripts/txt2img.py --prompt painting by Rembrandt of a mouse on the moon --plms --n_samples 1

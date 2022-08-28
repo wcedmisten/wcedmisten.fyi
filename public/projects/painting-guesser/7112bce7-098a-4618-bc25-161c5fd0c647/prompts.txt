@@ -1,0 +1,1 @@
+7112bce7-098a-4618-bc25-161c5fd0c647 scripts/txt2img.py --prompt painting by vincent van gogh of a mouse riding a motorcycle --plms --n_samples 1

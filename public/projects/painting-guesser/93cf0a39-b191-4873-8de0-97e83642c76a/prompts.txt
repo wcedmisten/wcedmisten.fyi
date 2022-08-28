@@ -1,0 +1,1 @@
+93cf0a39-b191-4873-8de0-97e83642c76a scripts/txt2img.py --prompt painting by Leonardo da Vinci of a cat sitting in a chair --plms --n_samples 1

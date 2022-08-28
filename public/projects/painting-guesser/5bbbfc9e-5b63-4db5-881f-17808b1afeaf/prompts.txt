@@ -1,0 +1,1 @@
+5bbbfc9e-5b63-4db5-881f-17808b1afeaf scripts/txt2img.py --prompt painting by vincent van gogh of a man on the moon --plms --n_samples 1

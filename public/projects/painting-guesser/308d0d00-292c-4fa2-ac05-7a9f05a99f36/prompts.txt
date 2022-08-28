@@ -1,0 +1,1 @@
+308d0d00-292c-4fa2-ac05-7a9f05a99f36 scripts/txt2img.py --prompt painting by Francisco Goya of a horse on the beach --plms --n_samples 1

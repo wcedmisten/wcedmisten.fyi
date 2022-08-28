@@ -1,0 +1,1 @@
+5cac3d4b-5bad-4a3b-8575-bd5768dc14d1 scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo wearing a baseball cap --plms --n_samples 1

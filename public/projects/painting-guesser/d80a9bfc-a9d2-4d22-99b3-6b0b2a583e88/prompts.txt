@@ -1,0 +1,1 @@
+d80a9bfc-a9d2-4d22-99b3-6b0b2a583e88 scripts/txt2img.py --prompt painting by vincent van gogh of a cow on the beach --plms --n_samples 1

@@ -1,0 +1,1 @@
+a92d621c-4829-4fb5-afd7-d9483edb57dd scripts/txt2img.py --prompt painting by Rembrandt of a lizard riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+ad74b82a-4b08-4370-98b8-41f69cc66ca5 scripts/txt2img.py --prompt painting by Claude Monet of a cow driving a car --plms --n_samples 1

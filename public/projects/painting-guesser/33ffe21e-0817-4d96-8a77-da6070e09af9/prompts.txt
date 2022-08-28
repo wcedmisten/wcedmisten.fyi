@@ -1,0 +1,1 @@
+33ffe21e-0817-4d96-8a77-da6070e09af9 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a man wearing sunglasses --plms --n_samples 1

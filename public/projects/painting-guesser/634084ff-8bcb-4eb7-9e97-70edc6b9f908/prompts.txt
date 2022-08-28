@@ -1,0 +1,1 @@
+634084ff-8bcb-4eb7-9e97-70edc6b9f908 scripts/txt2img.py --prompt painting by Salvador Dali of a dolphin eating a hotdog --plms --n_samples 1

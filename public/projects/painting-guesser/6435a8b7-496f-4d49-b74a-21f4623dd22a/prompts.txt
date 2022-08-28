@@ -1,0 +1,1 @@
+6435a8b7-496f-4d49-b74a-21f4623dd22a scripts/txt2img.py --prompt painting by Claude Monet of a man on the beach --plms --n_samples 1

@@ -121,7 +121,7 @@ export const Guesser = (props: GuesserProps) => {
                 <Row>
                     <Col className="justify-content-center text-center">
                         <div className={style.Frame}>
-                            <img className={style.PaintingImage} src={`/projects/painting-guesser/${pictureId}/00002.jpg`}></img>
+                            <img className={style.PaintingImage} src={`/projects/painting-guesser/${pictureId}/painting.jpg`}></img>
                         </div>
                     </Col>
                 </Row>

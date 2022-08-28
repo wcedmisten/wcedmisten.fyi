@@ -1,0 +1,1 @@
+05a36606-2e2e-4e30-9196-83d0a74bdfc0 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a cow wearing sunglasses --plms --n_samples 1

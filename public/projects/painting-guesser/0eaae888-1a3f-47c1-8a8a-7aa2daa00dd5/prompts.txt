@@ -1,0 +1,1 @@
+0eaae888-1a3f-47c1-8a8a-7aa2daa00dd5 scripts/txt2img.py --prompt painting by Andy Warhol of a horse jumping on a trampoline --plms --n_samples 1

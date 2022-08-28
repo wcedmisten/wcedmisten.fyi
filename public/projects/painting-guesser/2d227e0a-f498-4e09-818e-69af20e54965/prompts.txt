@@ -1,0 +1,1 @@
+2d227e0a-f498-4e09-818e-69af20e54965 scripts/txt2img.py --prompt painting by Claude Monet of a cat looking at the sky at night --plms --n_samples 1

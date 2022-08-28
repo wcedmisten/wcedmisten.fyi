@@ -1,0 +1,1 @@
+34c6c56b-c123-4ab0-a9af-915089512347 scripts/txt2img.py --prompt painting by Claude Monet of a frog eating a hotdog --plms --n_samples 1

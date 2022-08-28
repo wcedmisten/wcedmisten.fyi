@@ -1,0 +1,1 @@
+192475e2-5425-4849-aabb-89a6beb685f4 scripts/txt2img.py --prompt painting by Francisco Goya of a man riding a motorcycle --plms --n_samples 1

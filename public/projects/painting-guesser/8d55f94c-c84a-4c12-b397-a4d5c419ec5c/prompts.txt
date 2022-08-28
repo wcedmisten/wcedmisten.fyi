@@ -1,0 +1,1 @@
+8d55f94c-c84a-4c12-b397-a4d5c419ec5c scripts/txt2img.py --prompt painting by Claude Monet of a dog riding a motorcycle --plms --n_samples 1

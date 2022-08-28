@@ -1,0 +1,1 @@
+ef5e71ee-7125-42f9-84c0-111936a4330c scripts/txt2img.py --prompt painting by Rembrandt of a man wearing a baseball cap --plms --n_samples 1

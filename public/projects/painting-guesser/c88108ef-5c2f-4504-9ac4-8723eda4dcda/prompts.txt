@@ -1,0 +1,1 @@
+c88108ef-5c2f-4504-9ac4-8723eda4dcda scripts/txt2img.py --prompt painting by Francisco Goya of a cat on the beach --plms --n_samples 1

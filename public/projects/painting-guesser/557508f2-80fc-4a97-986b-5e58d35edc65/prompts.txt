@@ -1,0 +1,1 @@
+557508f2-80fc-4a97-986b-5e58d35edc65 scripts/txt2img.py --prompt painting by Andy Warhol of a lizard on the beach --plms --n_samples 1

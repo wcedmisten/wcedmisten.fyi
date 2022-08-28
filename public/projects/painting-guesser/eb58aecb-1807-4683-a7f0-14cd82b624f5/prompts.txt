@@ -1,0 +1,1 @@
+eb58aecb-1807-4683-a7f0-14cd82b624f5 scripts/txt2img.py --prompt painting by Francisco Goya of a dog on the moon --plms --n_samples 1

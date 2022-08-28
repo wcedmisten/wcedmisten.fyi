@@ -1,0 +1,1 @@
+6138ea3c-1b13-4e5e-b71d-e0ea6fe68836 scripts/txt2img.py --prompt painting by Rembrandt of a monkey wearing a baseball cap --plms --n_samples 1

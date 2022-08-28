@@ -1,0 +1,1 @@
+2385387b-30ef-46dd-bddf-81f6a35eb54d scripts/txt2img.py --prompt painting by Rembrandt of a man sitting in a chair --plms --n_samples 1

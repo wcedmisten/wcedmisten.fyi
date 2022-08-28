@@ -1,0 +1,1 @@
+e7d3381c-02e5-4b5c-a420-bb6f4bae800c scripts/txt2img.py --prompt painting by Francisco Goya of a monkey sitting in a chair --plms --n_samples 1

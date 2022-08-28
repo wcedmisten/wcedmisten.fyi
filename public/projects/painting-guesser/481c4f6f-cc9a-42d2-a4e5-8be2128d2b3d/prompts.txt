@@ -1,0 +1,1 @@
+481c4f6f-cc9a-42d2-a4e5-8be2128d2b3d scripts/txt2img.py --prompt painting by Andy Warhol of a mouse wearing sunglasses --plms --n_samples 1

@@ -1,0 +1,1 @@
+1dc9b545-2081-40dd-b947-f7fe9ca27eca scripts/txt2img.py --prompt painting by Claude Monet of a mouse riding a motorcycle --plms --n_samples 1

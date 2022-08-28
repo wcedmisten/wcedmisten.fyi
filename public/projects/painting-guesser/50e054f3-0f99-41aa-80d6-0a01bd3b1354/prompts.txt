@@ -1,0 +1,1 @@
+50e054f3-0f99-41aa-80d6-0a01bd3b1354 scripts/txt2img.py --prompt painting by Claude Monet of a cat wearing a baseball cap --plms --n_samples 1

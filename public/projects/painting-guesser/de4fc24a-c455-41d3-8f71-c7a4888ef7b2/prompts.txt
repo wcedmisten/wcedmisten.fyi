@@ -1,0 +1,1 @@
+de4fc24a-c455-41d3-8f71-c7a4888ef7b2 scripts/txt2img.py --prompt painting by vincent van gogh of a kangaroo in a park --plms --n_samples 1

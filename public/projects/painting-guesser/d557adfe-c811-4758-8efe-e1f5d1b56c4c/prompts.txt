@@ -1,0 +1,1 @@
+d557adfe-c811-4758-8efe-e1f5d1b56c4c scripts/txt2img.py --prompt painting by vincent van gogh of a man on the beach --plms --n_samples 1

@@ -1,0 +1,1 @@
+bdc8bdef-5ba2-4a9a-96f2-1676b7450da1 scripts/txt2img.py --prompt painting by Francisco Goya of a kangaroo wearing sunglasses --plms --n_samples 1

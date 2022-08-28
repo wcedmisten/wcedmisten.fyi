@@ -1,0 +1,1 @@
+1751fd9d-d53c-4ae7-92e6-875c6ea06dda scripts/txt2img.py --prompt painting by Andy Warhol of a woman wearing sunglasses --plms --n_samples 1

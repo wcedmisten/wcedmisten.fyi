@@ -1,0 +1,1 @@
+169a8bf7-d9ea-48cd-b502-7ee6b0e1a1ec scripts/txt2img.py --prompt painting by Rembrandt of a mouse wearing a suit --plms --n_samples 1

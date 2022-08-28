@@ -1,0 +1,1 @@
+d1c6b582-4c4d-4bb1-b44b-c50814223b6d scripts/txt2img.py --prompt painting by Andy Warhol of a horse sitting in a chair --plms --n_samples 1

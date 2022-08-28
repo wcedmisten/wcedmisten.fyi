@@ -1,0 +1,1 @@
+5e30557b-0035-4918-9ccf-d3f4ccf6bfd3 scripts/txt2img.py --prompt painting by Francisco Goya of a frog sitting in a chair --plms --n_samples 1

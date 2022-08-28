@@ -1,0 +1,1 @@
+4cf1e3a4-e9f3-4932-b356-fecd567666e2 scripts/txt2img.py --prompt painting by Claude Monet of a dolphin in a park --plms --n_samples 1

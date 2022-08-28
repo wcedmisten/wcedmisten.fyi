@@ -1,0 +1,1 @@
+1798df81-698f-4b8d-961c-bc6abbc3c4c2 scripts/txt2img.py --prompt painting by Rembrandt of a horse on the beach --plms --n_samples 1

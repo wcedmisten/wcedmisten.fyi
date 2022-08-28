@@ -1,0 +1,1 @@
+a1b5f43e-9cde-4a99-84fd-bb2fc058b0e0 scripts/txt2img.py --prompt painting by vincent van gogh of a frog wearing sunglasses --plms --n_samples 1

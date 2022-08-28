@@ -1,0 +1,1 @@
+1d661727-5eea-4a18-a5b6-3c3f6d603d4b scripts/txt2img.py --prompt painting by Andy Warhol of a horse wearing a baseball cap --plms --n_samples 1

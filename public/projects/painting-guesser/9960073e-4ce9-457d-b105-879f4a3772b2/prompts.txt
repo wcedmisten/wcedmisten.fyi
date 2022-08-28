@@ -1,0 +1,1 @@
+9960073e-4ce9-457d-b105-879f4a3772b2 scripts/txt2img.py --prompt painting by Rembrandt of a frog sitting in a chair --plms --n_samples 1

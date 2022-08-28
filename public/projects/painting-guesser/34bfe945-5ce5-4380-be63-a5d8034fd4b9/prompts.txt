@@ -1,0 +1,1 @@
+34bfe945-5ce5-4380-be63-a5d8034fd4b9 scripts/txt2img.py --prompt painting by Rembrandt of a cat wearing sunglasses --plms --n_samples 1

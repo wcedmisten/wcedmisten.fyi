@@ -1,0 +1,1 @@
+97b54dcd-0e03-45a5-ae64-10323e2ccc8a scripts/txt2img.py --prompt painting by Andy Warhol of a frog riding a motorcycle --plms --n_samples 1

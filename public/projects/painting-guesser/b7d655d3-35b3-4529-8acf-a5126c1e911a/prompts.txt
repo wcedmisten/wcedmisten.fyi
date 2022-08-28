@@ -1,0 +1,1 @@
+b7d655d3-35b3-4529-8acf-a5126c1e911a scripts/txt2img.py --prompt painting by vincent van gogh of a cat riding a motorcycle --plms --n_samples 1

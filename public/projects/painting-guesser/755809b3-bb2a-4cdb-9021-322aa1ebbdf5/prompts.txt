@@ -1,0 +1,1 @@
+755809b3-bb2a-4cdb-9021-322aa1ebbdf5 scripts/txt2img.py --prompt painting by Claude Monet of a lizard riding a motorcycle --plms --n_samples 1

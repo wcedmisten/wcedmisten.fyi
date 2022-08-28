@@ -1,0 +1,1 @@
+8b3fe17b-8878-4bfb-a53f-7869620deae0 scripts/txt2img.py --prompt painting by vincent van gogh of a monkey sitting in a chair --plms --n_samples 1

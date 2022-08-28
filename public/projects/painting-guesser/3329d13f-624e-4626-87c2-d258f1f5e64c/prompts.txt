@@ -1,0 +1,1 @@
+3329d13f-624e-4626-87c2-d258f1f5e64c scripts/txt2img.py --prompt painting by Rembrandt of a man riding a motorcycle --plms --n_samples 1

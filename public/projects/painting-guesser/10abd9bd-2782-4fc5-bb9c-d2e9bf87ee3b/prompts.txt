@@ -1,0 +1,1 @@
+10abd9bd-2782-4fc5-bb9c-d2e9bf87ee3b scripts/txt2img.py --prompt painting by vincent van gogh of a woman wearing sunglasses --plms --n_samples 1

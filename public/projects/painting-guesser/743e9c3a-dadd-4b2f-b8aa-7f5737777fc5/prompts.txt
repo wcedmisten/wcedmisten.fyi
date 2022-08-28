@@ -1,0 +1,1 @@
+743e9c3a-dadd-4b2f-b8aa-7f5737777fc5 scripts/txt2img.py --prompt painting by Salvador Dali of a frog on the beach --plms --n_samples 1

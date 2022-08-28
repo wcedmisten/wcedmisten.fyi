@@ -1,0 +1,1 @@
+eb272558-dbe6-4e1d-be93-179c165a0ca8 scripts/txt2img.py --prompt painting by Francisco Goya of a cow in a park --plms --n_samples 1

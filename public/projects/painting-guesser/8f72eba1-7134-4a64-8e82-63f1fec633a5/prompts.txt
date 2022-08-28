@@ -1,0 +1,1 @@
+8f72eba1-7134-4a64-8e82-63f1fec633a5 scripts/txt2img.py --prompt painting by Rembrandt of a mouse riding a motorcycle --plms --n_samples 1

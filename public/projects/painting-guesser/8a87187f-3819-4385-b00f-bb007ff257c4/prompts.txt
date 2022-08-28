@@ -1,0 +1,1 @@
+8a87187f-3819-4385-b00f-bb007ff257c4 scripts/txt2img.py --prompt painting by Rembrandt of a dog wearing sunglasses --plms --n_samples 1

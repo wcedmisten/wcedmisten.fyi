@@ -1,0 +1,1 @@
+5a5923ae-d12d-4104-91b4-d4e1150dc0e6 scripts/txt2img.py --prompt painting by Claude Monet of a man sitting in a chair --plms --n_samples 1

@@ -1,0 +1,1 @@
+7b2daf6c-2f10-4a1d-b9e3-072a14769979 scripts/txt2img.py --prompt painting by Rembrandt of a kangaroo driving a car --plms --n_samples 1

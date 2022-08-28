@@ -1,0 +1,1 @@
+5753a4e5-576b-473c-a458-d2700c119b25 scripts/txt2img.py --prompt painting by Salvador Dali of a horse on the beach --plms --n_samples 1

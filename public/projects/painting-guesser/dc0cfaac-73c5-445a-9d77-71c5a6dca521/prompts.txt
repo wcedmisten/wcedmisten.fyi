@@ -1,0 +1,1 @@
+dc0cfaac-73c5-445a-9d77-71c5a6dca521 scripts/txt2img.py --prompt painting by Andy Warhol of a woman on the beach --plms --n_samples 1

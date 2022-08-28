@@ -1,0 +1,1 @@
+d55b9fdc-ed35-4b91-b122-b8742294674c scripts/txt2img.py --prompt painting by Francisco Goya of a woman driving a car --plms --n_samples 1

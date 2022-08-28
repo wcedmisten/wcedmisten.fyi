@@ -1,0 +1,1 @@
+829f2f8b-024f-42d2-a67e-5b39d825f1ff scripts/txt2img.py --prompt painting by vincent van gogh of a kangaroo on the beach --plms --n_samples 1

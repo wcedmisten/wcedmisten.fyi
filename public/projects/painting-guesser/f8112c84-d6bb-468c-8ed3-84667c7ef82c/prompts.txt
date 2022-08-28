@@ -1,0 +1,1 @@
+f8112c84-d6bb-468c-8ed3-84667c7ef82c scripts/txt2img.py --prompt painting by Andy Warhol of a frog on the beach --plms --n_samples 1

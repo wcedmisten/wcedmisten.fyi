@@ -1,0 +1,1 @@
+120c5d35-2e1c-4c0f-822d-35d5044284ac scripts/txt2img.py --prompt painting by Leonardo da Vinci of a frog eating a hotdog --plms --n_samples 1

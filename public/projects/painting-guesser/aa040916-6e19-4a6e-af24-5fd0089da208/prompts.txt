@@ -1,0 +1,1 @@
+aa040916-6e19-4a6e-af24-5fd0089da208 scripts/txt2img.py --prompt painting by Andy Warhol of a dog on the beach --plms --n_samples 1

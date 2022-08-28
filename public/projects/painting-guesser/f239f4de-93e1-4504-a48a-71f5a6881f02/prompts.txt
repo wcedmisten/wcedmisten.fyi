@@ -1,0 +1,1 @@
+f239f4de-93e1-4504-a48a-71f5a6881f02 scripts/txt2img.py --prompt painting by Claude Monet of a monkey riding a motorcycle --plms --n_samples 1

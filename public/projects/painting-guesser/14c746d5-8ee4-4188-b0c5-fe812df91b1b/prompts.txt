@@ -1,0 +1,1 @@
+14c746d5-8ee4-4188-b0c5-fe812df91b1b scripts/txt2img.py --prompt painting by Francisco Goya of a dog on the beach --plms --n_samples 1

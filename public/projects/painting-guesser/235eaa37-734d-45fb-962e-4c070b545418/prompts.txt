@@ -1,0 +1,1 @@
+235eaa37-734d-45fb-962e-4c070b545418 scripts/txt2img.py --prompt painting by Francisco Goya of a monkey wearing sunglasses --plms --n_samples 1

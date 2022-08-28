@@ -1,0 +1,1 @@
+014327f4-3027-44c6-a445-229a5f9fbf30 scripts/txt2img.py --prompt painting by Francisco Goya of a man wearing a suit --plms --n_samples 1

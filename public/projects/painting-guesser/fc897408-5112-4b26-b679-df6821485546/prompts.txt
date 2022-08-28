@@ -1,0 +1,1 @@
+fc897408-5112-4b26-b679-df6821485546 scripts/txt2img.py --prompt painting by vincent van gogh of a man wearing sunglasses --plms --n_samples 1

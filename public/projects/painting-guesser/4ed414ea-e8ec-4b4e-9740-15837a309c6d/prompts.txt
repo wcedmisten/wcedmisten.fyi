@@ -1,0 +1,1 @@
+4ed414ea-e8ec-4b4e-9740-15837a309c6d scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo eating a hotdog --plms --n_samples 1

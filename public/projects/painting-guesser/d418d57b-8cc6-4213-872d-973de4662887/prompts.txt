@@ -1,0 +1,1 @@
+d418d57b-8cc6-4213-872d-973de4662887 scripts/txt2img.py --prompt painting by Claude Monet of a woman wearing a tophat --plms --n_samples 1

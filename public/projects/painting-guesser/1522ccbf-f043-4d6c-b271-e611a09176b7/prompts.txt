@@ -1,0 +1,1 @@
+1522ccbf-f043-4d6c-b271-e611a09176b7 scripts/txt2img.py --prompt painting by Rembrandt of a woman wearing a baseball cap --plms --n_samples 1

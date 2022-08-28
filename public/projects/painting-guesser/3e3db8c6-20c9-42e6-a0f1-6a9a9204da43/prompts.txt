@@ -1,0 +1,1 @@
+3e3db8c6-20c9-42e6-a0f1-6a9a9204da43 scripts/txt2img.py --prompt painting by Claude Monet of a monkey wearing a suit --plms --n_samples 1

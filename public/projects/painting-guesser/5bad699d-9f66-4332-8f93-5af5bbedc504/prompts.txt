@@ -1,0 +1,1 @@
+5bad699d-9f66-4332-8f93-5af5bbedc504 scripts/txt2img.py --prompt painting by Francisco Goya of a mouse wearing sunglasses --plms --n_samples 1

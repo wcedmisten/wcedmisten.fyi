@@ -1,0 +1,1 @@
+5d25a4d5-6535-4b11-b9f7-62c4a88d00da scripts/txt2img.py --prompt painting by Claude Monet of a dog wearing a suit --plms --n_samples 1

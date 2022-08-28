@@ -1,0 +1,1 @@
+bdb7de23-8189-4e6c-b757-e31679a353b2 scripts/txt2img.py --prompt painting by Andy Warhol of a cow eating a hotdog --plms --n_samples 1

@@ -1,0 +1,1 @@
+d7a1ec4e-da36-4a9a-8e84-4e2b34de4c22 scripts/txt2img.py --prompt painting by Francisco Goya of a dog wearing a baseball cap --plms --n_samples 1

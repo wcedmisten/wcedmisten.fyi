@@ -1,0 +1,1 @@
+6306f9ef-9597-4a57-b5a3-a6e3da0beca9 scripts/txt2img.py --prompt painting by vincent van gogh of a horse on the beach --plms --n_samples 1

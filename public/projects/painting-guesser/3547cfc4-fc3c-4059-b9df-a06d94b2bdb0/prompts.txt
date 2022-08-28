@@ -1,0 +1,1 @@
+3547cfc4-fc3c-4059-b9df-a06d94b2bdb0 scripts/txt2img.py --prompt painting by vincent van gogh of a monkey wearing a suit --plms --n_samples 1

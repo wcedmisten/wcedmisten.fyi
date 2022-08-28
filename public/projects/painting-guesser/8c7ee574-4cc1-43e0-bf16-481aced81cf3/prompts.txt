@@ -1,0 +1,1 @@
+8c7ee574-4cc1-43e0-bf16-481aced81cf3 scripts/txt2img.py --prompt painting by Andy Warhol of a dog wearing a tophat --plms --n_samples 1

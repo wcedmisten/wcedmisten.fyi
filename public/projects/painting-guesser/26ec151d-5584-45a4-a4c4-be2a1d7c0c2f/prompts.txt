@@ -1,0 +1,1 @@
+26ec151d-5584-45a4-a4c4-be2a1d7c0c2f scripts/txt2img.py --prompt painting by vincent van gogh of a cat in a park --plms --n_samples 1

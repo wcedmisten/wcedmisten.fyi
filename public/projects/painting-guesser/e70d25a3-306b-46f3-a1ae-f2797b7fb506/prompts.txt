@@ -1,0 +1,1 @@
+e70d25a3-306b-46f3-a1ae-f2797b7fb506 scripts/txt2img.py --prompt painting by Salvador Dali of a mouse jumping on a trampoline --plms --n_samples 1

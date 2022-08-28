@@ -1,0 +1,1 @@
+ed4b9b57-aaec-4e56-8a5a-9da90d054282 scripts/txt2img.py --prompt painting by Claude Monet of a horse jumping on a trampoline --plms --n_samples 1

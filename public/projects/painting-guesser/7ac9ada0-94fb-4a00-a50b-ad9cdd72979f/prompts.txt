@@ -1,0 +1,1 @@
+7ac9ada0-94fb-4a00-a50b-ad9cdd72979f scripts/txt2img.py --prompt painting by Francisco Goya of a lizard riding a motorcycle --plms --n_samples 1

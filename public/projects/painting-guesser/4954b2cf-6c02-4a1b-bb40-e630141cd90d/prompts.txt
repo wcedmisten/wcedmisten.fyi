@@ -1,0 +1,1 @@
+4954b2cf-6c02-4a1b-bb40-e630141cd90d scripts/txt2img.py --prompt painting by Francisco Goya of a mouse riding a motorcycle --plms --n_samples 1

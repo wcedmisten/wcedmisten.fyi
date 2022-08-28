@@ -1,0 +1,1 @@
+dfc9e159-4047-4169-9c9e-7e398283aecb scripts/txt2img.py --prompt painting by Francisco Goya of a frog driving a car --plms --n_samples 1

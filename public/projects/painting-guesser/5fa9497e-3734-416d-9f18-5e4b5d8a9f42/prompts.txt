@@ -1,0 +1,1 @@
+5fa9497e-3734-416d-9f18-5e4b5d8a9f42 scripts/txt2img.py --prompt painting by vincent van gogh of a cow wearing sunglasses --plms --n_samples 1

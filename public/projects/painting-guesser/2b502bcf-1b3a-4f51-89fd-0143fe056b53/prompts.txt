@@ -1,0 +1,1 @@
+2b502bcf-1b3a-4f51-89fd-0143fe056b53 scripts/txt2img.py --prompt painting by Francisco Goya of a woman wearing a tophat --plms --n_samples 1

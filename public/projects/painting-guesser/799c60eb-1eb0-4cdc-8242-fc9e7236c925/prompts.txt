@@ -1,0 +1,1 @@
+799c60eb-1eb0-4cdc-8242-fc9e7236c925 scripts/txt2img.py --prompt painting by Claude Monet of a dog jumping on a trampoline --plms --n_samples 1

@@ -1,0 +1,1 @@
+d6fdbd3e-51e9-4b4f-884d-0d9af5fccae3 scripts/txt2img.py --prompt painting by Andy Warhol of a dog sitting in a chair --plms --n_samples 1

@@ -1,0 +1,1 @@
+f28393f1-998f-4f95-976c-efd2e8794d42 scripts/txt2img.py --prompt painting by Claude Monet of a lizard on the beach --plms --n_samples 1

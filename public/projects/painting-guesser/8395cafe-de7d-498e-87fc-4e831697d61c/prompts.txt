@@ -1,0 +1,1 @@
+8395cafe-de7d-498e-87fc-4e831697d61c scripts/txt2img.py --prompt painting by Claude Monet of a woman sitting in a chair --plms --n_samples 1

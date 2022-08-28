@@ -1,0 +1,1 @@
+9d09ec2f-5251-441c-9111-1e4faa2f41e3 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a lizard on the beach --plms --n_samples 1

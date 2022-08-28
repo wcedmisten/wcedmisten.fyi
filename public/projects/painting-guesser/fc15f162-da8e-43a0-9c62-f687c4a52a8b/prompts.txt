@@ -1,0 +1,1 @@
+fc15f162-da8e-43a0-9c62-f687c4a52a8b scripts/txt2img.py --prompt painting by Leonardo da Vinci of a man looking at the sky at night --plms --n_samples 1

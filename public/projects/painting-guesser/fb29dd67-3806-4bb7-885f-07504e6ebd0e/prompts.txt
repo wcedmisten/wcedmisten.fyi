@@ -1,0 +1,1 @@
+fb29dd67-3806-4bb7-885f-07504e6ebd0e scripts/txt2img.py --prompt painting by vincent van gogh of a cow in a park --plms --n_samples 1

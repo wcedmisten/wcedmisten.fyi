@@ -1,0 +1,1 @@
+97e42ac9-5b95-4e29-9ec2-3864a77ed55c scripts/txt2img.py --prompt painting by vincent van gogh of a mouse in a park --plms --n_samples 1

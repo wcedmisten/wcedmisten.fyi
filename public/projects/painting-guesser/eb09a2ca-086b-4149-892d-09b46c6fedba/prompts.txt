@@ -1,0 +1,1 @@
+eb09a2ca-086b-4149-892d-09b46c6fedba scripts/txt2img.py --prompt painting by Francisco Goya of a dolphin eating a hotdog --plms --n_samples 1

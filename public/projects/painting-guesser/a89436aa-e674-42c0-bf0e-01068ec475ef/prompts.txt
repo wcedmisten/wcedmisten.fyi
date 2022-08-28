@@ -1,0 +1,1 @@
+a89436aa-e674-42c0-bf0e-01068ec475ef scripts/txt2img.py --prompt painting by Rembrandt of a kangaroo sitting in a chair --plms --n_samples 1

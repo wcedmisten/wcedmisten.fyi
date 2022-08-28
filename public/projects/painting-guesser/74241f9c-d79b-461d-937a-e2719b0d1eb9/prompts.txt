@@ -1,0 +1,1 @@
+74241f9c-d79b-461d-937a-e2719b0d1eb9 scripts/txt2img.py --prompt painting by Francisco Goya of a cow jumping on a trampoline --plms --n_samples 1

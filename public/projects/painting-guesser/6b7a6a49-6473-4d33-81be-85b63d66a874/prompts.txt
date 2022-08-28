@@ -1,0 +1,1 @@
+6b7a6a49-6473-4d33-81be-85b63d66a874 scripts/txt2img.py --prompt painting by Rembrandt of a kangaroo wearing sunglasses --plms --n_samples 1

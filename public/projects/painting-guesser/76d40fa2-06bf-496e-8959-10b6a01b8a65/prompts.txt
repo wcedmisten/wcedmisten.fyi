@@ -1,0 +1,1 @@
+76d40fa2-06bf-496e-8959-10b6a01b8a65 scripts/txt2img.py --prompt painting by Rembrandt of a cat riding a motorcycle --plms --n_samples 1

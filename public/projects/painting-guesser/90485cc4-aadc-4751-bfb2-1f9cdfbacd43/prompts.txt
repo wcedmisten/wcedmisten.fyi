@@ -1,0 +1,1 @@
+90485cc4-aadc-4751-bfb2-1f9cdfbacd43 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a woman jumping on a trampoline --plms --n_samples 1

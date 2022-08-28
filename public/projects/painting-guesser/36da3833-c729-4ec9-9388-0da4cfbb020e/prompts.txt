@@ -1,0 +1,1 @@
+36da3833-c729-4ec9-9388-0da4cfbb020e scripts/txt2img.py --prompt painting by Francisco Goya of a cat sitting in a chair --plms --n_samples 1

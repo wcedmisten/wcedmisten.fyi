@@ -1,0 +1,1 @@
+d6f17c43-04a8-40fb-92d1-fa7e8d646ece scripts/txt2img.py --prompt painting by Rembrandt of a cow jumping on a trampoline --plms --n_samples 1

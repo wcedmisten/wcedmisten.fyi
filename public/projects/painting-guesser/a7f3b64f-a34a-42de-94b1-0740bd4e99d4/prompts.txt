@@ -1,0 +1,1 @@
+a7f3b64f-a34a-42de-94b1-0740bd4e99d4 scripts/txt2img.py --prompt painting by Claude Monet of a man eating a hotdog --plms --n_samples 1

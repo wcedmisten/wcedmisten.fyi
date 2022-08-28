@@ -1,0 +1,1 @@
+dd72d25f-4470-40ea-bc3c-025e7d5b2ec6 scripts/txt2img.py --prompt painting by Rembrandt of a woman looking at the sky at night --plms --n_samples 1

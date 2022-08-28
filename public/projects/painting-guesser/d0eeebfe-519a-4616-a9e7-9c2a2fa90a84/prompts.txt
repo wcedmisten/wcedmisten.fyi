@@ -1,0 +1,1 @@
+d0eeebfe-519a-4616-a9e7-9c2a2fa90a84 scripts/txt2img.py --prompt painting by Rembrandt of a horse in a park --plms --n_samples 1

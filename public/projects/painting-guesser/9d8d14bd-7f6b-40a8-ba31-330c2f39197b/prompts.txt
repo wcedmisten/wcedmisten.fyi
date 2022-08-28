@@ -1,0 +1,1 @@
+9d8d14bd-7f6b-40a8-ba31-330c2f39197b scripts/txt2img.py --prompt painting by Claude Monet of a cat wearing a suit --plms --n_samples 1

@@ -1,0 +1,1 @@
+17962920-ad68-4467-b450-ce7b34ca9c75 scripts/txt2img.py --prompt painting by Rembrandt of a dog on the beach --plms --n_samples 1

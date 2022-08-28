@@ -1,0 +1,1 @@
+d8badd08-501a-4a70-a6c6-b08a132938ac scripts/txt2img.py --prompt painting by Rembrandt of a horse wearing sunglasses --plms --n_samples 1

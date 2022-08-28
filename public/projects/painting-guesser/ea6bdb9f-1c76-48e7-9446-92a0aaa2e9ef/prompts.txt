@@ -1,0 +1,1 @@
+ea6bdb9f-1c76-48e7-9446-92a0aaa2e9ef scripts/txt2img.py --prompt painting by Claude Monet of a frog riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+809563d6-924d-406f-902b-2b3a7cb8165a scripts/txt2img.py --prompt painting by Salvador Dali of a mouse riding a motorcycle --plms --n_samples 1

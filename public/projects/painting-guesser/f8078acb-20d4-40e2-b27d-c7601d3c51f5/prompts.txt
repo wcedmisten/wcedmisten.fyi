@@ -1,0 +1,1 @@
+f8078acb-20d4-40e2-b27d-c7601d3c51f5 scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo sitting in a chair --plms --n_samples 1

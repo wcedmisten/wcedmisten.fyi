@@ -1,0 +1,1 @@
+643dcfa5-7a67-49e9-87a2-effd8ad513ea scripts/txt2img.py --prompt painting by Leonardo da Vinci of a woman in a park --plms --n_samples 1

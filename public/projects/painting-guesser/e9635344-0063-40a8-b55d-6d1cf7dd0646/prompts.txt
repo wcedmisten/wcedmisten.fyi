@@ -1,0 +1,1 @@
+e9635344-0063-40a8-b55d-6d1cf7dd0646 scripts/txt2img.py --prompt painting by Claude Monet of a frog wearing a suit --plms --n_samples 1

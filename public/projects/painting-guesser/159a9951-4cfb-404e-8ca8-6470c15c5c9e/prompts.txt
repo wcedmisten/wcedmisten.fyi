@@ -1,0 +1,1 @@
+159a9951-4cfb-404e-8ca8-6470c15c5c9e scripts/txt2img.py --prompt painting by vincent van gogh of a monkey in a park --plms --n_samples 1

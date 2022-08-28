@@ -1,0 +1,1 @@
+a1042c51-2d02-481b-aa9d-ab027a0cc1c9 scripts/txt2img.py --prompt painting by Salvador Dali of a dog on the moon --plms --n_samples 1

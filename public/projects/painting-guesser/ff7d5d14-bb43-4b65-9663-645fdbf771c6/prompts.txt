@@ -1,0 +1,1 @@
+ff7d5d14-bb43-4b65-9663-645fdbf771c6 scripts/txt2img.py --prompt painting by Andy Warhol of a dog riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+e4df62b6-6228-440d-a36e-c7492805d127 scripts/txt2img.py --prompt painting by Claude Monet of a man in a park --plms --n_samples 1

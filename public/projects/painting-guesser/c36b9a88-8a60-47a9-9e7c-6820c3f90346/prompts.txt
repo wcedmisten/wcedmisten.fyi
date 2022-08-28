@@ -1,0 +1,1 @@
+c36b9a88-8a60-47a9-9e7c-6820c3f90346 scripts/txt2img.py --prompt painting by Francisco Goya of a woman wearing sunglasses --plms --n_samples 1

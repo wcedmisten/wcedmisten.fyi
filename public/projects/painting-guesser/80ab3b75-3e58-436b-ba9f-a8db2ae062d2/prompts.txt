@@ -1,0 +1,1 @@
+80ab3b75-3e58-436b-ba9f-a8db2ae062d2 scripts/txt2img.py --prompt painting by Rembrandt of a cat wearing a baseball cap --plms --n_samples 1

@@ -1,0 +1,1 @@
+090b5541-5497-4298-8793-8e34581a7e96 scripts/txt2img.py --prompt painting by vincent van gogh of a frog jumping on a trampoline --plms --n_samples 1

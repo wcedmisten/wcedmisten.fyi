@@ -1,0 +1,1 @@
+25c593d9-3f94-412b-942f-aaeb4de05a2d scripts/txt2img.py --prompt painting by Leonardo da Vinci of a dog wearing sunglasses --plms --n_samples 1

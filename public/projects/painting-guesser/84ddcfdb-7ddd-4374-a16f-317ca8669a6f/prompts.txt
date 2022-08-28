@@ -1,0 +1,1 @@
+84ddcfdb-7ddd-4374-a16f-317ca8669a6f scripts/txt2img.py --prompt painting by Leonardo da Vinci of a lizard sitting in a chair --plms --n_samples 1

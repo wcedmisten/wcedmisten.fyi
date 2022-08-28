@@ -1,0 +1,1 @@
+569276b7-6ce8-4cc6-a26b-e83f39348b4a scripts/txt2img.py --prompt painting by Claude Monet of a dog wearing a baseball cap --plms --n_samples 1

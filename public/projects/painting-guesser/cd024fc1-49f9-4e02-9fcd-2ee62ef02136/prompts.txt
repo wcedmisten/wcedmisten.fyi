@@ -1,0 +1,1 @@
+cd024fc1-49f9-4e02-9fcd-2ee62ef02136 scripts/txt2img.py --prompt painting by Claude Monet of a dog wearing sunglasses --plms --n_samples 1

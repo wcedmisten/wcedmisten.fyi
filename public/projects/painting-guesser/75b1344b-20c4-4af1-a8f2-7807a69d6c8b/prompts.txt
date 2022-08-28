@@ -1,0 +1,1 @@
+75b1344b-20c4-4af1-a8f2-7807a69d6c8b scripts/txt2img.py --prompt painting by Francisco Goya of a monkey eating a hotdog --plms --n_samples 1

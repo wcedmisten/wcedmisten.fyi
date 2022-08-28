@@ -1,0 +1,1 @@
+f2ccbe85-52dc-4cd5-ba80-7ceb4121b8b8 scripts/txt2img.py --prompt painting by Francisco Goya of a dog looking at the sky at night --plms --n_samples 1

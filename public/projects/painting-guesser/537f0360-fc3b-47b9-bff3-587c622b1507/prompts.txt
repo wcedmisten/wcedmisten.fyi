@@ -1,0 +1,1 @@
+537f0360-fc3b-47b9-bff3-587c622b1507 scripts/txt2img.py --prompt painting by Rembrandt of a dog riding a motorcycle --plms --n_samples 1

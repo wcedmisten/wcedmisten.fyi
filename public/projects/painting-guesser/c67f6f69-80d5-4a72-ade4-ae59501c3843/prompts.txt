@@ -1,0 +1,1 @@
+c67f6f69-80d5-4a72-ade4-ae59501c3843 scripts/txt2img.py --prompt painting by vincent van gogh of a kangaroo driving a car --plms --n_samples 1

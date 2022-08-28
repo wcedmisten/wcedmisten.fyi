@@ -1,0 +1,1 @@
+86ced694-9858-41ed-a6e4-b2e0d1b1e157 scripts/txt2img.py --prompt painting by vincent van gogh of a woman riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+a6544553-c902-4f2c-99fd-2c8309f3d252 scripts/txt2img.py --prompt painting by Claude Monet of a horse in a park --plms --n_samples 1

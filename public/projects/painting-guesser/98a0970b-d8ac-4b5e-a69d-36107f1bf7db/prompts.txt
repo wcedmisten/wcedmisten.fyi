@@ -1,0 +1,1 @@
+98a0970b-d8ac-4b5e-a69d-36107f1bf7db scripts/txt2img.py --prompt painting by Claude Monet of a cat on the beach --plms --n_samples 1

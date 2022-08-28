@@ -1,0 +1,1 @@
+3c198840-8ba5-4cec-bdf8-4c2e7446eda3 scripts/txt2img.py --prompt painting by Andy Warhol of a kangaroo jumping on a trampoline --plms --n_samples 1

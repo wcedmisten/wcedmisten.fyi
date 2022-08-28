@@ -1,0 +1,1 @@
+ffce567d-21e1-4815-9da4-a47f45bad87d scripts/txt2img.py --prompt painting by Francisco Goya of a kangaroo sitting in a chair --plms --n_samples 1

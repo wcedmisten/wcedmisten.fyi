@@ -1,0 +1,1 @@
+749eb7e7-e526-4c27-b03a-f84b1b381f47 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a kangaroo in a park --plms --n_samples 1

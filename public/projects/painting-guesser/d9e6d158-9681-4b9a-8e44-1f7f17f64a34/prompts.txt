@@ -1,0 +1,1 @@
+d9e6d158-9681-4b9a-8e44-1f7f17f64a34 scripts/txt2img.py --prompt painting by Francisco Goya of a cow wearing sunglasses --plms --n_samples 1

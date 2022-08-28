@@ -1,0 +1,1 @@
+0be9c4f1-6b41-40fd-9cdc-2a6ef566e4ba scripts/txt2img.py --prompt painting by Andy Warhol of a cow wearing sunglasses --plms --n_samples 1

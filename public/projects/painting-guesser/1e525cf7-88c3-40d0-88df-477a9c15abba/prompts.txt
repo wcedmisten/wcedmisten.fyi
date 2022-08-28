@@ -1,0 +1,1 @@
+1e525cf7-88c3-40d0-88df-477a9c15abba scripts/txt2img.py --prompt painting by vincent van gogh of a man driving a car --plms --n_samples 1

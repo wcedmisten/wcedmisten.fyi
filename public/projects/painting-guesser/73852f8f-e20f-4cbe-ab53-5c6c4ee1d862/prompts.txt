@@ -1,0 +1,1 @@
+73852f8f-e20f-4cbe-ab53-5c6c4ee1d862 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a frog riding a motorcycle --plms --n_samples 1

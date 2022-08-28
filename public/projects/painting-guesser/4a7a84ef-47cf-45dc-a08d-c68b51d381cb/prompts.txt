@@ -1,0 +1,1 @@
+4a7a84ef-47cf-45dc-a08d-c68b51d381cb scripts/txt2img.py --prompt painting by Andy Warhol of a dog jumping on a trampoline --plms --n_samples 1

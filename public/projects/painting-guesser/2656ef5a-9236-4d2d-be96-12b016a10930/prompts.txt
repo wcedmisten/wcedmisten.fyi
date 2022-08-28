@@ -1,0 +1,1 @@
+2656ef5a-9236-4d2d-be96-12b016a10930 scripts/txt2img.py --prompt painting by Francisco Goya of a man wearing sunglasses --plms --n_samples 1

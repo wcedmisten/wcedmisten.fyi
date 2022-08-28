@@ -1,0 +1,1 @@
+a8244fe0-df7a-4219-ab23-89a0e7ec49ed scripts/txt2img.py --prompt painting by Francisco Goya of a woman in a park --plms --n_samples 1

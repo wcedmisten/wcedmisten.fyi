@@ -1,0 +1,1 @@
+08fab3c7-ee6d-4abe-bc3e-d84aeaae51f3 scripts/txt2img.py --prompt painting by Francisco Goya of a woman riding a motorcycle --plms --n_samples 1

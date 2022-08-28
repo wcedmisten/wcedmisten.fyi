@@ -1,0 +1,1 @@
+84de13fd-fbeb-4771-8389-5880b5063c3e scripts/txt2img.py --prompt painting by Rembrandt of a dog on the moon --plms --n_samples 1

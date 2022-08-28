@@ -1,0 +1,1 @@
+e95cad9b-94c2-4594-8fb5-02d31e8f2999 scripts/txt2img.py --prompt painting by vincent van gogh of a mouse on the beach --plms --n_samples 1

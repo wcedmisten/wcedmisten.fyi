@@ -1,0 +1,1 @@
+abc2f859-f7b0-4ed4-bf60-509fcf210177 scripts/txt2img.py --prompt painting by vincent van gogh of a horse in a park --plms --n_samples 1

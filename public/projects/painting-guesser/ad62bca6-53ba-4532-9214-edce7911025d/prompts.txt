@@ -1,0 +1,1 @@
+ad62bca6-53ba-4532-9214-edce7911025d scripts/txt2img.py --prompt painting by vincent van gogh of a man wearing a suit --plms --n_samples 1

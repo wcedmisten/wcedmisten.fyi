@@ -1,0 +1,1 @@
+02c985ca-9c27-443f-808a-3e4a0a2086dc scripts/txt2img.py --prompt painting by Claude Monet of a mouse wearing a suit --plms --n_samples 1

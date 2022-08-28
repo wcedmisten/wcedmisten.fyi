@@ -1,0 +1,1 @@
+e4b9a2cb-f516-46b9-b2ee-926eb4e1a30f scripts/txt2img.py --prompt painting by Leonardo da Vinci of a cow sitting in a chair --plms --n_samples 1

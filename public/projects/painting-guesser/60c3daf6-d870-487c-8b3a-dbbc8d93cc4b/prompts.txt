@@ -1,0 +1,1 @@
+60c3daf6-d870-487c-8b3a-dbbc8d93cc4b scripts/txt2img.py --prompt painting by Leonardo da Vinci of a monkey in a park --plms --n_samples 1

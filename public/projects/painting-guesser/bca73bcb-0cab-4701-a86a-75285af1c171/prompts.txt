@@ -1,0 +1,1 @@
+bca73bcb-0cab-4701-a86a-75285af1c171 scripts/txt2img.py --prompt painting by Claude Monet of a mouse wearing a baseball cap --plms --n_samples 1

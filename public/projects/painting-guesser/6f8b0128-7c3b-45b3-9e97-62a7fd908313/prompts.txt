@@ -1,0 +1,1 @@
+6f8b0128-7c3b-45b3-9e97-62a7fd908313 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a woman wearing a baseball cap --plms --n_samples 1

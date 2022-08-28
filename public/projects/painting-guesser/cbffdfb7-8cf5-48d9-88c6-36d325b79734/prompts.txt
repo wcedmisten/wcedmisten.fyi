@@ -1,0 +1,1 @@
+cbffdfb7-8cf5-48d9-88c6-36d325b79734 scripts/txt2img.py --prompt painting by Andy Warhol of a kangaroo eating a hotdog --plms --n_samples 1

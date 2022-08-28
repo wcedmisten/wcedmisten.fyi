@@ -1,0 +1,1 @@
+51583315-f1ed-47f6-b79b-d87f77526b30 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a cow on the beach --plms --n_samples 1

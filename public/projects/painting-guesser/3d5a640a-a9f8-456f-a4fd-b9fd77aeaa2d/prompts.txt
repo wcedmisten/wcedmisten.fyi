@@ -1,0 +1,1 @@
+3d5a640a-a9f8-456f-a4fd-b9fd77aeaa2d scripts/txt2img.py --prompt painting by Rembrandt of a man wearing sunglasses --plms --n_samples 1

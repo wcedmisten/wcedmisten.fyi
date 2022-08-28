@@ -1,0 +1,1 @@
+94fa8af7-b7c9-4eab-ae1f-839a9ff8dae5 scripts/txt2img.py --prompt painting by Francisco Goya of a dog sitting in a chair --plms --n_samples 1

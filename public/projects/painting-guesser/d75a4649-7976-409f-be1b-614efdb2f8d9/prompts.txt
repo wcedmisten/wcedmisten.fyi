@@ -1,0 +1,1 @@
+d75a4649-7976-409f-be1b-614efdb2f8d9 scripts/txt2img.py --prompt painting by Rembrandt of a kangaroo looking at the sky at night --plms --n_samples 1

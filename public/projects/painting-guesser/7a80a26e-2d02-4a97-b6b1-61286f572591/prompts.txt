@@ -1,0 +1,1 @@
+7a80a26e-2d02-4a97-b6b1-61286f572591 scripts/txt2img.py --prompt painting by Claude Monet of a cow jumping on a trampoline --plms --n_samples 1

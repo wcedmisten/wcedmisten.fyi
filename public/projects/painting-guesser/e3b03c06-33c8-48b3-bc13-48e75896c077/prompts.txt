@@ -1,0 +1,1 @@
+e3b03c06-33c8-48b3-bc13-48e75896c077 scripts/txt2img.py --prompt painting by Andy Warhol of a woman driving a car --plms --n_samples 1

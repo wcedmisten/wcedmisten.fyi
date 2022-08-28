@@ -1,0 +1,1 @@
+a061a118-9274-4d27-b9fd-886b5aabb25c scripts/txt2img.py --prompt painting by Andy Warhol of a cat eating a hotdog --plms --n_samples 1

@@ -1,0 +1,1 @@
+ada0f0ad-5bc5-4212-9023-221fd3b281b4 scripts/txt2img.py --prompt painting by Andy Warhol of a woman riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+6fcf4c4e-bbb2-45ef-bf94-fec1a168dce4 scripts/txt2img.py --prompt painting by Claude Monet of a man wearing a suit --plms --n_samples 1

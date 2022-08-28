@@ -1,0 +1,1 @@
+3d7a2d3f-7875-4144-9122-e5ec01b61f9d scripts/txt2img.py --prompt painting by Rembrandt of a man in a park --plms --n_samples 1

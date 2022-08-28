@@ -1,0 +1,1 @@
+b37d4abe-0ecd-4458-a05a-42c2226f38ed scripts/txt2img.py --prompt painting by Claude Monet of a dog sitting in a chair --plms --n_samples 1

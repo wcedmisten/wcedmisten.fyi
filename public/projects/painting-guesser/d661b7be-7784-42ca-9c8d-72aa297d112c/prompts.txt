@@ -1,0 +1,1 @@
+d661b7be-7784-42ca-9c8d-72aa297d112c scripts/txt2img.py --prompt painting by Francisco Goya of a dolphin on the moon --plms --n_samples 1

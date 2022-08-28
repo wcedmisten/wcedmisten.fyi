@@ -1,0 +1,1 @@
+e1f240b8-dae4-45e7-a36e-11e2c14db52c scripts/txt2img.py --prompt painting by Andy Warhol of a cat wearing sunglasses --plms --n_samples 1

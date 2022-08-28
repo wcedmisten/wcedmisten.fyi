@@ -1,0 +1,1 @@
+93dc2529-cec9-4c6f-8bd4-e44f28352be6 scripts/txt2img.py --prompt painting by Francisco Goya of a woman wearing a baseball cap --plms --n_samples 1

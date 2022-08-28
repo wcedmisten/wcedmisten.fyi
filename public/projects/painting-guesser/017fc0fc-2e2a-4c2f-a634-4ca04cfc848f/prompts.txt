@@ -1,0 +1,1 @@
+017fc0fc-2e2a-4c2f-a634-4ca04cfc848f scripts/txt2img.py --prompt painting by Claude Monet of a man on the moon --plms --n_samples 1

@@ -1,0 +1,1 @@
+3f7f5e9e-4c97-4dea-a83c-0f4e4f11c9cb scripts/txt2img.py --prompt painting by Francisco Goya of a kangaroo on the beach --plms --n_samples 1

@@ -1,0 +1,1 @@
+2ba7e048-dc7c-4f3c-b645-c9d62f846888 scripts/txt2img.py --prompt painting by Claude Monet of a kangaroo wearing a suit --plms --n_samples 1

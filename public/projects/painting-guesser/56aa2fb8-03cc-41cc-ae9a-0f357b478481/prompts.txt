@@ -1,0 +1,1 @@
+56aa2fb8-03cc-41cc-ae9a-0f357b478481 scripts/txt2img.py --prompt painting by Claude Monet of a man riding a motorcycle --plms --n_samples 1

@@ -1,0 +1,1 @@
+4c6e8e36-0330-4fb0-8a26-dd2beaf2f2ea scripts/txt2img.py --prompt painting by Andy Warhol of a man riding a motorcycle --plms --n_samples 1

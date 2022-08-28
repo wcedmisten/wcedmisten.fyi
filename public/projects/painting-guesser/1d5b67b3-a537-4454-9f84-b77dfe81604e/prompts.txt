@@ -1,0 +1,1 @@
+1d5b67b3-a537-4454-9f84-b77dfe81604e scripts/txt2img.py --prompt painting by Andy Warhol of a frog sitting in a chair --plms --n_samples 1

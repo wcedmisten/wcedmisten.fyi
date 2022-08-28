@@ -1,0 +1,1 @@
+eb2672a2-07b2-4f52-badc-58eb61f8bf38 scripts/txt2img.py --prompt painting by Francisco Goya of a lizard eating a hotdog --plms --n_samples 1

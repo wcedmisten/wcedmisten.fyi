@@ -1,0 +1,1 @@
+441cdc19-a525-4614-b1e0-3c8196dccb1d scripts/txt2img.py --prompt painting by Leonardo da Vinci of a dog wearing a suit --plms --n_samples 1

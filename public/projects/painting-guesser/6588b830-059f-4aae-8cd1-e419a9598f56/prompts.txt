@@ -1,0 +1,1 @@
+6588b830-059f-4aae-8cd1-e419a9598f56 scripts/txt2img.py --prompt painting by Claude Monet of a cow sitting in a chair --plms --n_samples 1

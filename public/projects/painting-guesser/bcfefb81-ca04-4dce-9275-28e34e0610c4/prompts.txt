@@ -1,0 +1,1 @@
+bcfefb81-ca04-4dce-9275-28e34e0610c4 scripts/txt2img.py --prompt painting by vincent van gogh of a man eating a hotdog --plms --n_samples 1

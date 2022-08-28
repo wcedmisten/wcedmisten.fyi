@@ -1,0 +1,1 @@
+1aa80304-62ed-44c4-8cfd-99ffe6928f95 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a frog sitting in a chair --plms --n_samples 1

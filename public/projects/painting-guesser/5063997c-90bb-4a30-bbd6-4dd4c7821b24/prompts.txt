@@ -1,0 +1,1 @@
+5063997c-90bb-4a30-bbd6-4dd4c7821b24 scripts/txt2img.py --prompt painting by vincent van gogh of a frog on the beach --plms --n_samples 1

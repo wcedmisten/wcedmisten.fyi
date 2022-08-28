@@ -1,0 +1,1 @@
+797d0a88-0a6f-4c38-a3c2-82984de86f2e scripts/txt2img.py --prompt painting by Claude Monet of a frog wearing sunglasses --plms --n_samples 1

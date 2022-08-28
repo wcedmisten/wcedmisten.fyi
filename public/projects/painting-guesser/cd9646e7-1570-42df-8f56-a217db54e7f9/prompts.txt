@@ -1,0 +1,1 @@
+cd9646e7-1570-42df-8f56-a217db54e7f9 scripts/txt2img.py --prompt painting by Claude Monet of a cow wearing a baseball cap --plms --n_samples 1

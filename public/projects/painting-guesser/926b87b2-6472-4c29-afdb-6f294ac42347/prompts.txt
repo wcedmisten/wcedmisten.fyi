@@ -1,0 +1,1 @@
+926b87b2-6472-4c29-afdb-6f294ac42347 scripts/txt2img.py --prompt painting by Claude Monet of a mouse driving a car --plms --n_samples 1

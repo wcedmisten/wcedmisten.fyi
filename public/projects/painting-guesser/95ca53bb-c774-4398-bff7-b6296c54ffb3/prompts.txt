@@ -1,0 +1,1 @@
+95ca53bb-c774-4398-bff7-b6296c54ffb3 scripts/txt2img.py --prompt painting by Claude Monet of a horse on the beach --plms --n_samples 1

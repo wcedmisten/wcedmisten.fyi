@@ -1,0 +1,1 @@
+6e2686b7-8c26-47a0-910b-7d931bb94de2 scripts/txt2img.py --prompt painting by Andy Warhol of a woman wearing a baseball cap --plms --n_samples 1

@@ -1,0 +1,1 @@
+c0508ca9-43c8-4280-8c62-e57ec72fadb4 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a kangaroo wearing sunglasses --plms --n_samples 1

@@ -1,0 +1,1 @@
+c23ccbdf-9281-489c-b083-326f9caadfa3 scripts/txt2img.py --prompt painting by Francisco Goya of a cat in a park --plms --n_samples 1

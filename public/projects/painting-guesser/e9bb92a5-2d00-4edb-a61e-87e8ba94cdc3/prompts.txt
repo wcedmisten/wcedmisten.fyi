@@ -1,0 +1,1 @@
+e9bb92a5-2d00-4edb-a61e-87e8ba94cdc3 scripts/txt2img.py --prompt painting by Claude Monet of a man driving a car --plms --n_samples 1

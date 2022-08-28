@@ -1,0 +1,1 @@
+9987a5cf-605f-46ad-9f7b-b1dda965f687 scripts/txt2img.py --prompt painting by Francisco Goya of a woman jumping on a trampoline --plms --n_samples 1

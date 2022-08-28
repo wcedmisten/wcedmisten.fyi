@@ -1,0 +1,1 @@
+2fc70baf-c01a-42dd-a1e3-8ce791c88ba7 scripts/txt2img.py --prompt painting by Francisco Goya of a monkey wearing a baseball cap --plms --n_samples 1

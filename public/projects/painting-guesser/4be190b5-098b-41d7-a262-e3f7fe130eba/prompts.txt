@@ -1,0 +1,1 @@
+4be190b5-098b-41d7-a262-e3f7fe130eba scripts/txt2img.py --prompt painting by Francisco Goya of a dog wearing sunglasses --plms --n_samples 1

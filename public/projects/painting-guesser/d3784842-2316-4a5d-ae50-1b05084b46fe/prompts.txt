@@ -1,0 +1,1 @@
+d3784842-2316-4a5d-ae50-1b05084b46fe scripts/txt2img.py --prompt painting by Francisco Goya of a monkey wearing a suit --plms --n_samples 1

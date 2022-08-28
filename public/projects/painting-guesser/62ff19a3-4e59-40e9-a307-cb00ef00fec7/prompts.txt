@@ -1,0 +1,1 @@
+62ff19a3-4e59-40e9-a307-cb00ef00fec7 scripts/txt2img.py --prompt painting by Andy Warhol of a monkey riding a motorcycle --plms --n_samples 1

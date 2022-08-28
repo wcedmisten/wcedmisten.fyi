@@ -1,0 +1,1 @@
+a2c2b603-1bb6-42c5-a214-84d46564fee2 scripts/txt2img.py --prompt painting by Rembrandt of a monkey on the beach --plms --n_samples 1

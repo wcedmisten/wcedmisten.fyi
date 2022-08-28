@@ -1,0 +1,1 @@
+6080282b-8775-4595-9bb3-4a0621729d9f scripts/txt2img.py --prompt painting by vincent van gogh of a dog on the beach --plms --n_samples 1

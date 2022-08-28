@@ -1,0 +1,1 @@
+e6088d60-6af7-4b31-b77d-91b20ee5296b scripts/txt2img.py --prompt painting by Claude Monet of a mouse sitting in a chair --plms --n_samples 1

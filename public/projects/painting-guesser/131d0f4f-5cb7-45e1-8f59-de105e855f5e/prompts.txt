@@ -1,0 +1,1 @@
+131d0f4f-5cb7-45e1-8f59-de105e855f5e scripts/txt2img.py --prompt painting by Claude Monet of a woman on the beach --plms --n_samples 1

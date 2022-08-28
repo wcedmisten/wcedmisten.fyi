@@ -1,0 +1,1 @@
+87f344de-31fc-4292-9235-9a82cfcd017d scripts/txt2img.py --prompt painting by Andy Warhol of a cat sitting in a chair --plms --n_samples 1

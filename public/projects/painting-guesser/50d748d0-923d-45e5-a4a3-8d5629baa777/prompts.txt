@@ -1,0 +1,1 @@
+50d748d0-923d-45e5-a4a3-8d5629baa777 scripts/txt2img.py --prompt painting by Salvador Dali of a monkey riding a motorcycle --plms --n_samples 1

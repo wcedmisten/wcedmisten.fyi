@@ -1,0 +1,1 @@
+a4da456e-e17f-4216-97e3-272255ca7b10 scripts/txt2img.py --prompt painting by vincent van gogh of a mouse jumping on a trampoline --plms --n_samples 1

@@ -1,0 +1,1 @@
+4b20af68-0e09-47b0-9a05-8ee32b087176 scripts/txt2img.py --prompt painting by Leonardo da Vinci of a woman sitting in a chair --plms --n_samples 1

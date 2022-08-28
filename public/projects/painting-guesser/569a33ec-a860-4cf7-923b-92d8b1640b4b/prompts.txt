@@ -1,0 +1,1 @@
+569a33ec-a860-4cf7-923b-92d8b1640b4b scripts/txt2img.py --prompt painting by vincent van gogh of a cat wearing a baseball cap --plms --n_samples 1

@@ -1,0 +1,1 @@
+e07df566-02ab-48cb-9fe6-6c004e4c0e7e scripts/txt2img.py --prompt painting by vincent van gogh of a mouse wearing sunglasses --plms --n_samples 1
