@@ -296,13 +296,21 @@ export async function getStaticProps() {
         }
     };
 
+    const artistsList = Array.from(artists);
+    const subjectsList = Array.from(subjects);
+    const descriptionsList = Array.from(descriptions);
+
+    artistsList.sort();
+    subjectsList.sort();
+    descriptionsList.sort();
+
     return {
         props: {
             filenames,
             solutions,
-            artists: Array.from(artists),
-            subjects: Array.from(subjects),
-            descriptions: Array.from(descriptions)
+            artists: artistsList,
+            subjects: subjectsList,
+            descriptions: descriptionsList
         }
     };
 }
