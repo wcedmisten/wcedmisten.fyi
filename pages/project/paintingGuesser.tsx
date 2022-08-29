@@ -57,6 +57,11 @@ export const Guesser = (props: GuesserProps) => {
     }
 
     function submitAnswers(event: any) {
+        setShowCorrectValues({
+            artist: selectedArtist === solution.artist,
+            subject: selectedSubject === solution.subject,
+            description: selectedDescription === solution.description
+        });
         if (answersCorrect) {
             setGameStatus("correct");
         } else {
@@ -70,6 +75,11 @@ export const Guesser = (props: GuesserProps) => {
 
     function resetGame(event: any) {
         setIndex((index + 1) % filenames.length);
+        setShowCorrectValues({
+            artist: false,
+            subject: false,
+            description: false
+        });
         setCopyButtonText("Share");
         setGameStatus("guessing");
     }
@@ -85,6 +95,12 @@ export const Guesser = (props: GuesserProps) => {
     const answersCorrect: boolean = selectedArtist === solution?.artist &&
         selectedSubject === solution?.subject &&
         selectedDescription === solution?.description;
+
+    const [showCorrectValues, setShowCorrectValues] = useState<any>({
+        artist: false,
+        subject: false,
+        description: false
+    });
 
     const showSubmitButton: boolean = selectedArtist !== "" && selectedSubject !== "" && selectedDescription !== "";
 
@@ -178,7 +194,7 @@ export const Guesser = (props: GuesserProps) => {
                     <Col className="justify-content-center text-center">
                         <div className={style.Plaque}>
                             <div className={style.PlaqueText}>
-                                {gameStatus === "correct" ?
+                                {showCorrectValues.artist ?
                                     <h3 className={style.PlaqueText}>{solution.artist}</h3> :
                                     <select value={selectedArtist} onChange={handleArtistSelectChange} name="artist">
                                         <option key="placeholder" value="" disabled>Artist</option>
@@ -190,7 +206,7 @@ export const Guesser = (props: GuesserProps) => {
                             </div>
                             <p className={style.PlaqueText}>
                                 Painting of a {' '}
-                                {gameStatus === "correct" ?
+                                {showCorrectValues.subject ?
                                     solution.subject :
                                     <select value={selectedSubject} onChange={handleSubjectSelectChange} name="subject" id="subject">
                                         <option key="placeholder" value="" disabled>Subject</option>
@@ -200,7 +216,7 @@ export const Guesser = (props: GuesserProps) => {
                                     </select>
                                 }
                                 {' '}
-                                {gameStatus === "correct" ?
+                                {showCorrectValues.description ?
                                     solution.description + ", " + year + "." :
                                     <select value={selectedDescription} onChange={handleDescriptionSelectChange} name="description" id="description">
                                         <option key="placeholder" value="" disabled>Description</option>
