@@ -7,6 +7,13 @@ function ProjectsPage() {
             <h1 className="post-title">Projects I've made.</h1>
             <ListGroup variant="flush">
                 <PostItem
+                    href="/project/paintingGuesser/"
+                    thumbnailURL="/thumbnails/paintingGuesser.png"
+                    thumbnailAlt="Painting of a mouse in a baseball cap."
+                    title="Painting Guesser"
+                    description='Guess the missing plaque information for generated paintings in the style of real artists. Images generated with stable diffusion.'
+                    date='2022-08-28' />
+                <PostItem
                     href="/project/foodGraph/"
                     thumbnailURL="/thumbnails/foodGraph.jpg"
                     thumbnailAlt="A network graph of recipes"

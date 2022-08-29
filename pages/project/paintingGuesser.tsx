@@ -66,6 +66,8 @@ export const Guesser = (props: GuesserProps) => {
 
     const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
+    const [showArtistModal, setShowArtistModal] = useState<boolean>(false);
+
     function resetGame(event: any) {
         setIndex((index + 1) % filenames.length);
         setCopyButtonText("Share");
@@ -115,6 +117,51 @@ export const Guesser = (props: GuesserProps) => {
 
     return shuffled !== undefined && (
         <>
+            <Modal fullscreen={true} show={showArtistModal} onHide={() => setShowArtistModal(false)} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Need a Refresher on Famous Artists?</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        <Row><Col className="text-center"><h2>Here are a few famous pieces:</h2></Col></Row>
+                        <Row>
+                            <Col className="text-center">
+                                <p>Mona Lisa, by Leonardo da Vinci</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/mona-lisa.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>The Starry Night, by Vincent van Gogh</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/starry-night.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>Orange Marilyn, by Andy Warhol</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/orange-marilyn.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>The Persistence of Memory, by Salvador Dali</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/persistence-of-memory.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>Waterlillies and Japanese Bridge, by Claude Monet</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/waterlillies-and-japanese-bridge.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>Self Portrait, by Rembrandt</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/rembrandt-self-portrait.jpg"></img>
+                            </Col>
+                            <Col className="text-center">
+                                <p>Saturn Devouring His Son, by Francisco Goya</p>
+                                <img className={style.RefresherImage} src="/thumbnails/artist-refreshers/saturn-devouring-his-son.jpg"></img>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button className="button-lg" variant="secondary" onClick={() => setShowArtistModal(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Container className="justify-content-md-center">
                 <Row><Col className="justify-content-center text-center">
                     <h1 className={style.Headers}>Art Gallery Curator</h1>
@@ -180,7 +227,8 @@ export const Guesser = (props: GuesserProps) => {
                 </Row>
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <Button className="btn-secondary btn-sm" onClick={() => setShowInfoModal(true)}>More info</Button>
+                        <Button className={`btn-secondary btn-sm ${style.Button}`} onClick={() => setShowInfoModal(true)}>Game Info</Button>
+                        <Button className={`btn-secondary btn-sm ${style.Button}`} onClick={() => setShowArtistModal(true)}>Need an Art Refresher?</Button>
                     </Col>
                 </Row>
             </Container>
