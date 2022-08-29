@@ -35,7 +35,7 @@ export const Guesser = (props: GuesserProps) => {
         <>
             <Container className="justify-content-md-center">
                 <Row><Col className="justify-content-center text-center">
-                    <h1 className={style.Headers}>Art Gallery Curator</h1>
+                    <h1 className={style.Headers}>Multiverse Art Gallery</h1>
                 </Col></Row>
                 <Row>
                     <Col className="justify-content-center text-center">

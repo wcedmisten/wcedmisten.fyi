@@ -180,8 +180,8 @@ export const Guesser = (props: GuesserProps) => {
             </Modal>
             <Container className="justify-content-md-center">
                 <Row><Col className="justify-content-center text-center">
-                    <h1 className={style.Headers}>Art Gallery Curator</h1>
-                    <p className={style.Headers}>Oh no! The plaques for these famous paintings got stolen! Can you fix them?</p>
+                    <h1 className={style.Headers}>Multiverse Art Gallery Curator</h1>
+                    <p className={style.Headers}>Oh no! The plaques for these famous paintings from another timeline got stolen! Can you fix them?</p>
                 </Col></Row>
                 <Row>
                     <Col className="justify-content-center text-center">
@@ -326,7 +326,8 @@ export async function getStaticProps() {
             solutions,
             artists: artistsList,
             subjects: subjectsList,
-            descriptions: descriptionsList
+            descriptions: descriptionsList,
+            ogImagePath: "https://wcedmisten.fyi/thumbnails/paintingGuesser.png"
         }
     };
 }

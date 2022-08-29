@@ -10,8 +10,8 @@ function ProjectsPage() {
                     href="/project/paintingGuesser/"
                     thumbnailURL="/thumbnails/paintingGuesser.png"
                     thumbnailAlt="Painting of a mouse in a baseball cap."
-                    title="Painting Guesser"
-                    description='Guess the missing plaque information for generated paintings in the style of real artists. Images generated with stable diffusion.'
+                    title="Multiverse Art Gallery Curator"
+                    description='Guess the missing plaque information for famous paintings that were made in another timeline. Images generated with stable diffusion.'
                     date='2022-08-28' />
                 <PostItem
                     href="/project/foodGraph/"
