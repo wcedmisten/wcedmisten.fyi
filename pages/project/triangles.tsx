@@ -141,7 +141,7 @@ function Triangles() {
 
     const draw = async (ctx: any) => {
         if (selectedFile !== null) {
-            const bitmap = await createImageBitmap(selectedFile);
+            const bitmap = await createImageBitmap(selectedFile, { resizeWidth: 500 });
 
             if (canvasRef?.current !== null) {
                 canvasRef.current.width = bitmap.width;
@@ -176,8 +176,6 @@ function Triangles() {
                     const red = totals[0] / pixels.length;
                     const green = totals[1] / pixels.length;
                     const blue = totals[2] / pixels.length;
-
-                    console.log(totals);
 
                     ctx.beginPath();
                     ctx.moveTo(triangle[0][0], triangle[0][1]);
