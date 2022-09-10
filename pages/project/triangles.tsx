@@ -141,7 +141,20 @@ function Triangles() {
 
     const draw = async (ctx: any) => {
         if (selectedFile !== null) {
-            const bitmap = await createImageBitmap(selectedFile, { resizeWidth: 500 });
+            const testBitmap = await createImageBitmap(
+                selectedFile,
+            );
+
+            console.log(testBitmap);
+
+            const maxWidth = 750;
+            const maxHeight = 750;
+            const resizeOptions = testBitmap.width > maxWidth ? { resizeWidth: maxWidth } : { resizeHeight: maxHeight }
+
+            const bitmap = await createImageBitmap(
+                selectedFile,
+                resizeOptions
+            );
 
             if (canvasRef?.current !== null) {
                 canvasRef.current.width = bitmap.width;
