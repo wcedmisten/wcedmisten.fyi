@@ -2,17 +2,36 @@ import { useEffect, useRef, useState } from "react";
 import Delaunator from 'delaunator';
 import PoissonDiskSampling from 'poisson-disk-sampling';
 
+import { max } from "d3";
+
 // assign random points in the image
-function getRandomPoints(width: number, height: number) {
+function getRandomPoints(width: number, height: number, minDistance = 20, maxDistance = 30) {
+    console.log("Get points");
     const p = new PoissonDiskSampling({
-        shape: [width, height],
-        minDistance: 20,
-        maxDistance: 30,
+        shape: [width + 50, height + 50],
+        minDistance,
+        maxDistance,
         tries: 10
     });
     const points = p.fill();
 
-    return points;
+    return points.map((p: number[]) => {
+        let newX = p[0];
+        if (newX - 25 < 0) {
+            newX = 0
+        } else if (newX + 25 >= width) {
+            newX = width;
+        }
+
+        let newY = p[1];
+        if (newY - 25 < 0) {
+            newY = 0
+        } else if (newY + 25 >= height) {
+            newY = height;
+        }
+
+        return [newX, newY];
+    });
 };
 
 
@@ -135,6 +154,7 @@ function fillTopFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any) {
 }
 
 function Triangles() {
+    console.log("Triangles");
     const [selectedFile, setSelectedFile] = useState(null);
 
     const canvasRef = useRef(null);
@@ -144,8 +164,6 @@ function Triangles() {
             const testBitmap = await createImageBitmap(
                 selectedFile,
             );
-
-            console.log(testBitmap);
 
             const maxWidth = 750;
             const maxHeight = 750;
@@ -164,8 +182,6 @@ function Triangles() {
             const delaunator = Delaunator.from(points);
 
             ctx.drawImage(bitmap, 0, 0);
-
-            const triangles: any[] = [];
 
             forEachTriangle(points, delaunator,
                 (e: any, triangle: any, q: any) => {
@@ -201,20 +217,23 @@ function Triangles() {
                 }
             );
         }
-    }
+    };
 
     useEffect(() => {
-        const canvas: any = canvasRef.current
-        const context = canvas.getContext('2d')
+        redraw();
+    }, [draw]);
+
+    const redraw = () => {
+        const canvas: any = canvasRef.current;
+        const context = canvas.getContext('2d');
 
         //Our draw come here
-        draw(context)
-    }, [draw])
-
-
+        draw(context);
+    };
 
     return (
         <>
+            <button onClick={redraw}>Redraw</button>
             <input type="file" onChange={(e: any) => setSelectedFile(e.target.files[0])} />
             <canvas ref={canvasRef}></canvas>
         </>
