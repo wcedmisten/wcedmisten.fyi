@@ -2,31 +2,35 @@ import { useEffect, useRef, useState } from "react";
 import Delaunator from 'delaunator';
 import PoissonDiskSampling from 'poisson-disk-sampling';
 
-import { max } from "d3";
+import style from "./triangles.module.css"
+
+import { Button, Form, FormControl } from "react-bootstrap";
 
 // assign random points in the image
-function getRandomPoints(width: number, height: number, minDistance = 20, maxDistance = 30) {
+function getRandomPoints(width: number, height: number, minDistance: number, maxDistance: number) {
     console.log("Get points");
     const p = new PoissonDiskSampling({
-        shape: [width + 50, height + 50],
+        shape: [width + 2 * minDistance, height + 2 * minDistance],
         minDistance,
         maxDistance,
         tries: 10
     });
     const points = p.fill();
 
+    console.log("Filled", points.length, minDistance, maxDistance);
+
     return points.map((p: number[]) => {
-        let newX = p[0];
-        if (newX - 25 < 0) {
+        let newX = p[0] - minDistance;
+        if (newX - minDistance < 0) {
             newX = 0
-        } else if (newX + 25 >= width) {
+        } else if (newX + minDistance >= width) {
             newX = width;
         }
 
-        let newY = p[1];
-        if (newY - 25 < 0) {
+        let newY = p[1] - minDistance;
+        if (newY - minDistance < 0) {
             newY = 0
-        } else if (newY + 25 >= height) {
+        } else if (newY + minDistance >= height) {
             newY = height;
         }
 
@@ -154,7 +158,6 @@ function fillTopFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any) {
 }
 
 function Triangles() {
-    console.log("Triangles");
     const [selectedFile, setSelectedFile] = useState(null);
 
     const canvasRef = useRef<any>(null);
@@ -178,10 +181,12 @@ function Triangles() {
                 canvasRef.current.width = bitmap.width;
                 canvasRef.current.height = bitmap.height;
             }
-            const points = getRandomPoints(bitmap.width, bitmap.height);
+            const points = getRandomPoints(bitmap.width, bitmap.height, minDistance, maxDistance);
             const delaunator = Delaunator.from(points);
 
             ctx.drawImage(bitmap, 0, 0);
+
+            console.log(points)
 
             forEachTriangle(points, delaunator,
                 (e: any, triangle: any, q: any) => {
@@ -224,6 +229,7 @@ function Triangles() {
     }, [draw]);
 
     const redraw = () => {
+        console.log("redraw")
         const canvas: any = canvasRef.current;
         const context = canvas.getContext('2d');
 
@@ -231,10 +237,23 @@ function Triangles() {
         draw(context);
     };
 
+    const [minDistance, setMinDistance] = useState<number>(20);
+    const maxDistance = minDistance + 10;
+    // const [maxDistance, setMaxDistance] = useState<number>(40);
+
     return (
         <>
-            <button onClick={redraw}>Redraw</button>
-            <input type="file" onChange={(e: any) => setSelectedFile(e.target.files[0])} />
+            <Form>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Upload a picture</Form.Label>
+                    <Form.Control type="file" onChange={(e: any) => setSelectedFile(e.target.files[0])} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Triangle Size</Form.Label>
+                    <Form.Range value={minDistance} min={10} max={200} onChange={(e: any) => setMinDistance(parseInt(e.target.value))} />
+                </Form.Group>
+                <Button className={`btn-secondary btn-sm ${style.Button}`} onClick={redraw}>Redraw</Button>
+            </Form>
             <canvas ref={canvasRef}></canvas>
         </>
     );
