@@ -157,7 +157,7 @@ function Triangles() {
     console.log("Triangles");
     const [selectedFile, setSelectedFile] = useState(null);
 
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<any>(null);
 
     const draw = async (ctx: any) => {
         if (selectedFile !== null) {
@@ -174,7 +174,7 @@ function Triangles() {
                 resizeOptions
             );
 
-            if (canvasRef?.current !== null) {
+            if (canvasRef.current) {
                 canvasRef.current.width = bitmap.width;
                 canvasRef.current.height = bitmap.height;
             }
