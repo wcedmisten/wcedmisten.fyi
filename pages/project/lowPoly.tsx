@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Delaunator from 'delaunator';
 import PoissonDiskSampling from 'poisson-disk-sampling';
 
-import style from "./triangles.module.css"
+import style from "./lowpoly.module.css"
 
-import { Button, Form, FormControl } from "react-bootstrap";
+import { Button, Container, Form, Row } from "react-bootstrap";
 
 // assign random points in the image
 function getRandomPoints(width: number, height: number, minDistance: number, maxDistance: number) {
-    console.log("Get points");
     const p = new PoissonDiskSampling({
         shape: [width + 2 * minDistance, height + 2 * minDistance],
         minDistance,
@@ -16,8 +15,6 @@ function getRandomPoints(width: number, height: number, minDistance: number, max
         tries: 10
     });
     const points = p.fill();
-
-    console.log("Filled", points.length, minDistance, maxDistance);
 
     return points.map((p: number[]) => {
         let newX = p[0] - minDistance;
@@ -158,11 +155,19 @@ function fillTopFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any) {
 }
 
 function Triangles() {
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const downloadFilename = selectedFile ? `low-poly-${selectedFile.name}`.replace(/\.[^.]+$/, '.png') : "test.png"
+
+    const [minDistance, setMinDistance] = useState<number>(20);
+    const maxDistance = minDistance + 10;
 
     const canvasRef = useRef<any>(null);
+    const canvas = canvasRef.current;
+
+    const [downloadFile, setDownloadFile] = useState<any>("");
 
     const draw = async (ctx: any) => {
+        console.log("Draw()", selectedFile);
         if (selectedFile !== null) {
             const testBitmap = await createImageBitmap(
                 selectedFile,
@@ -170,23 +175,33 @@ function Triangles() {
 
             const maxWidth = 750;
             const maxHeight = 750;
-            const resizeOptions = testBitmap.width > maxWidth ? { resizeWidth: maxWidth } : { resizeHeight: maxHeight }
+            let resizeOptions: { resizeWidth?: number; resizeHeight?: number; } = {
+                resizeWidth: undefined,
+                resizeHeight: undefined
+            }
+
+            if (testBitmap.width >= testBitmap.height &&
+                testBitmap.width > maxWidth) {
+                resizeOptions.resizeWidth = maxWidth;
+            } else if (testBitmap.width < testBitmap.height &&
+                testBitmap.height > maxHeight) {
+                resizeOptions.resizeHeight = maxHeight;
+            }
 
             const bitmap = await createImageBitmap(
                 selectedFile,
                 resizeOptions
             );
 
-            if (canvasRef.current) {
-                canvasRef.current.width = bitmap.width;
-                canvasRef.current.height = bitmap.height;
+            if (canvas) {
+                canvas.width = bitmap.width;
+                canvas.height = bitmap.height;
             }
+
             const points = getRandomPoints(bitmap.width, bitmap.height, minDistance, maxDistance);
             const delaunator = Delaunator.from(points);
 
             ctx.drawImage(bitmap, 0, 0);
-
-            console.log(points)
 
             forEachTriangle(points, delaunator,
                 (e: any, triangle: any, q: any) => {
@@ -224,37 +239,46 @@ function Triangles() {
         }
     };
 
-    useEffect(() => {
-        redraw();
-    }, [draw]);
-
-    const redraw = () => {
-        console.log("redraw")
-        const canvas: any = canvasRef.current;
-        const context = canvas.getContext('2d');
-
-        //Our draw come here
-        draw(context);
+    const redraw = async () => {
+        console.log("Redraw()");
+        const context = canvas?.getContext('2d');
+        await draw(context);
+        setDownloadFile(canvas?.toDataURL("image/png").replace("image/png", "image/octet-stream") || "");
     };
 
-    const [minDistance, setMinDistance] = useState<number>(20);
-    const maxDistance = minDistance + 10;
-    // const [maxDistance, setMaxDistance] = useState<number>(40);
+    useEffect(() => {
+        redraw(); // This is be executed when `loading` state changes
+    }, [selectedFile])
 
     return (
         <>
-            <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Upload a picture</Form.Label>
-                    <Form.Control type="file" onChange={(e: any) => setSelectedFile(e.target.files[0])} />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Triangle Size</Form.Label>
-                    <Form.Range value={minDistance} min={10} max={200} onChange={(e: any) => setMinDistance(parseInt(e.target.value))} />
-                </Form.Group>
-                <Button className={`btn-secondary btn-sm ${style.Button}`} onClick={redraw}>Redraw</Button>
-            </Form>
-            <canvas ref={canvasRef}></canvas>
+            <Container>
+                <Row className="justify-content-center">
+                    <Form className="w-75 text-center">
+                        <Form.Group>
+                            <Form.Label>Select a picture</Form.Label>
+                            <Form.Control type="file" onChange={async (e: any) => setSelectedFile(e.target.files[0])} />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Triangle Size</Form.Label>
+                            <Form.Range value={minDistance} min={10} max={100} onChange={(e: any) => setMinDistance(parseInt(e.target.value))} />
+                        </Form.Group>
+                        {selectedFile && <>
+                            <Button className={`btn-primary ${style.Button}`} onClick={redraw}>Redraw</Button>
+                            <a
+                                className="btn btn-primary"
+                                role="button"
+                                download={downloadFilename}
+                                href={downloadFile}>
+                                Download
+                            </a>
+                        </>}
+                    </Form>
+                </Row>
+                <Row>
+                    <canvas className={style.Canvas} ref={canvasRef}></canvas>
+                </Row>
+            </Container>
         </>
     );
 }
