@@ -7,6 +7,13 @@ function ProjectsPage() {
             <h1 className="post-title">Projects I've made.</h1>
             <ListGroup variant="flush">
                 <PostItem
+                    href="/project/lowPoly/"
+                    thumbnailURL="/thumbnails/lowPoly.jpg"
+                    thumbnailAlt="A low polygon picture of a sunflower."
+                    title="Low Polygon Image Filter"
+                    description='Convert images into low-polygon art using Delauney triangulation.'
+                    date='2022-09-10' />
+                <PostItem
                     href="/project/paintingGuesser/"
                     thumbnailURL="/thumbnails/paintingGuesser.png"
                     thumbnailAlt="Painting of a mouse in a baseball cap."
