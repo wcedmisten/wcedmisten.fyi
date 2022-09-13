@@ -54,7 +54,7 @@ function forEachTriangle(points: any, delaunay: any, callback: any) {
 
 // triangle rasterization
 // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
-function line(x0: any, y0: any, x1: any, y1: any, img: any, ctx: any) {
+function line(x0: any, y0: any, x1: any, y1: any, imgData: any) {
     x0 = Math.round(x0);
     y0 = Math.round(y0);
     x1 = Math.round(x1);
@@ -69,11 +69,18 @@ function line(x0: any, y0: any, x1: any, y1: any, img: any, ctx: any) {
 
     let itt = 0;
     while (true) {
-        // store pixel color at x0, y0 
-        //this.plot(x0, y0, color, img);
-        const pixel = ctx.getImageData(x0, y0, 1, 1);
-        const data = pixel.data;
-        pixels.push(data);
+        // first pixel is at imgData[0-3]
+        // second pixel at imgData[4-7]
+        const { data, width } = imgData;
+        const pixelIdx = (y0 * width + x0) * 4;
+        const R = data[pixelIdx] || 0;
+        const G = data[pixelIdx + 1] || 0;
+        const B = data[pixelIdx + 2] || 0;
+        const A = data[pixelIdx + 3] || 0;
+
+        const pixel = [R, G, B, A];
+
+        pixels.push(pixel);
 
         itt++;
         if (x0 == x1 && y0 == y1) break;
@@ -91,14 +98,14 @@ function line(x0: any, y0: any, x1: any, y1: any, img: any, ctx: any) {
     return pixels;
 }
 
-function fillTriangle(triangles: any, img: any, ctx: any) {
+function fillTriangle(triangles: any, imgData: any) {
     const vertices: any = Array.from(triangles);
     vertices.sort((a: any, b: any) => a.y - b.y);
 
     if (vertices[1].y == vertices[2].y) {
-        return fillBottomFlatTriangle(vertices[0], vertices[1], vertices[2], img, ctx);
+        return fillBottomFlatTriangle(vertices[0], vertices[1], vertices[2], imgData);
     } else if (vertices[0].y == vertices[1].y) {
-        return fillTopFlatTriangle(vertices[0], vertices[1], vertices[2], img, ctx);
+        return fillTopFlatTriangle(vertices[0], vertices[1], vertices[2], imgData);
     } else {
         let v4 = {
             x: vertices[0].x + (vertices[1].y - vertices[0].y) / (vertices[2].y - vertices[0].y) * (vertices[2].x - vertices[0].x),
@@ -108,13 +115,13 @@ function fillTriangle(triangles: any, img: any, ctx: any) {
         let pixels: any[] = [];
 
         return pixels.concat(
-            fillBottomFlatTriangle(vertices[0], vertices[1], v4, img, ctx),
-            fillTopFlatTriangle(vertices[1], v4, vertices[2], img, ctx)
+            fillBottomFlatTriangle(vertices[0], vertices[1], v4, imgData),
+            fillTopFlatTriangle(vertices[1], v4, vertices[2], imgData)
         );
     }
 }
 
-function fillBottomFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any): any[] {
+function fillBottomFlatTriangle(v1: any, v2: any, v3: any, imgData: any): any[] {
     let invslope1 = (v2.x - v1.x) / (v2.y - v1.y);
     let invslope2 = (v3.x - v1.x) / (v3.y - v1.y);
 
@@ -125,7 +132,7 @@ function fillBottomFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any): 
 
     for (let scanlineY = v1.y; scanlineY <= v2.y; scanlineY++) {
         pixels = pixels.concat(
-            line(curx1, scanlineY, curx2, scanlineY, img, ctx)
+            line(curx1, scanlineY, curx2, scanlineY, imgData)
         );
         curx1 += invslope1;
         curx2 += invslope2;
@@ -134,7 +141,7 @@ function fillBottomFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any): 
     return pixels;
 }
 
-function fillTopFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any) {
+function fillTopFlatTriangle(v1: any, v2: any, v3: any, imgData: any) {
     let invslope1 = (v3.x - v1.x) / (v3.y - v1.y);
     let invslope2 = (v3.x - v2.x) / (v3.y - v2.y);
 
@@ -145,7 +152,7 @@ function fillTopFlatTriangle(v1: any, v2: any, v3: any, img: any, ctx: any) {
 
     for (let scanlineY = v3.y; scanlineY > v1.y; scanlineY--) {
         pixels = pixels.concat(
-            line(curx1, scanlineY, curx2, scanlineY, img, ctx)
+            line(curx1, scanlineY, curx2, scanlineY, imgData)
         );
         curx1 -= invslope1;
         curx2 -= invslope2;
@@ -167,7 +174,6 @@ function Triangles() {
     const [downloadFile, setDownloadFile] = useState<any>("");
 
     const draw = async (ctx: any) => {
-        console.log("Draw()", selectedFile);
         if (selectedFile !== null) {
             const testBitmap = await createImageBitmap(
                 selectedFile,
@@ -203,6 +209,8 @@ function Triangles() {
 
             ctx.drawImage(bitmap, 0, 0);
 
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
             forEachTriangle(points, delaunator,
                 (e: any, triangle: any, q: any) => {
 
@@ -213,7 +221,7 @@ function Triangles() {
                         }
                     });
 
-                    const pixels = fillTriangle(xyTriangle, bitmap, ctx);
+                    const pixels = fillTriangle(xyTriangle, imgData);
 
                     const totals = [0, 0, 0];
                     pixels.forEach((pixel) => {
@@ -240,7 +248,6 @@ function Triangles() {
     };
 
     const redraw = async () => {
-        console.log("Redraw()");
         const context = canvas?.getContext('2d');
         await draw(context);
         setDownloadFile(canvas?.toDataURL("image/png").replace("image/png", "image/octet-stream") || "");
