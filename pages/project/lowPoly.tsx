@@ -260,6 +260,9 @@ function Triangles() {
     return (
         <>
             <Container>
+                <Row className="justify-content-center text-center">
+                    <h1>Low Poly Image Filter</h1>
+                </Row>
                 <Row className="justify-content-center">
                     <Form className="w-75 text-center">
                         <Form.Group>
