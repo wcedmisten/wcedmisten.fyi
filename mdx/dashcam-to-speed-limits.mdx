@@ -1,18 +1,18 @@
 ---
-title: "Find Missing Speed Limits in Openstreetmap from Dashcam Footage"
+title: "Finding Missing Speed Limits in Openstreetmap from Dashcam Footage"
 date: "2022-06-25"
 thumbnail: "/thumbnails/dashcam-to-speed-limits.jpg"
 thumbnailAlt: "Dashcam image containing speed limit sign"
-description: "Find Missing Speed Limits using a pipeline with OCR and PostGIS"
+description: "Finding Missing Speed Limits using a pipeline with OCR and PostGIS"
 tags: ["openstreetmap", "ocr", "python", "postgis"]
 ---
 
-# Previously
+## Previously
 
 In [my previous post](/post/dashcam-to-openstreetmap/), I was able to extract street sign text from geo-located dashcam footage using an OCR model.
 In this section, I'll explore how to search Openstreetmap (OSM) data using PostGIS to find missing data. Specifically: *missing speed limits.*
 
-# Downloading the Data
+## Downloading the Data
 
 To start off with, I'll need data to query. Openstreetmap's terms and conditions limit use of their servers solely for editing purposes.
 So instead of making these queries to their API, I'll be making them on a local dataset.
@@ -22,16 +22,16 @@ So, I need to download some data!
 
 OSM data is available in a few different formats:
 
-## .osm.pbf
+### .osm.pbf
 
 The .osm.pbf format uses Google's protobuf data format to serialize the data into a binary format. The disadvantage is that the data is not 
 human readable, but that doesn't matter for my use-case.
 
-## .osm 
+### .osm 
 
 The .osm format is an XML based format, which is human readable, but also more verbose.
 
-# Region Extracts 
+## Region Extracts 
 
 OSM data is pretty big compared to the amount of RAM I have in my computer (16 GB).
 It's about 64 GB (in the more compact .pbf format) for a snapshot of the entire world.
@@ -50,14 +50,14 @@ OSM data, hosts regional extracts freely on their website. So I could easily dow
 
 This dataset is only 2.9GB, much more managable for downloading and processing.
 
-# Querying the Data
+## Querying the Data
 
 Now I had the data, but the binary .pbf format doesn't lend itself well to direct queries. After doing some research, I found
 a tool called [osm2pgsql](https://osm2pgsql.org/), which provides a simple CLI for extracting OSM data into PostgreSQL, a relational database.
 
 The tool also required the use of an extension called PostGIS, which provides some geospatial capabilities on top of PostgreSQL.
 
-## Setting up PostgreSQL
+### Setting up PostgreSQL
 
 To help set up PostGIS faster, I used the official Postgis docker image, within a docker-compose file. This allowed me to store the configuration needed
 for mounting the DB locally without much trouble.
@@ -83,7 +83,7 @@ services:
 
 Once I had PostgreSQL running with `docker-compose up`, I could run the command to import the DB.
 
-## Importing the data
+### Importing the data
 
 ```bash
 PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-south.osm.pbf
@@ -92,7 +92,7 @@ PGPASSWORD=password osm2pgsql --create -U postgres -H localhost /path/to/us-sout
 This import took about 25 minutes to run on my machine. I attribute some of this slowness to the fact that my linux install
 is still on a hard drive, rather than an SSD, which would improve I/O speed.
 
-## Inspecting the data
+### Inspecting the data
 
 Once I had the data, I was able to query the new tables that were imported:
 
@@ -123,7 +123,7 @@ For instance, the URL for Bailey Farm Road, near Statesville, North Carolina:
 
 [https://www.openstreetmap.org/way/16617188](https://www.openstreetmap.org/way/16617188)
 
-## Importing custom tags
+### Importing custom tags
 
 By default, osm2pgsql only imports a subset of all tags into the database.
 To add additional tags, I had to edit the "style" configuration file used, and re-import the data.
@@ -166,7 +166,7 @@ Interestingly enough, "APC Farley Spur", tagged as 0mph, was part of a nuclear p
 
 ![Farley Nuclear Plant in OSM](/dashcam-to-speed-limits/nuclear-plant.jpg)
 
-## Finding the Nearest Road to a Point 
+### Finding the Nearest Road to a Point 
 
 This is where PostGIS really starts to come in handy. Out of the box, PostgreSQL can easily handle queries on text or numerical data,
 but if I want to efficiently run geospatial queries, I'm going to need PostGIS.
@@ -176,19 +176,19 @@ This will let me answer questions like:
 * What's the closest road to my car?
 * What features are within a certain distance of my car?
 
-## A Note on Projections
+### A Note on Projections
 
-### [EPSG:4326](https://epsg.io/4326)
+#### [EPSG:4326](https://epsg.io/4326)
 
 Also called World Geodetic System 1984 or WGS84, is a projection of points on a ellipsoid. It deals with units as degrees. It gets used by GPS.
 
-### [EPSG:3857]((https://epsg.io/3857))
+#### [EPSG:3857]((https://epsg.io/3857))
 
 Also called Web Mercator, is a projection of points on a flat surface (e.g. a map). This projection is used by Google Maps, Openstreetmap, as well as other map services.
 
 ![EPSG:4326 vs. EPSG:3857 Visualized](/dashcam-to-speed-limits/projections-compared.jpg "Source: https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg and https://upload.wikimedia.org/wikipedia/commons/7/73/Mercator_projection_Square.JPG")
 
-### Conversion
+#### Conversion
 
 Data in one projection needs to be converted before it can be compared to points in another system. Which was necessary here, because I want to compare 
 GPS coordinates from my dashcam (4326) to openstreetmap coordinates (3857).
@@ -232,7 +232,7 @@ Here's an overlay of the gps track (pink) from my dashcam on top of this road (g
 
 This indicates I found an exact match to the road in OSM. Success!
 
-## Searching for Missing Speed Limits 
+### Searching for Missing Speed Limits 
 
 Putting this all together, I wrote some python scripts to:
 
@@ -242,7 +242,7 @@ Putting this all together, I wrote some python scripts to:
 * if a "speed limit" sign is found in the image, check OSM to see if the road has "maxspeed" set
 * if a missing speed limit is found, output a link to the image, and the OSM feature
 
-## Results
+### Results
 
 After running this script on the video explored in part 1, I got several hits!
 
@@ -274,15 +274,15 @@ I consider this project a success! Now I can run the script on all my dashcam fi
 After this discovery was made, I added the tag to this road.
 
 
-## Appendix
+### Appendix
 
-### osm2pgsql-docker 
+#### osm2pgsql-docker 
 
 This project stores the needed configuration to import OSM data into a PostGIS database.
 
 [Link](https://github.com/wcedmisten/osm2pgsql-docker)
 
-### piofo
+#### piofo
 
 This project contains the code for running the pipeline from dashcam video file -> missing tag detection.
 
