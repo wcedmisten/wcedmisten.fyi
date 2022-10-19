@@ -1,0 +1,563 @@
+---
+title: "Measuring Walkability with Isochrone Maps"
+date: "2022-10-16"
+thumbnail: "/thumbnails/isochrone-walkability.png"
+thumbnailAlt: "Pedestrian isochrone map of Richmond, Virginia. Map copyright Openstreetmap."
+description: "Measuring urban walkability using isochrone maps and Valhalla on openstreetmap data"
+tags: ["openstreetmap", "python", "postgis", "isochrone"]
+---
+
+## Walkability
+
+Walkability is the quality of an urban space that allows pedestrians to accomplish everyday tasks like
+collecting groceries, visiting restaurants, and attending doctor's appointments, all on foot.
+
+There are many to measure walkability, including intersection density and 
+by measuring the distance to urban amenities. The most notable metric for walkability is 
+Walk Score, which is owned by Red Fin. They use a proprietary system for this metric,
+but ultimately their [methodology](https://www.walkscore.com/methodology.shtml) is based on distance to amenities,
+similar to the one I will explore today.
+
+## Isochrone maps
+
+Isochrone maps are a way to visualize the area that could be reached in a given time.
+These distances appear as contours originating from the starting point, showing bands across which the travel 
+time is equal.
+
+<figure>
+    <img className="captioned-img" src="/isochrone-walkability/galton-isochrone.jpg"
+        alt="An 1881 isochrone map by Francis Galton showing world travel time starting in London"/>
+    <figcaption>An 1881 isochrone map by Francis Galton showing world travel time starting in London.</figcaption>
+</figure>
+
+Isochrone maps may account for travel by different methods. E.g. travel by car is constrained to roads, and 
+travel by foot is constrained (roughly) to sidewalks.
+
+## Motivation
+
+The main idea of this project is to examine how not just density, but also the structure of roads and sidewalks 
+impact walkability. For instance, compare these two pedestrian isochrone maps showing the destinations possible
+in 15 minutes of walking:
+
+A rural residential area in West Virginia:
+![Valhalla isochrone map](/isochrone-walkability/west-virginia-isochrone.png)
+
+Manhattan, NYC:
+![Valhalla isochrone map](/isochrone-walkability/new-york-isochrone.png)
+
+Even though there are clearly fewer amenities near this rural area, the network structure of roads also prohibits
+covering as much distance there, not to mention the lack of sidewalks facilitating safe pedestrian travel.
+The former area represents only 1.28 square km of area, while the latter is 1.68, a 30% increase.
+
+## Valhalla
+
+![Valhalla isochrone map](/isochrone-walkability/valhalla-isochrone.png)
+
+To construct isochrone maps, we'll be using a tool called [Valhalla](https://github.com/valhalla/valhalla),
+which is an open source routing engine. This tool operates on top of openstreetmap data, which is crowdsourced
+by volunteers, but is generally quite thorough, especially in urban areas.
+
+### Downloading the data
+
+First I downloaded the openstreetmap data from Geofabrik, which graciously hosts up-to-date extracts of openstreetmap for download.
+
+Initially I used an extract specifically for Virginia which was a modest size of 342 MB.
+But after this code was tested, I ran imported the entire United States extract, which is 8.5 GB.
+
+Then I copied the data to `data/data.osm.pbf`
+
+### Setting up Valhalla and PostGIS
+
+I used docker compose to manage Valhalla and PostGIS so that I didn't have to install it locally.
+
+For Valhalla, this docker compose file just exposes port 8002 for the API in addition to some volume mounts for the run script and the OSM data.
+
+```yaml
+version: "3.9"
+services:
+  valhalla:
+    image: valhalla/valhalla:run-latest
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./scripts:/scripts
+      - ./data:/data
+    entrypoint: /scripts/build_tiles.sh
+```
+
+Combined with a simple bash script to build the Valhalla tiles and run the server:
+
+```bash
+#!/bin/bash
+
+mkdir /data/valhalla_tiles
+
+if ! test -f "/data/valhalla.json"; then
+    echo "Valhalla JSON not found. Creating config." 
+    valhalla_build_config --mjolnir-tile-dir /data/valhalla_tiles --mjolnir-tile-extract /data/valhalla_tiles.tar --mjolnir-timezone /data/valhalla_tiles/timezones.sqlite --mjolnir-admin /data/valhalla_tiles/admins.sqlite > /data/valhalla.json
+fi
+
+if ! test -f "/data/valhalla_tiles/timezones.sqlite"; then
+    echo "Valhalla tiles not found. Building now."
+    valhalla_build_timezones > /data/valhalla_tiles/timezones.sqlite
+    valhalla_build_tiles -c /data/valhalla.json /data/data.osm.pbf
+fi
+
+if ! test -f "/data/valhalla_tiles.tar"; then
+    echo "Tile extract not found. Extracting now."
+    valhalla_build_extract -c /data/valhalla.json -v
+fi
+
+echo "Starting valhalla server."
+valhalla_service /data/valhalla.json 1
+```
+
+## Setting up PostGIS
+
+PostGIS is a geospatial extension on top of PostgreSQL, which does some very cool optimizations to support efficient geospatial queries.
+
+Similarly, I set up PostGIS and imported the US dataset using `osm2pgsql`, a tool used for ingesting the protobuf formatted data 
+into PostGIS.
+
+```yaml
+version: "3.9"  # optional since v1.27.0
+services:
+  postgis:
+    container_name: postgis
+    image: postgis/postgis
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - type: bind
+        source: ./postgresql.conf
+        target: /etc/postgresql.conf
+    command: ["postgres", "-c", "config_file=/etc/postgresql.conf"]
+```
+
+After PostGIS was running, I imported the data. This was initially tested on the Virginia state osm.pbf data,
+but I later updated this to use the entire US dataset. Making this change forced me to add the 
+`--slim --drop` flags, which process the data using PostgresSQL, rather than storing everything in memory.
+Without these flags, the process kept getting killed, due to running out of memory. Although I was running this 
+on a 16 GB machine, I did not have enough free memory for the whole file.
+
+
+```bash
+PGPASSWORD=password osm2pgsql \
+  --create \
+  --verbose \
+  -P 15432 -U postgres -H localhost \
+  -S osm2pgsql.style \
+  --slim --drop \
+  /home/wcedmisten/Downloads/us-latest.osm.pbf
+```
+
+I also used a pared down version of `osm2pgsql.style` to reduce the number of features imported into 
+the database.
+
+These 3 lines were retained, but most other tags were set to be deleted, rather than imported.
+
+```
+node,way   amenity      text         polygon
+node,way   shop         text         polygon
+node,way   leisure      text         polygon
+```
+
+I intentionally limited my analysis to `amenity`, `shop`, and `leisure` tags.
+
+The import took around 6 hours (overnight). It was slower than a pure in-memory import and relied on 
+postgreSQL for handling the intermediate data during the import.
+
+Even with this reduced set of tags, the DB still took up 25 GB of storage, much more than could fit in memory.
+
+## Writing the Code 
+
+Now that the backends were set up, I could begin writing the code to measure walkability.
+My code was intended to do several things for each city we want to measure:
+
+* Sample some points randomly inside a city
+* Find the isochrone map for each of these points within a 15 minute walk
+* Find the amenities within this isochrone boundary (e.g. restaurants, parks, grocery stores, etc.)
+
+### Getting the City Boundary Data
+
+To find the boundaries for US cities, I downloaded a few different datasets for cities:
+
+* geoJSON files for each city's boundary for major cities in the US. These were based on the TIGER US census dataset that someone converted to GeoJSON
+* top 1,000 most populous cities. I examined the top 100 cities in this dataset to compare walkability.
+
+I then created a PostGIS table, `city`, to store the GeoJSON boundaries for these 100 cities using a python script:
+
+`upload_cities.py`:
+
+```python
+import psycopg2
+import json
+
+from util import get_cities
+
+conn = psycopg2.connect(host="localhost", port="15432", dbname="postgres", user="postgres", password="password")
+cur = conn.cursor()
+
+create_city_table = """CREATE TABLE IF NOT EXISTS city (
+    name text,
+    state text,
+	geom geometry,
+    PRIMARY KEY (name, state)
+);
+"""
+
+cur.execute(create_city_table)
+conn.commit()
+
+
+def import_city(city, state):
+    with open(f"geojson-us-city-boundaries/cities/{state}/{city}.json") as f:
+        data = json.load(f)
+
+    geom = data['features'][0]['geometry']
+
+    cur.execute("INSERT INTO city (name, state, geom) VALUES (%s, %s, %s)", (city, state, json.dumps(geom)))
+    conn.commit()
+
+
+# get_cities() just munged the city population JSON data to get the top 100
+for city, state in get_cities():
+    # print(city,state)
+    import_city(city, state)
+```
+
+This allowed me to query whether or not a point is inside a city with the SQL query:
+
+```
+SELECT ST_Contains(geom, ST_GeomFromText('POINT(%s %s)'))
+    FROM ( SELECT geom FROM city WHERE name=%s AND state=%s ) as geom
+```
+
+### Sampling
+
+The first approach I explored was using sampling. Basically my idea was to generate a distribution of 
+points across a city and sample "walkability" at each of these points. Then, all samples could be averaged out.
+
+To accomplish this, I calculated the bounding box for each city, and generated a Poisson disc sampling of points.
+This resulted in an even distribution and guaranteed minimal overlap of points being sampled.
+
+This distribution for New York City looked like this:
+
+![sampling points for bounding box of NYC - map data copyright openstreetmap](/isochrone-walkability/bbox.png)
+
+After removing the points outside of the city's actual geometry, the sample looked like this:
+
+![sampling points for NYC](/isochrone-walkability/sampling-in-geom.png)
+
+Zoomed in further:
+
+![sampling points for NYC - zoomed in](/isochrone-walkability/sampling-zoomed.png)
+
+Poisson disc distributions allow the user to set a minimum separation distance for the points. I picked a 
+value somewhat arbitrarily that would have some overlap of walkable amenities for neighboring samples, but not too much.
+
+The code to do this was also fairly simple, relying on a library `poisson_disc` to calculate the sample points,
+and PostGIS to determine whether each point was in the city.
+
+```python
+get_bbox_query = """SELECT ST_AsText(ST_Envelope( geom ))
+FROM ( SELECT geom FROM city WHERE name=%s AND state=%s ) as geom
+"""
+
+cur.execute(get_bbox_query, [city, state])
+bbox = cur.fetchone()
+
+minx, miny, maxx, maxy = shapely.wkt.loads(bbox[0]).bounds
+height = (maxy - miny)
+width = (maxx - minx)
+
+points = poisson_disc.Bridson_sampling(dims=np.array([width,height]), radius=.005)
+
+is_in_query = """
+SELECT ST_Contains(geom, ST_GeomFromText('POINT(%s %s)'))
+FROM ( SELECT geom FROM city WHERE name=%s AND state=%s ) as geom
+"""
+
+scaled = list(map(lambda p: [p[0] + minx, p[1] + miny], points))
+
+def point_in_city(point):
+    is_in_city = cur.execute(is_in_query, [point[0], point[1], city, state])
+    return cur.fetchone()[0]
+
+# get all the points in the given city
+in_city = list(filter(point_in_city, scaled))
+```
+
+## Creating a metric 
+
+Now that I had a sampling for the city, I needed a metric to calculate for each point.
+
+I used a relatively simple approach: I examined a few categories of urban amenities and 
+gave 1 point to each unique category of amenity within a 15 minute walking distance.
+The walking distance was determined by querying Valhalla for each sampled point.
+
+For instance, a point with 3 restaurants, 2 bakeries, and 1 shoe store within walking distance would 
+get a score of 3: 1 point for each category. My reasoning was that most amenities are essentially a 
+binary category. Either the amenity you want is within walking distance or it's not. For future work, I 
+would probably change this to a logarithmic or logistic function to reflect diminishing returns on amenities of the same category.
+
+The first bakery within walking distance provides much more value than the second one, which provides more value 
+than the third, etc.
+
+It was also simpler to examine these categories at a binary level because the OSM data model has many 
+places where a single entity would be represented as multiple nodes (i.e. a building polygon), and 
+this approach avoided that complexity.
+
+15 minutes was chosen somewhat arbitrarily, but 
+is about the maximum I would consider to be a "quick walk" to a destination. In the future, this could be explored 
+using variable distances per amenity.
+
+I created a function `get_amenities(lat, lon)` to retrieve the amenities within walking distance of a point.
+
+```python
+MAX_WALK_TIME = 15
+
+def get_amenities(lat, lon):
+    payload = {
+        "locations":[
+            {"lat": lat,"lon": lon}
+        ],
+        "costing":"pedestrian",
+        "denoise":"0.11",
+        "generalize":"0",
+        "contours":[{"time":MAX_WALK_TIME}],
+        "polygons":True
+    }
+
+
+    request = f"http://localhost:8002/isochrone?json={json.dumps(payload)}"
+    isochrone = requests.get(request).json()
+
+    geom = json.dumps(isochrone['features'][0]['geometry'])
+
+    query = f"""
+    SELECT * FROM planet_osm_point
+    WHERE ST_Contains(ST_Transform(ST_GeomFromGeoJSON('{geom}'),3857), way) AND (amenity IS NOT NULL OR shop IS NOT NULL OR leisure IS NOT NULL);
+    """
+
+    cur.execute(query)
+    rows = cur.fetchall()
+
+    cur.execute("SELECT * FROM planet_osm_point LIMIT 0")
+    colnames = [desc[0] for desc in cur.description]
+    
+    return to_dict(colnames, rows)
+```
+
+This function:
+
+1. makes a request to the Valhalla Isochrone service to get the polygon representing a 15 minute walk surrounding the point
+2. uses that polygon to find all unique amenities within those bounds
+
+The amenities considered here are represented in the following OSM tags, including their definitions from the OSM wiki.
+
+* `amenity:cafe` - a generally informal place with sit-down facilities selling beverages and light meals and/or snacks
+* `amenity:bar` - a purpose-built commercial establishment that sells alcoholic drinks to be consumed on the premises
+* `amenity:pub` - an establishment that sells alcoholic drinks that can be consumed on the premises
+* `amenity:restaurant` - formal eating places with sit-down facilities selling full meals served by waiters
+* `shop:bakery` - a shop selling bread
+* `shop:convenience` - a small local shop carrying a variety of everyday products, mostly including single-serving food items
+* `shop:supermarket` - a large shop for groceries and other goods, including meat and fresh produce
+* `shop:department_store` - a large store with multiple clothing and other general merchandise departments
+* `shop:clothes` - a shop which primarily sells clothing, such as underwear, shirts, jeans etc
+* `shop:shoes` - is a type of retailer that specialises in selling shoes
+* `shop:books` - A shop selling books (including antique books, chain bookstores, etc.)
+* `shop:hairdresser` - where you can get your hair cut
+* `leisure:fitness_center` - a place with exercise machines and/or fitness/dance classes. They are places to go to for exercise
+* `leisure:park` - an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes
+
+## Results
+Calculating the top 100 cities took about 45 minutes.
+
+Top 10 most walkable cities, their score, and the score normalized to 100
+
+```txt
+washington dc , 5.5423340961098395 , 100.0
+minneapolis mn , 4.309927360774818 , 77.76375956476448
+chicago il , 4.202944942381562 , 75.83348223867641
+new-york ny , 4.068999028182701 , 73.41670418314784
+seattle wa , 4.011549566891242 , 72.3801470161632
+cleveland oh , 3.838532110091743 , 69.25840347275359
+denver co , 3.3679525222551927 , 60.76776433631375
+jersey-city nj , 3.3055555555555554 , 59.64193962748876
+st.-louis mo , 3.1411483253588517 , 56.675549883642375
+pittsburgh pa , 3.07012987012987 , 55.39416817699229
+```
+
+Least 10 walkable cities:
+
+```txt
+louisville ky , 0.39025787965616043 , 7.041399397594637
+tucson az , 0.38472519628836543 , 6.941573525103868
+north-las-vegas nv , 0.36065573770491804 , 6.507289734807976
+jacksonville fl , 0.34642576590730556 , 6.250539211457165
+lubbock tx , 0.3165644171779141 , 5.711752696397542
+oklahoma-city ok , 0.31058201058201057 , 5.603812494811669
+chesapeake va , 0.2728500675371454 , 4.923017320963359
+bakersfield ca , 0.21790722761596548 , 3.93168697226164
+corpus-christi tx , 0.16981132075471697 , 3.063895424021937
+anchorage ak , 0.053474605780231804 , 0.9648390886028613
+```
+
+I also compared these rankings to Walk Score, and found that they seemed to be mostly in the ballpark.
+
+![flame graph](/isochrone-walkability/walk-score-comparison.png)
+
+This plot shows the difference between the Walk Score ranking and my ranking. E.g. I ranked San Fransisco as #26, but Walk Score ranked it at #1, showing a 
+bar at -25 for the first entry. The x axis is ordered by the walk [score ranking](https://www.walkscore.com/cities-and-neighborhoods/).
+
+### Limitations
+
+Some significant limitations: 
+* I didn't filter samples that aren't on land
+* I didn't filter for residential areas (although arguably this could be intentional to count tourism and travel)
+* openstreetmap is made by crowdsourced data from volunteers, and amenity data may not be evenly distributed (probably benefitting higher population cities)
+* Biases from the boundaries of the city vs. metropolitan sprawl. This would be biased toward larger metropolitan areas
+
+### Performance
+
+I profiled running this on a single city, and found that the majority of time is spent between querying Valhalla and querying PostGIS,
+which makes sense to me.
+
+https://pypi.org/project/flameprof/
+
+![flame graph](/isochrone-walkability/flame-graph.svg)
+
+## Future Work
+
+### Custom walkability scores
+
+Explore customized walkability scores. "Walkability" based on *all* amenities is painting with a broad brush. Most people probably don't care about every single 
+amenity that can be categorized. Peter Johnson has an [interesting article](https://towardsdatascience.com/engineer-walkscore-4dc1730b976c)
+about reverse engineering the Walk Score, which found that it's highly correlated with the number of nearby restuarants.
+
+Personally I love restaurants, but I eat most of my meals cooking at home, so this score may be less useful to me personally. I like the idea of assigning
+weights to each amenity to get a more custom optimization. You could even optimize for something like "most walkable Chinese restuarants" or "most parts".
+
+We could also codify some other factors with walkability related to the isochrone calculations. For example, people with disabilities may have
+an especially hard time with poor sidewalk infrastructure. I don't think Valhalla supports custom sidewalk cost penalties related to width, sidewalk condition,
+or curb cuts, but I would be interested in exploring that more specifically. 
+
+One of the coolest things about openstreetmap is the level of detail available in the data. I don't know of anywhere else where curb cut data is available.
+
+### Amenity centered isochrones
+
+Another idea I had was instead of sampling a bunch of points, which requires a lot of isochrone calculations, instead calculate isochrones starting from each amenity.
+Then we could combine all the isochrone polygons and calculate what portion of the city is within X minute walk of that amenity. This could also be useful for finding
+amenity "deserts", like food deserts, but more general.
+
+This would also allow me to explore varying the walking distance for each amenity category. E.g. I would be more willing to walk further for infrequent and important
+errands, like electronics repair or a hospital visit. But for more common tasks like getting groceries I would prefer a closer walk.
+
+## Appendix 
+
+```txt
+city , score , normalized score to 100
+washington dc , 5.5423340961098395 , 100.0
+minneapolis mn , 4.309927360774818 , 77.76375956476448
+chicago il , 4.202944942381562 , 75.83348223867641
+new-york ny , 4.068999028182701 , 73.41670418314784
+seattle wa , 4.011549566891242 , 72.3801470161632
+cleveland oh , 3.838532110091743 , 69.25840347275359
+denver co , 3.3679525222551927 , 60.76776433631375
+jersey-city nj , 3.3055555555555554 , 59.64193962748876
+st.-louis mo , 3.1411483253588517 , 56.675549883642375
+pittsburgh pa , 3.07012987012987 , 55.39416817699229
+philadelphia pa , 3.0 , 54.1288191577209
+portland or , 2.944713870029098 , 53.13129484734582
+st.-paul mn , 2.8675 , 51.73812964492156
+san-jose ca , 2.7959719789842383 , 50.44755387349762
+buffalo ny , 2.6732394366197183 , 48.23309801002547
+baltimore md , 2.6317512274959083 , 47.48452875374534
+detroit mi , 2.5689300411522633 , 46.351049875455786
+boston ma , 2.553225806451613 , 46.06769931541515
+oakland ca , 2.5428571428571427 , 45.880618143211045
+miami fl , 2.4380952380952383 , 43.990405410719205
+sacramento ca , 2.3950233281493003 , 43.2132615359721
+omaha ne , 2.3313008130081303 , 42.063520036521595
+chandler az , 2.262086513994911 , 40.81469061171661
+long-beach ca , 2.10625 , 38.00294178364988
+santa-ana ca , 2.0365853658536586 , 36.74598698918451
+madison wi , 2.014513788098694 , 36.34775084224316
+san-francisco ca , 1.9972658920027342 , 36.03654809270004
+milwaukee wi , 1.9099236641221373 , 34.460637540106276
+los-angeles ca , 1.9041365725541695 , 34.356221395795714
+richmond va , 1.8927680798004987 , 34.151100366342604
+cincinnati oh , 1.8854368932038834 , 34.01882420850937
+san-diego ca , 1.8296064400715564 , 33.01147870814493
+chula-vista ca , 1.8 , 32.47729149463254
+atlanta ga , 1.7965686274509804 , 32.41537944657632
+gilbert az , 1.7644230769230769 , 31.835379216159566
+urban-honolulu hi , 1.7608695652173914 , 31.771263418662265
+anaheim ca , 1.7605177993527508 , 31.764916528371266
+mesa az , 1.7423167848699763 , 31.43651672122955
+raleigh nc , 1.6407447973713034 , 29.603859473627566
+newark nj , 1.6402439024390243 , 29.594821856558777
+lincoln ne , 1.621283255086072 , 29.252716039331688
+albuquerque nm , 1.5051993067590987 , 27.158220357296702
+las-vegas nv , 1.4890929965556832 , 26.86761517319709
+austin tx , 1.4347150259067358 , 25.88647672672352
+columbus oh , 1.4032586558044806 , 25.318911337182413
+plano tx , 1.3448275862068966 , 24.264643070702473
+colorado-springs co , 1.3436754176610979 , 24.24385456308422
+aurora co , 1.3264503441494593 , 23.93306360005424
+st.-petersburg fl , 1.3012658227848102 , 23.47866079921396
+greensboro nc , 1.289855072463768 , 23.272777319020094
+riverside ca , 1.2777777777777777 , 23.054867419029268
+houston tx , 1.2459948320413436 , 22.481409645006902
+boise-city id , 1.2444444444444445 , 22.453436095054595
+tampa fl , 1.2391732283464567 , 22.358327860751512
+glendale az , 1.1924119241192412 , 21.51461646738681
+fremont ca , 1.0990825688073393 , 19.8306805354586
+toledo oh , 1.0673758865248226 , 19.258598778338047
+irvine ca , 1.045 , 18.85487200660611
+stockton ca , 1.0289156626506024 , 18.564663277387005
+orlando fl , 1.0058479532163742 , 18.148453986604277
+charlotte nc , 1.0010559662090812 , 18.061992453896305
+hialeah fl , 0.991869918699187 , 17.896249152417205
+indianapolis-city in , 0.9912207357859532 , 17.88453598424697
+durham nc , 0.9635343618513323 , 17.38499240830026
+norfolk va , 0.9585406301824212 , 17.294890808824036
+phoenix az , 0.8997069358515142 , 16.233358008551267
+baton-rouge la , 0.8815533980582524 , 15.905814820456495
+dallas tx , 0.8440087145969499 , 15.228398359986256
+reno nv , 0.8310991957104558 , 14.995472688912848
+fort-wayne in , 0.8198924731182796 , 14.793270468731967
+arlington tx , 0.8023648648648649 , 14.477020889593145
+wichita ks , 0.7713736791546589 , 13.917848793996118
+garland tx , 0.7544910179640718 , 13.613235955833996
+irving tx , 0.75 , 13.532204789430224
+winston-salem nc , 0.7078787878787879 , 12.772214298225858
+tulsa ok , 0.6851704996034893 , 12.362490021747515
+fresno ca , 0.6740638002773925 , 12.162092515327025
+kansas-city mo , 0.6733496332518337 , 12.149206842735397
+new-orleans la , 0.6644001942690626 , 11.98773265464824
+fort-worth tx , 0.6505223171889839 , 11.737334955061353
+san-antonio tx , 0.57991513437058 , 10.463373811723512
+henderson nv , 0.5763993948562783 , 10.399939535598417
+san-bernardino ca , 0.5633423180592992 , 10.164351486041031
+nashville-davidson-metropolitan-government tn , 0.5518025332900293 , 9.956139845076086
+memphis tn , 0.5425692695214106 , 9.789544623487053
+scottsdale az , 0.5339892665474061 , 9.634736147036188
+lexington-fayette ky , 0.5107794361525705 , 9.215962576328378
+el-paso tx , 0.4807692307692308 , 8.674490249634758
+laredo tx , 0.4416243654822335 , 7.968201804943685
+virginia-beach va , 0.39852752880921893 , 7.190608178762539
+louisville ky , 0.39025787965616043 , 7.041399397594637
+tucson az , 0.38472519628836543 , 6.941573525103868
+north-las-vegas nv , 0.36065573770491804 , 6.507289734807976
+jacksonville fl , 0.34642576590730556 , 6.250539211457165
+lubbock tx , 0.3165644171779141 , 5.711752696397542
+oklahoma-city ok , 0.31058201058201057 , 5.603812494811669
+chesapeake va , 0.2728500675371454 , 4.923017320963359
+bakersfield ca , 0.21790722761596548 , 3.93168697226164
+corpus-christi tx , 0.16981132075471697 , 3.063895424021937
+anchorage ak , 0.053474605780231804 , 0.9648390886028613
+```

@@ -23,15 +23,6 @@ const components = {
     Container,
     Col,
     Row,
-    p: (props: any) => (
-        <p {...props} />
-    ),
-    ol: (props: any) => (
-        <ol {...props} />
-    ),
-    li: (props: any) => (
-        <li {...props} />
-    ),
     figure: (props: any) => (
         <figure className={style.PostFigure} {...props} />
     ),
@@ -43,7 +34,7 @@ const components = {
     ),
     h3: (props: any) => (
         <h3 className={style.PostH3} {...props} />
-    ),
+    )
 };
 
 export default function TestPage(props: { source: any }) {
