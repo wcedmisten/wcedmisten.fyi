@@ -13,10 +13,6 @@ import PostItem from '../components/PostItem'
 import generateRSS from "../utils/RSS"
 import readingTime from 'reading-time';
 
-interface HomeType {
-  sources: any;
-}
-
 const getPosts: any = (sources: any) => {
   return sources.map((source: any) => ({
     filename: source.filename,
@@ -27,10 +23,18 @@ const getPosts: any = (sources: any) => {
   });
 };
 
-const Home: NextPage<HomeType> = (props) => {
-  const postData = getPosts(props.sources)
+interface Post {
+  filename: string;
+  readingLength: number;
+  meta: any;
+}
 
-  const posts = postData.map((post: any) =>
+interface HomeType {
+  posts: Post[]
+}
+
+const Home: NextPage<HomeType> = (props) => {
+  const posts = props.posts.map((post: any) =>
     <PostItem
       key={post.filename}
       href={`/post/${post.filename}`}
@@ -89,7 +93,7 @@ export async function getStaticProps() {
   // will receive `posts` as a prop at build time
   return {
     props: {
-      sources
+      posts: postList
     },
   }
 }
