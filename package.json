@@ -25,6 +25,7 @@
     "reading-time": "^1.5.0",
     "rehype-highlight": "^5.0.2",
     "rehype-slug": "^5.0.1",
+    "remark-gfm": "^3.0.1",
     "rss": "^1.2.2"
   },
   "devDependencies": {

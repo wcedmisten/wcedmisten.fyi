@@ -6,9 +6,9 @@ function AboutPage() {
             <Row><Col><h1>About</h1></Col></Row>
             <Row>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
-                    <p>I'm William Edmisten, a full stack software engineer working
-                        for Reify Health. I graduated from Virginia Tech in 2019
-                        with a BS in Computer Science.
+                    <p>Hello! I'm William Edmisten, a full stack software engineer working
+                        for OneStudyTeam. I graduated from Virginia Tech with a B.S.
+                        in Computer Science.
                     </p>
 
                     <p>I frequently start hobby projects, and I'm hoping this blog

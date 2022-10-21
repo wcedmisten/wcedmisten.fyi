@@ -1,5 +1,5 @@
 ---
-title: "Measuring Walkability with Isochrone Maps"
+title: "Measuring Walkability with Openstreetmap and Isochrone Maps"
 date: "2022-10-16"
 thumbnail: "/thumbnails/isochrone-walkability.png"
 thumbnailAlt: "Pedestrian isochrone map of Richmond, Virginia. Map copyright Openstreetmap."
@@ -9,18 +9,18 @@ tags: ["openstreetmap", "python", "postgis", "isochrone"]
 
 ## Walkability
 
-Walkability is the quality of an urban space that allows pedestrians to accomplish everyday tasks like
+Walkability is the quality of a neighborhood that allows pedestrians to accomplish everyday tasks like
 collecting groceries, visiting restaurants, and attending doctor's appointments, all on foot.
 
-There are many to measure walkability, including intersection density and 
+There are many ways to measure walkability, including intersection density and 
 by measuring the distance to urban amenities. The most notable metric for walkability is 
 Walk Score, which is owned by Red Fin. They use a proprietary system for this metric,
-but ultimately their [methodology](https://www.walkscore.com/methodology.shtml) is based on distance to amenities,
+but ultimately their methodology[^walk-score-methodology] is based on the distance to amenities,
 similar to the one I will explore today.
 
 ## Isochrone maps
 
-Isochrone maps are a way to visualize the area that could be reached in a given time.
+Isochrone maps are a way to visualize the area that could be reached from a starting point in a given time.
 These distances appear as contours originating from the starting point, showing bands across which the travel 
 time is equal.
 
@@ -39,19 +39,30 @@ The main idea of this project is to examine how not just density, but also the s
 impact walkability. For instance, compare these two pedestrian isochrone maps showing the destinations possible
 in 15 minutes of walking:
 
-A rural residential area in West Virginia:
-![Valhalla isochrone map](/isochrone-walkability/west-virginia-isochrone.png)
+<figure>
+    <img className="captioned-img" src="/isochrone-walkability/west-virginia-isochrone.png"
+        alt="A rural residential area in West Virginia"/>
+    <figcaption>A rural residential area in West Virginia. Copyright openstreetmap</figcaption>
+</figure>
 
-Manhattan, NYC:
-![Valhalla isochrone map](/isochrone-walkability/new-york-isochrone.png)
+<figure>
+    <img className="captioned-img" src="/isochrone-walkability/new-york-isochrone.png"
+        alt="A map of Manhattan"/>
+    <figcaption>Manhattan, New York City. Copyright openstreetmap</figcaption>
+</figure>
 
 Even though there are clearly fewer amenities near this rural area, the network structure of roads also prohibits
-covering as much distance there, not to mention the lack of sidewalks facilitating safe pedestrian travel.
-The former area represents only 1.28 square km of area, while the latter is 1.68, a 30% increase.
+covering as much distance, not to mention the lack of sidewalks facilitating safe pedestrian travel.
+The city block structure in Manhattan provides a 30% increase in the walkable area from the starting point,
+compared to the rural area.
 
 ## Valhalla
 
-![Valhalla isochrone map](/isochrone-walkability/valhalla-isochrone.png)
+<figure>
+    <img className="captioned-img" src="/isochrone-walkability/new-york-isochrone.png"
+        alt="Valhalla Isochrome Map Example"/>
+    <figcaption>Valhalla Isochrome Map Example. Copyright openstreetmap</figcaption>
+</figure>
 
 To construct isochrone maps, we'll be using a tool called [Valhalla](https://github.com/valhalla/valhalla),
 which is an open source routing engine. This tool operates on top of openstreetmap data, which is crowdsourced
@@ -59,7 +70,7 @@ by volunteers, but is generally quite thorough, especially in urban areas.
 
 ### Downloading the data
 
-First I downloaded the openstreetmap data from Geofabrik, which graciously hosts up-to-date extracts of openstreetmap for download.
+First I downloaded the openstreetmap data from Geofabrik,[^geofabrik] which graciously hosts up-to-date extracts of openstreetmap for download.
 
 Initially I used an extract specifically for Virginia which was a modest size of 342 MB.
 But after this code was tested, I ran imported the entire United States extract, which is 8.5 GB.
@@ -112,12 +123,14 @@ echo "Starting valhalla server."
 valhalla_service /data/valhalla.json 1
 ```
 
+The full code can be found [here](https://github.com/wcedmisten/city-walkability).
+
 ## Setting up PostGIS
 
 PostGIS is a geospatial extension on top of PostgreSQL, which does some very cool optimizations to support efficient geospatial queries.
 
-Similarly, I set up PostGIS and imported the US dataset using `osm2pgsql`, a tool used for ingesting the protobuf formatted data 
-into PostGIS.
+Similarly, I set up PostGIS using my [osm2pgsql-docker repo](https://github.com/wcedmisten/osm2pgsql-docker)
+and imported the US dataset with `osm2pgsql`, a tool used for ingesting the protobuf formatted data into PostGIS.
 
 ```yaml
 version: "3.9"  # optional since v1.27.0
@@ -137,10 +150,9 @@ services:
 ```
 
 After PostGIS was running, I imported the data. This was initially tested on the Virginia state osm.pbf data,
-but I later updated this to use the entire US dataset. Making this change forced me to add the 
-`--slim --drop` flags, which process the data using PostgresSQL, rather than storing everything in memory.
-Without these flags, the process kept getting killed, due to running out of memory. Although I was running this 
-on a 16 GB machine, I did not have enough free memory for the whole file.
+but I later updated this to use the entire US dataset. After making this change, the script kept running out of memory.
+So I added the `--slim --drop` flags, which process the data using PostgresSQL (using my SSD), rather than storing everything in memory.
+Although I was running this on a 16 GB machine, I did not have enough free memory to process for the whole file.
 
 
 ```bash
@@ -153,7 +165,7 @@ PGPASSWORD=password osm2pgsql \
   /home/wcedmisten/Downloads/us-latest.osm.pbf
 ```
 
-I also used a pared down version of `osm2pgsql.style` to reduce the number of features imported into 
+I also used a simplified version of `osm2pgsql.style` to reduce the number of features imported into 
 the database.
 
 These 3 lines were retained, but most other tags were set to be deleted, rather than imported.
@@ -166,10 +178,10 @@ node,way   leisure      text         polygon
 
 I intentionally limited my analysis to `amenity`, `shop`, and `leisure` tags.
 
-The import took around 6 hours (overnight). It was slower than a pure in-memory import and relied on 
-postgreSQL for handling the intermediate data during the import.
+Due to using my SSD instead of memory for the import, the whole process took around 6 hours. I just let it run overnight, 
+so this wasn't a huge issue.
 
-Even with this reduced set of tags, the DB still took up 25 GB of storage, much more than could fit in memory.
+Even with this reduced set of tags, the database still took up 25 GB of storage, much more than could fit in memory.
 
 ## Writing the Code 
 
@@ -237,17 +249,17 @@ SELECT ST_Contains(geom, ST_GeomFromText('POINT(%s %s)'))
 
 ### Sampling
 
-The first approach I explored was using sampling. Basically my idea was to generate a distribution of 
-points across a city and sample "walkability" at each of these points. Then, all samples could be averaged out.
+I wanted to generate an even distribution of points across a city and sample "walkability" at each of these points.
+Then, all samples could be averaged out.
 
-To accomplish this, I calculated the bounding box for each city, and generated a Poisson disc sampling of points.
-This resulted in an even distribution and guaranteed minimal overlap of points being sampled.
+To accomplish this, I calculated the bounding box for each city, and generated a Poisson disk sampling[^poisson-disk-sampling] of points.
+This distribution guaranteed minimal overlap of points being sampled.
 
-This distribution for New York City looked like this:
+This bounding-box distribution for New York City looked like this:
 
 ![sampling points for bounding box of NYC - map data copyright openstreetmap](/isochrone-walkability/bbox.png)
 
-After removing the points outside of the city's actual geometry, the sample looked like this:
+After removing the points outside of the city's actual boundaries, the sample looked like this:
 
 ![sampling points for NYC](/isochrone-walkability/sampling-in-geom.png)
 
@@ -255,10 +267,10 @@ Zoomed in further:
 
 ![sampling points for NYC - zoomed in](/isochrone-walkability/sampling-zoomed.png)
 
-Poisson disc distributions allow the user to set a minimum separation distance for the points. I picked a 
-value somewhat arbitrarily that would have some overlap of walkable amenities for neighboring samples, but not too much.
+Poisson disk distributions guarantee a minimum separation distance for all the points. I picked a 
+distance somewhat arbitrarily that would have some overlap of walkable amenities for neighboring samples, but not too much.
 
-The code to do this was also fairly simple, relying on a library `poisson_disc` to calculate the sample points,
+The code to do this was also fairly simple, relying on a library `poisson_disc` [^poisson-disc-lib] to calculate the sample points,
 and PostGIS to determine whether each point was in the city.
 
 ```python
@@ -299,7 +311,7 @@ gave 1 point to each unique category of amenity within a 15 minute walking dista
 The walking distance was determined by querying Valhalla for each sampled point.
 
 For instance, a point with 3 restaurants, 2 bakeries, and 1 shoe store within walking distance would 
-get a score of 3: 1 point for each category. My reasoning was that most amenities are essentially a 
+get a score of 3: 1 point for each category. I reasoned that most amenities are essentially a 
 binary category. Either the amenity you want is within walking distance or it's not. For future work, I 
 would probably change this to a logarithmic or logistic function to reflect diminishing returns on amenities of the same category.
 
@@ -374,44 +386,44 @@ The amenities considered here are represented in the following OSM tags, includi
 * `leisure:park` - an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes
 
 ## Results
-Calculating the top 100 cities took about 45 minutes.
 
-Top 10 most walkable cities, their score, and the score normalized to 100
+### Top 10 most walkable cities
 
-```txt
-washington dc , 5.5423340961098395 , 100.0
-minneapolis mn , 4.309927360774818 , 77.76375956476448
-chicago il , 4.202944942381562 , 75.83348223867641
-new-york ny , 4.068999028182701 , 73.41670418314784
-seattle wa , 4.011549566891242 , 72.3801470161632
-cleveland oh , 3.838532110091743 , 69.25840347275359
-denver co , 3.3679525222551927 , 60.76776433631375
-jersey-city nj , 3.3055555555555554 , 59.64193962748876
-st.-louis mo , 3.1411483253588517 , 56.675549883642375
-pittsburgh pa , 3.07012987012987 , 55.39416817699229
-```
+| Rank   | City      | Amenity Score | Amenity Score out of 100 |
+| :--- | -------   |       ----:   |                     ---: |
+| 1 | washington dc | 5.5423340961098395 | 100.0 |
+| 2 | minneapolis mn | 4.309927360774818 | 77.76375956476448 |
+| 3 | chicago il | 4.202944942381562 | 75.83348223867641 |
+| 4 | new-york ny | 4.068999028182701 | 73.41670418314784 |
+| 5 | seattle wa | 4.011549566891242 | 72.3801470161632 |
+| 6 | cleveland oh | 3.838532110091743 | 69.25840347275359 |
+| 7 | denver co | 3.3679525222551927 | 60.76776433631375 |
+| 8 | jersey-city nj | 3.3055555555555554 | 59.64193962748876 |
+| 9 | st-louis mo | 3.1411483253588517 | 56.675549883642375 |
+| 10 | pittsburgh pa | 3.07012987012987 | 55.39416817699229 |
 
-Least 10 walkable cities:
+### Least 10 walkable cities:
 
-```txt
-louisville ky , 0.39025787965616043 , 7.041399397594637
-tucson az , 0.38472519628836543 , 6.941573525103868
-north-las-vegas nv , 0.36065573770491804 , 6.507289734807976
-jacksonville fl , 0.34642576590730556 , 6.250539211457165
-lubbock tx , 0.3165644171779141 , 5.711752696397542
-oklahoma-city ok , 0.31058201058201057 , 5.603812494811669
-chesapeake va , 0.2728500675371454 , 4.923017320963359
-bakersfield ca , 0.21790722761596548 , 3.93168697226164
-corpus-christi tx , 0.16981132075471697 , 3.063895424021937
-anchorage ak , 0.053474605780231804 , 0.9648390886028613
-```
+| Rank   | City      | Amenity Score | Amenity Score out of 100 |
+| :--- | -------   |       ----:   |                     ---: |
+| 91 | louisville-jefferson ky | 0.39025787965616043 | 7.041399397594637 |
+| 92 | tucson az | 0.38472519628836543 | 6.941573525103868 |
+| 93 | north-las-vegas nv | 0.36065573770491804 | 6.507289734807976 |
+| 94 | jacksonville fl | 0.34642576590730556 | 6.250539211457165 |
+| 95 | lubbock tx | 0.3165644171779141 | 5.711752696397542 |
+| 96 | oklahoma-city ok | 0.31058201058201057 | 5.603812494811669 |
+| 97 | chesapeake va | 0.2728500675371454 | 4.923017320963359 |
+| 98 | bakersfield ca | 0.21790722761596548 | 3.93168697226164 |
+| 99 | corpus-christi tx | 0.16981132075471697 | 3.063895424021937 |
+| 100 | anchorage ak | 0.053474605780231804 | 0.9648390886028613 |
+
 
 I also compared these rankings to Walk Score, and found that they seemed to be mostly in the ballpark.
 
-![flame graph](/isochrone-walkability/walk-score-comparison.png)
+![walk score comparison](/isochrone-walkability/walk-score-comparison.png)
 
 This plot shows the difference between the Walk Score ranking and my ranking. E.g. I ranked San Fransisco as #26, but Walk Score ranked it at #1, showing a 
-bar at -25 for the first entry. The x axis is ordered by the walk [score ranking](https://www.walkscore.com/cities-and-neighborhoods/).
+bar at -25 for the first entry. The x axis is ordered by the walk score ranking.[^walk-score-rankings]
 
 ### Limitations
 
@@ -423,10 +435,8 @@ Some significant limitations:
 
 ### Performance
 
-I profiled running this on a single city, and found that the majority of time is spent between querying Valhalla and querying PostGIS,
-which makes sense to me.
-
-https://pypi.org/project/flameprof/
+I profiled running this on a single city with flameprof[^flameprof], and found that the majority of time is spent between querying Valhalla and querying PostGIS,
+which makes sense to me. Both Valhalla and PostGIS are most likely heavily optimized already, so the only way I could shave down runtime would be to sample fewer points.
 
 ![flame graph](/isochrone-walkability/flame-graph.svg)
 
@@ -435,11 +445,11 @@ https://pypi.org/project/flameprof/
 ### Custom walkability scores
 
 Explore customized walkability scores. "Walkability" based on *all* amenities is painting with a broad brush. Most people probably don't care about every single 
-amenity that can be categorized. Peter Johnson has an [interesting article](https://towardsdatascience.com/engineer-walkscore-4dc1730b976c)
-about reverse engineering the Walk Score, which found that it's highly correlated with the number of nearby restuarants.
+amenity that can be categorized. Peter Johnson has an interesting article[^reverse-engineering-walkscore]
+about reverse engineering the Walk Score, which found that it's highly correlated with the number of nearby restaurants.
 
-Personally I love restaurants, but I eat most of my meals cooking at home, so this score may be less useful to me personally. I like the idea of assigning
-weights to each amenity to get a more custom optimization. You could even optimize for something like "most walkable Chinese restuarants" or "most parts".
+Personally, I love restaurants, but I cook most of my meals at home, so this score may be less useful to me. I like the idea of assigning
+weights to each amenity to get a more custom optimization. You could even optimize for something like "most walkable Chinese restaurants" or "most parts".
 
 We could also codify some other factors with walkability related to the isochrone calculations. For example, people with disabilities may have
 an especially hard time with poor sidewalk infrastructure. I don't think Valhalla supports custom sidewalk cost penalties related to width, sidewalk condition,
@@ -454,110 +464,122 @@ Then we could combine all the isochrone polygons and calculate what portion of t
 amenity "deserts", like food deserts, but more general.
 
 This would also allow me to explore varying the walking distance for each amenity category. E.g. I would be more willing to walk further for infrequent and important
-errands, like electronics repair or a hospital visit. But for more common tasks like getting groceries I would prefer a closer walk.
+errands, like electronics repair or a hospital visit. But for more common tasks like getting groceries, I would prefer a closer walk.
 
 ## Appendix 
 
-```txt
-city , score , normalized score to 100
-washington dc , 5.5423340961098395 , 100.0
-minneapolis mn , 4.309927360774818 , 77.76375956476448
-chicago il , 4.202944942381562 , 75.83348223867641
-new-york ny , 4.068999028182701 , 73.41670418314784
-seattle wa , 4.011549566891242 , 72.3801470161632
-cleveland oh , 3.838532110091743 , 69.25840347275359
-denver co , 3.3679525222551927 , 60.76776433631375
-jersey-city nj , 3.3055555555555554 , 59.64193962748876
-st.-louis mo , 3.1411483253588517 , 56.675549883642375
-pittsburgh pa , 3.07012987012987 , 55.39416817699229
-philadelphia pa , 3.0 , 54.1288191577209
-portland or , 2.944713870029098 , 53.13129484734582
-st.-paul mn , 2.8675 , 51.73812964492156
-san-jose ca , 2.7959719789842383 , 50.44755387349762
-buffalo ny , 2.6732394366197183 , 48.23309801002547
-baltimore md , 2.6317512274959083 , 47.48452875374534
-detroit mi , 2.5689300411522633 , 46.351049875455786
-boston ma , 2.553225806451613 , 46.06769931541515
-oakland ca , 2.5428571428571427 , 45.880618143211045
-miami fl , 2.4380952380952383 , 43.990405410719205
-sacramento ca , 2.3950233281493003 , 43.2132615359721
-omaha ne , 2.3313008130081303 , 42.063520036521595
-chandler az , 2.262086513994911 , 40.81469061171661
-long-beach ca , 2.10625 , 38.00294178364988
-santa-ana ca , 2.0365853658536586 , 36.74598698918451
-madison wi , 2.014513788098694 , 36.34775084224316
-san-francisco ca , 1.9972658920027342 , 36.03654809270004
-milwaukee wi , 1.9099236641221373 , 34.460637540106276
-los-angeles ca , 1.9041365725541695 , 34.356221395795714
-richmond va , 1.8927680798004987 , 34.151100366342604
-cincinnati oh , 1.8854368932038834 , 34.01882420850937
-san-diego ca , 1.8296064400715564 , 33.01147870814493
-chula-vista ca , 1.8 , 32.47729149463254
-atlanta ga , 1.7965686274509804 , 32.41537944657632
-gilbert az , 1.7644230769230769 , 31.835379216159566
-urban-honolulu hi , 1.7608695652173914 , 31.771263418662265
-anaheim ca , 1.7605177993527508 , 31.764916528371266
-mesa az , 1.7423167848699763 , 31.43651672122955
-raleigh nc , 1.6407447973713034 , 29.603859473627566
-newark nj , 1.6402439024390243 , 29.594821856558777
-lincoln ne , 1.621283255086072 , 29.252716039331688
-albuquerque nm , 1.5051993067590987 , 27.158220357296702
-las-vegas nv , 1.4890929965556832 , 26.86761517319709
-austin tx , 1.4347150259067358 , 25.88647672672352
-columbus oh , 1.4032586558044806 , 25.318911337182413
-plano tx , 1.3448275862068966 , 24.264643070702473
-colorado-springs co , 1.3436754176610979 , 24.24385456308422
-aurora co , 1.3264503441494593 , 23.93306360005424
-st.-petersburg fl , 1.3012658227848102 , 23.47866079921396
-greensboro nc , 1.289855072463768 , 23.272777319020094
-riverside ca , 1.2777777777777777 , 23.054867419029268
-houston tx , 1.2459948320413436 , 22.481409645006902
-boise-city id , 1.2444444444444445 , 22.453436095054595
-tampa fl , 1.2391732283464567 , 22.358327860751512
-glendale az , 1.1924119241192412 , 21.51461646738681
-fremont ca , 1.0990825688073393 , 19.8306805354586
-toledo oh , 1.0673758865248226 , 19.258598778338047
-irvine ca , 1.045 , 18.85487200660611
-stockton ca , 1.0289156626506024 , 18.564663277387005
-orlando fl , 1.0058479532163742 , 18.148453986604277
-charlotte nc , 1.0010559662090812 , 18.061992453896305
-hialeah fl , 0.991869918699187 , 17.896249152417205
-indianapolis-city in , 0.9912207357859532 , 17.88453598424697
-durham nc , 0.9635343618513323 , 17.38499240830026
-norfolk va , 0.9585406301824212 , 17.294890808824036
-phoenix az , 0.8997069358515142 , 16.233358008551267
-baton-rouge la , 0.8815533980582524 , 15.905814820456495
-dallas tx , 0.8440087145969499 , 15.228398359986256
-reno nv , 0.8310991957104558 , 14.995472688912848
-fort-wayne in , 0.8198924731182796 , 14.793270468731967
-arlington tx , 0.8023648648648649 , 14.477020889593145
-wichita ks , 0.7713736791546589 , 13.917848793996118
-garland tx , 0.7544910179640718 , 13.613235955833996
-irving tx , 0.75 , 13.532204789430224
-winston-salem nc , 0.7078787878787879 , 12.772214298225858
-tulsa ok , 0.6851704996034893 , 12.362490021747515
-fresno ca , 0.6740638002773925 , 12.162092515327025
-kansas-city mo , 0.6733496332518337 , 12.149206842735397
-new-orleans la , 0.6644001942690626 , 11.98773265464824
-fort-worth tx , 0.6505223171889839 , 11.737334955061353
-san-antonio tx , 0.57991513437058 , 10.463373811723512
-henderson nv , 0.5763993948562783 , 10.399939535598417
-san-bernardino ca , 0.5633423180592992 , 10.164351486041031
-nashville-davidson-metropolitan-government tn , 0.5518025332900293 , 9.956139845076086
-memphis tn , 0.5425692695214106 , 9.789544623487053
-scottsdale az , 0.5339892665474061 , 9.634736147036188
-lexington-fayette ky , 0.5107794361525705 , 9.215962576328378
-el-paso tx , 0.4807692307692308 , 8.674490249634758
-laredo tx , 0.4416243654822335 , 7.968201804943685
-virginia-beach va , 0.39852752880921893 , 7.190608178762539
-louisville ky , 0.39025787965616043 , 7.041399397594637
-tucson az , 0.38472519628836543 , 6.941573525103868
-north-las-vegas nv , 0.36065573770491804 , 6.507289734807976
-jacksonville fl , 0.34642576590730556 , 6.250539211457165
-lubbock tx , 0.3165644171779141 , 5.711752696397542
-oklahoma-city ok , 0.31058201058201057 , 5.603812494811669
-chesapeake va , 0.2728500675371454 , 4.923017320963359
-bakersfield ca , 0.21790722761596548 , 3.93168697226164
-corpus-christi tx , 0.16981132075471697 , 3.063895424021937
-anchorage ak , 0.053474605780231804 , 0.9648390886028613
-```
+### Final Rankings
+
+| Rank   | City      | Amenity Score | Amenity Score out of 100 |
+| :--- | -------   |       ----:   |                     ---: |
+| 1 | washington dc | 5.5423340961098395 | 100.0 |
+| 2 | minneapolis mn | 4.309927360774818 | 77.76375956476448 |
+| 3 | chicago il | 4.202944942381562 | 75.83348223867641 |
+| 4 | new-york ny | 4.068999028182701 | 73.41670418314784 |
+| 5 | seattle wa | 4.011549566891242 | 72.3801470161632 |
+| 6 | cleveland oh | 3.838532110091743 | 69.25840347275359 |
+| 7 | denver co | 3.3679525222551927 | 60.76776433631375 |
+| 8 | jersey-city nj | 3.3055555555555554 | 59.64193962748876 |
+| 9 | st-louis mo | 3.1411483253588517 | 56.675549883642375 |
+| 10 | pittsburgh pa | 3.07012987012987 | 55.39416817699229 |
+| 11 | philadelphia pa | 3.0 | 54.1288191577209 |
+| 12 | portland or | 2.944713870029098 | 53.13129484734582 |
+| 13 | st-paul mn | 2.8675 | 51.73812964492156 |
+| 14 | san-jose ca | 2.7959719789842383 | 50.44755387349762 |
+| 15 | buffalo ny | 2.6732394366197183 | 48.23309801002547 |
+| 16 | baltimore md | 2.6317512274959083 | 47.48452875374534 |
+| 17 | detroit mi | 2.5689300411522633 | 46.351049875455786 |
+| 18 | boston ma | 2.553225806451613 | 46.06769931541515 |
+| 19 | oakland ca | 2.5428571428571427 | 45.880618143211045 |
+| 20 | miami fl | 2.4380952380952383 | 43.990405410719205 |
+| 21 | sacramento ca | 2.3950233281493003 | 43.2132615359721 |
+| 22 | omaha ne | 2.3313008130081303 | 42.063520036521595 |
+| 23 | chandler az | 2.262086513994911 | 40.81469061171661 |
+| 24 | long-beach ca | 2.10625 | 38.00294178364988 |
+| 25 | santa-ana ca | 2.0365853658536586 | 36.74598698918451 |
+| 26 | madison wi | 2.014513788098694 | 36.34775084224316 |
+| 27 | san-francisco ca | 1.9972658920027342 | 36.03654809270004 |
+| 28 | milwaukee wi | 1.9099236641221373 | 34.460637540106276 |
+| 29 | los-angeles ca | 1.9041365725541695 | 34.356221395795714 |
+| 30 | richmond va | 1.8927680798004987 | 34.151100366342604 |
+| 31 | cincinnati oh | 1.8854368932038834 | 34.01882420850937 |
+| 32 | san-diego ca | 1.8296064400715564 | 33.01147870814493 |
+| 33 | chula-vista ca | 1.8 | 32.47729149463254 |
+| 34 | atlanta ga | 1.7965686274509804 | 32.41537944657632 |
+| 35 | gilbert az | 1.7644230769230769 | 31.835379216159566 |
+| 36 | honolulu hi | 1.7608695652173914 | 31.771263418662265 |
+| 37 | anaheim ca | 1.7605177993527508 | 31.764916528371266 |
+| 38 | mesa az | 1.7423167848699763 | 31.43651672122955 |
+| 39 | raleigh nc | 1.6407447973713034 | 29.603859473627566 |
+| 40 | newark nj | 1.6402439024390243 | 29.594821856558777 |
+| 41 | lincoln ne | 1.621283255086072 | 29.252716039331688 |
+| 42 | albuquerque nm | 1.5051993067590987 | 27.158220357296702 |
+| 43 | las-vegas nv | 1.4890929965556832 | 26.86761517319709 |
+| 44 | austin tx | 1.4347150259067358 | 25.88647672672352 |
+| 45 | columbus oh | 1.4032586558044806 | 25.318911337182413 |
+| 46 | plano tx | 1.3448275862068966 | 24.264643070702473 |
+| 47 | colorado-springs co | 1.3436754176610979 | 24.24385456308422 |
+| 48 | aurora co | 1.3264503441494593 | 23.93306360005424 |
+| 49 | st.-petersburg fl | 1.3012658227848102 | 23.47866079921396 |
+| 50 | greensboro nc | 1.289855072463768 | 23.272777319020094 |
+| 51 | riverside ca | 1.2777777777777777 | 23.054867419029268 |
+| 52 | houston tx | 1.2459948320413436 | 22.481409645006902 |
+| 53 | boise-city id | 1.2444444444444445 | 22.453436095054595 |
+| 54 | tampa fl | 1.2391732283464567 | 22.358327860751512 |
+| 55 | glendale az | 1.1924119241192412 | 21.51461646738681 |
+| 56 | fremont ca | 1.0990825688073393 | 19.8306805354586 |
+| 57 | toledo oh | 1.0673758865248226 | 19.258598778338047 |
+| 58 | irvine ca | 1.045 | 18.85487200660611 |
+| 59 | stockton ca | 1.0289156626506024 | 18.564663277387005 |
+| 60 | orlando fl | 1.0058479532163742 | 18.148453986604277 |
+| 61 | charlotte nc | 1.0010559662090812 | 18.061992453896305 |
+| 62 | hialeah fl | 0.991869918699187 | 17.896249152417205 |
+| 63 | indianapolis-city in | 0.9912207357859532 | 17.88453598424697 |
+| 64 | durham nc | 0.9635343618513323 | 17.38499240830026 |
+| 65 | norfolk va | 0.9585406301824212 | 17.294890808824036 |
+| 66 | phoenix az | 0.8997069358515142 | 16.233358008551267 |
+| 67 | baton-rouge la | 0.8815533980582524 | 15.905814820456495 |
+| 68 | dallas tx | 0.8440087145969499 | 15.228398359986256 |
+| 69 | reno nv | 0.8310991957104558 | 14.995472688912848 |
+| 70 | fort-wayne in | 0.8198924731182796 | 14.793270468731967 |
+| 71 | arlington tx | 0.8023648648648649 | 14.477020889593145 |
+| 72 | wichita ks | 0.7713736791546589 | 13.917848793996118 |
+| 73 | garland tx | 0.7544910179640718 | 13.613235955833996 |
+| 74 | irving tx | 0.75 | 13.532204789430224 |
+| 75 | winston-salem nc | 0.7078787878787879 | 12.772214298225858 |
+| 76 | tulsa ok | 0.6851704996034893 | 12.362490021747515 |
+| 77 | fresno ca | 0.6740638002773925 | 12.162092515327025 |
+| 78 | kansas-city mo | 0.6733496332518337 | 12.149206842735397 |
+| 79 | new-orleans la | 0.6644001942690626 | 11.98773265464824 |
+| 80 | fort-worth tx | 0.6505223171889839 | 11.737334955061353 |
+| 81 | san-antonio tx | 0.57991513437058 | 10.463373811723512 |
+| 82 | henderson nv | 0.5763993948562783 | 10.399939535598417 |
+| 83 | san-bernardino ca | 0.5633423180592992 | 10.164351486041031 |
+| 84 | nashville-davidson tn | 0.5518025332900293 | 9.956139845076086 |
+| 85 | memphis tn | 0.5425692695214106 | 9.789544623487053 |
+| 86 | scottsdale az | 0.5339892665474061 | 9.634736147036188 |
+| 87 | lexington-fayette ky | 0.5107794361525705 | 9.215962576328378 |
+| 88 | el-paso tx | 0.4807692307692308 | 8.674490249634758 |
+| 89 | laredo tx | 0.4416243654822335 | 7.968201804943685 |
+| 90 | virginia-beach va | 0.39852752880921893 | 7.190608178762539 |
+| 91 | louisville-jefferson ky | 0.39025787965616043 | 7.041399397594637 |
+| 92 | tucson az | 0.38472519628836543 | 6.941573525103868 |
+| 93 | north-las-vegas nv | 0.36065573770491804 | 6.507289734807976 |
+| 94 | jacksonville fl | 0.34642576590730556 | 6.250539211457165 |
+| 95 | lubbock tx | 0.3165644171779141 | 5.711752696397542 |
+| 96 | oklahoma-city ok | 0.31058201058201057 | 5.603812494811669 |
+| 97 | chesapeake va | 0.2728500675371454 | 4.923017320963359 |
+| 98 | bakersfield ca | 0.21790722761596548 | 3.93168697226164 |
+| 99 | corpus-christi tx | 0.16981132075471697 | 3.063895424021937 |
+| 100 | anchorage ak | 0.053474605780231804 | 0.9648390886028613 |
+
+#
+
+[^walk-score-methodology]: https://www.walkscore.com/methodology.shtml
+[^flameprof]: https://pypi.org/project/flameprof
+[^walk-score-rankings]: https://www.walkscore.com/cities-and-neighborhoods
+[^poisson-disk-sampling]: [PDF - Fast Poisson Disk Sampling in Arbitrary Dimensions](https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf)
+[^geofabrik]: https://www.geofabrik.de/data/download.html
+[^reverse-engineering-walkscore]: [Reverse Engineering the Walk Score Algorithm](https://towardsdatascience.com/engineer-walkscore-4dc1730b976c)
+[^poisson-disc-lib]: https://pypi.org/project/poisson-disc
+

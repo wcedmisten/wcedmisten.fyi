@@ -2,6 +2,7 @@ import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote } from 'next-mdx-remote'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm'
 
 import readingTime from 'reading-time';
 
@@ -94,6 +95,7 @@ export async function getStaticProps({ params }: { params: any }) {
             {
                 mdxOptions: {
                     rehypePlugins: [rehypeHighlight, rehypeSlug],
+                    remarkPlugins: [remarkGfm]
                 },
                 parseFrontmatter: true,
             }),
