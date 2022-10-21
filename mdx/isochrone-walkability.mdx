@@ -40,13 +40,13 @@ impact walkability. For instance, compare these two pedestrian isochrone maps sh
 in 15 minutes of walking:
 
 <figure>
-    <img className="captioned-img" src="/isochrone-walkability/west-virginia-isochrone.png"
+    <img className="captioned-img" src="/isochrone-walkability/west-virginia-isochrone.jpg"
         alt="A rural residential area in West Virginia"/>
     <figcaption>A rural residential area in West Virginia. Copyright openstreetmap</figcaption>
 </figure>
 
 <figure>
-    <img className="captioned-img" src="/isochrone-walkability/new-york-isochrone.png"
+    <img className="captioned-img" src="/isochrone-walkability/new-york-isochrone.jpg"
         alt="A map of Manhattan"/>
     <figcaption>Manhattan, New York City. Copyright openstreetmap</figcaption>
 </figure>
@@ -59,7 +59,7 @@ compared to the rural area.
 ## Valhalla
 
 <figure>
-    <img className="captioned-img" src="/isochrone-walkability/new-york-isochrone.png"
+    <img className="captioned-img" src="/isochrone-walkability/valhalla-isochrone.jpg"
         alt="Valhalla Isochrome Map Example"/>
     <figcaption>Valhalla Isochrome Map Example. Copyright openstreetmap</figcaption>
 </figure>
@@ -257,15 +257,15 @@ This distribution guaranteed minimal overlap of points being sampled.
 
 This bounding-box distribution for New York City looked like this:
 
-![sampling points for bounding box of NYC - map data copyright openstreetmap](/isochrone-walkability/bbox.png)
+![sampling points for bounding box of NYC - map data copyright openstreetmap](/isochrone-walkability/bbox.jpg)
 
 After removing the points outside of the city's actual boundaries, the sample looked like this:
 
-![sampling points for NYC](/isochrone-walkability/sampling-in-geom.png)
+![sampling points for NYC](/isochrone-walkability/sampling-in-geom.jpg)
 
 Zoomed in further:
 
-![sampling points for NYC - zoomed in](/isochrone-walkability/sampling-zoomed.png)
+![sampling points for NYC - zoomed in](/isochrone-walkability/sampling-zoomed.jpg)
 
 Poisson disk distributions guarantee a minimum separation distance for all the points. I picked a 
 distance somewhat arbitrarily that would have some overlap of walkable amenities for neighboring samples, but not too much.
@@ -420,7 +420,7 @@ The amenities considered here are represented in the following OSM tags, includi
 
 I also compared these rankings to Walk Score, and found that they seemed to be mostly in the ballpark.
 
-![walk score comparison](/isochrone-walkability/walk-score-comparison.png)
+![walk score comparison](/isochrone-walkability/walk-score-comparison.jpg)
 
 This plot shows the difference between the Walk Score ranking and my ranking. E.g. I ranked San Fransisco as #26, but Walk Score ranked it at #1, showing a 
 bar at -25 for the first entry. The x axis is ordered by the walk score ranking.[^walk-score-rankings]
