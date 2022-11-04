@@ -4,7 +4,7 @@ export default async function generateRSS(posts: any[]) {
     const siteURL = "https://wcedmisten.fyi";
 
     const feed = new RSS({
-        title: "William Edmisten's Developer Blog",
+        title: "William Edmisten",
         description: "A blog detailing my personal projects and other activities.",
         site_url: siteURL,
         feed_url: `${siteURL}/feed.xml`,
@@ -19,7 +19,7 @@ export default async function generateRSS(posts: any[]) {
         feed.item({
             title: post.meta.title,
             url: `${siteURL}/post/${post.filename}`,
-            author: "William Edmisten",
+            author: "William Edmisten <wcedmisten@gmail.com>",
             categories: post.meta.tags,
             date: post.meta.date,
             description: post.meta.description,
