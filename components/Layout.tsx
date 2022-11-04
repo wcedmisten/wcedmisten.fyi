@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({
 }) => (
     <>
         <Head>
-            <title>wcedmisten.fyi</title>
+            <title>William Edmisten</title>
             <meta name="description" content="William Edmisten" />
             {ogImagePath && <meta property="og:image" content={ogImagePath} />}
             <link rel="icon" href="/favicon.ico" />
