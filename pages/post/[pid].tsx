@@ -102,14 +102,17 @@ export async function getStaticProps({ params }: { params: any }) {
 
         readingStats: stats
     }
+
+    const meta: any = source.mdx.frontmatter;
+
     // By returning { props: { posts } }, the Blog component
     // will receive `posts` as a prop at build time
     return {
         props: {
             source,
             opengraph: {
-                title: source.mdx.frontmatter.title,
-                image: `https://wcedmisten.fyi${source.mdx.frontmatter.thumbnail}`,
+                title: meta.title,
+                image: `https://wcedmisten.fyi${meta.thumbnail}`,
                 type: "article",
                 url: `https://wcedmisten.fyi/post/${source.filename}/`
             }
