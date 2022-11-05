@@ -327,7 +327,12 @@ export async function getStaticProps() {
             artists: artistsList,
             subjects: subjectsList,
             descriptions: descriptionsList,
-            ogImagePath: "https://wcedmisten.fyi/thumbnails/paintingGuesser.png"
+            opengraph: {
+                title: "Multiverse Art Gallery Curator",
+                image: "https://wcedmisten.fyi/thumbnails/paintingGuesser.png",
+                type: "website",
+                url: "https://wcedmisten.fyi/project/paintingGuesser/"
+            }
         }
     };
 }

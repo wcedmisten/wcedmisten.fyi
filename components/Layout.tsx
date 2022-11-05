@@ -4,20 +4,32 @@ import React from 'react'
 import Footer from './Footer';
 import NavbarHeader from './NavbarHeader'
 
-type LayoutProps = {
+interface OpenGraph {
+    title: string;
+    image: string;
+    type: string;
+    url: string;
+}
+
+interface LayoutProps {
     children: React.ReactNode;
-    ogImagePath: string | undefined;
+    opengraph: OpenGraph | undefined;
 }
 
 const Layout: React.FC<LayoutProps> = ({
     children,
-    ogImagePath,
+    opengraph,
 }) => (
     <>
         <Head>
             <title>William Edmisten</title>
             <meta name="description" content="William Edmisten" />
-            {ogImagePath && <meta property="og:image" content={ogImagePath} />}
+            {opengraph && <>
+                <meta property="og:title" content={opengraph.title} />
+                <meta property="og:type" content={opengraph.type} />
+                <meta property="og:image" content={opengraph.image} />
+                <meta property="og:url" content={opengraph.url} />
+            </>}
             <link rel="icon" href="/favicon.ico" />
             <link
                 rel="alternate"

@@ -106,7 +106,13 @@ export async function getStaticProps({ params }: { params: any }) {
     // will receive `posts` as a prop at build time
     return {
         props: {
-            source
+            source,
+            opengraph: {
+                title: source.mdx.frontmatter.title,
+                image: `https://wcedmisten.fyi${source.mdx.frontmatter.thumbnail}`,
+                type: "article",
+                url: `https://wcedmisten.fyi/post/${source.filename}/`
+            }
         },
     }
 }

@@ -297,8 +297,13 @@ export default Triangles;
 
 export async function getStaticProps() {
     return {
-        props: {
-            ogImagePath: "https://wcedmisten.fyi/og-images/low-poly.jpg"
+        props: { 
+            opengraph: {
+                title: "Low Poly Image Filter",
+                image: "https://wcedmisten.fyi/og-images/low-poly.jpg",
+                type: "website",
+                url: "https://wcedmisten.fyi/project/lowPoly/"
+            }
         }
     }
 }

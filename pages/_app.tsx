@@ -7,7 +7,7 @@ import '../styles/styles.css'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SSRProvider>
-      <Layout ogImagePath={pageProps.ogImagePath}>
+      <Layout opengraph={pageProps.opengraph}>
         <Component {...pageProps} />
       </Layout>
     </SSRProvider>)

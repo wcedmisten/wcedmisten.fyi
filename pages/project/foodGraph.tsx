@@ -344,7 +344,12 @@ export default FoodGraph
 export async function getStaticProps() {
     return {
         props: {
-            ogImagePath: "https://wcedmisten.fyi/og-images/recipe-graph-full.png"
+            opengraph: {
+                title: "All Recipes Graph Visualization",
+                image: "https://wcedmisten.fyi/og-images/recipe-graph-full.png",
+                type: "website",
+                url: "https://wcedmisten.fyi/project/foodGraph/"
+            }
         }
     }
 }
