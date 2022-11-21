@@ -21,6 +21,11 @@ body {
     max-width: 100%;
 }
 
+p,
+li {
+    font-family: 'Rubik';
+}
+
 figcaption {
     background-color: #222;
     color: #fff;
