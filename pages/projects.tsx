@@ -4,7 +4,7 @@ import PostItem from "../components/PostItem";
 function ProjectsPage() {
     return (
         <div className="post-wrapper">
-            <h1 className="post-title">Projects I've made.</h1>
+            <h1 className="post-title">Projects</h1>
             <ListGroup variant="flush">
                 <PostItem
                     href="/project/lowPoly/"
