@@ -1,0 +1,313 @@
+---
+title: "Self Hosting a Google Maps Alternative with OpenStreetMap"
+date: "2022-11-17"
+thumbnail: "/thumbnails/self-hosting-osm.png"
+thumbnailAlt: "Routing from DC to Seattle on my Self Hosted Setup."
+description: "Self hosting a software stack to replace Google Maps on an unused gaming PC."
+tags: ["openstreetmap", "valhalla", "self-hosting", "docker"]
+---
+## Why? That's weird
+No, it's not! Google Maps is probably the most amazing service we get for free[^google-footnote]
+It's something I use almost every day and is incredibly useful for getting around.
+
+But what if I didn't need Google at all? 
+
+OpenStreetMap provides crowdsourced mapping
+data available for free to the world. But this isn't to say I can just use OSM.
+The organization does provide the data, but its usage policy encourages users 
+to not rely on their servers for personal use,
+and instead take responsibility for hosting themselves.
+And based on this project, I can see why. The hardware requirements are not for 
+the faint of heart.
+
+## Hardware
+I had access to a gaming PC that was mostly unused.
+These days my girlfriend and I prefer to play couch
+co-op games on the Switch, rather than on PCs in separate rooms. 
+So I thought I'd make use of this fairly beefy desktop and turn it 
+into a self-hosted map server.
+
+This particular desktop[^desktop] has:
+
+* Intel i7 gen 10700kf CPU
+* 32 GB of RAM
+* 1TB NVMe SSD
+* GTX 2070 GPU
+* 750 Watt PSU
+
+It cost $1,270 when I bought it (open box) from Microcenter
+about two years ago.
+
+To meet the demanding requirements[^osm-requirements]
+for running a map server for the entire planet,
+I also bought 128 GB of RAM to replace the 32 GB it came with.
+This brought the total hardware cost to $1,670.
+
+This is quite a large price for self-hosting, but it should 
+be noted that the requirements are roughly proportional to the 
+geographic boundaries of the data. If you wanted to self-host 
+a map service for a smaller region (a European country or a few 
+US states), this could be accomplished with a much more modest 
+computer.
+
+In the end, I compromised and lowered my expectations
+to only hosting the map data for North America.
+
+## Requirements
+
+What does it take to match Google Maps? In my mind, there are 3 main
+requirements:
+
+* A "slippy map" which can be dragged and zoomed interactively
+* A way to route from place to place 
+* A way to search for locations
+
+These can be solved with 3-ish services:
+
+* a tile server[^tile] (technically this involves multiple services)
+* valhalla[^valhalla], a routing service
+* nominatim[^nominatim], a geocoding service
+
+## Implementation
+
+To accomplish this, I set up a github repo to group together 
+these core services and run them using docker-compose.
+
+This repo can be found 
+[here](https://github.com/wcedmisten/docker-openstreetmap-stack).
+
+It was surprisingly easy to piece together these dockerized
+services in a single docker-compose.
+
+The READMEs for these services suggest creating a separate 
+docker volume before starting the containers.
+This is useful because the import can take a very long time
+(multiple days for the whole planet).
+
+I initially tried to import the entire planet.osm.pbf file,
+which is currently 66 GB. However, the import kept crashing, so I 
+limited the scope of my project to only use data in North America.
+If I need to travel abroad anytime soon I'll just have to use Google Maps.
+
+The North America extract is only 12GB in its compressed protobuf format,
+so I was able to run all 3 services on this data.
+
+Remarkably, the services extract this data into a much more verbose
+(but more read efficient) format.
+
+To see how much final disk space was being used, I ran:
+
+```
+docker system df -v
+```
+
+From the output, it was clear why I couldn't import the entire planet.
+
+```
+VOLUME NAME      LINKS     SIZE
+nominatim-data   1         291.9GB
+osm-data         2         337.8GB
+osm-tiles        1         203.3MB
+valhalla-data    2         37.6GB
+```
+
+Even on this smaller extract, these services already use a large portion 
+of my 1TB SSD (667 GB total). Assuming the usage scales proportionally,
+I would need around 3.7TB of storage for the entire planet. Not to mention
+the RAM requirements also scaling.
+
+## Webapp
+
+I also made some modifications to the Valhalla webapp[^valhalla-app] to 
+improve the mobile layout with a more responsive UI. These changes
+got upstreamed into the main repo! Open source is amazing.
+
+I also changed the backend services being used, to avoid
+putting demand on the official OSM servers
+and instead, make the requests to my own hosted instances.
+
+This demo can be found here: https://map-demo.wcedmisten.dev
+
+### Demo Screenshots
+
+Routing:
+
+![Routing from Charlottesville to Seattle](/self-hosting-osm/routing-screenshot.png)
+
+Isochrones:
+
+![Pedestrian isochrone in Charlottesville](/self-hosting-osm/isochrone.png)
+
+## Configuring the server
+
+To actually serve traffic outside my local network,
+I had to set up some additional configurations.
+
+### Enabling DDNS
+
+Because I don't have a static IP address through my
+Internet Service Provider,
+I needed to use a Dynamic Domain Name Service client, which 
+updates my DNS records to point at the current IP address of my router.
+Since it's not static, my ISP occasionally will reset the IP
+address allocated to me.
+I used `ddclient`. This provides less reliability than a static IP,
+but it's good enough just for my hobbyist development server.
+
+### Nginx
+
+To serve traffic at different subdomains like `maps.wcedmisten.dev`,
+I set up Nginx to send traffic to each subdomain
+to the correct port as configured in `docker-compose.yml`.
+I also used the `certbot` command
+to automatically generate a certificate from LetsEncrypt for 
+each subdomain and update the Nginx config. This part was also 
+pretty seamless.
+
+This part of `/etc/nginx/sites-available/default`
+looked like this before running 
+`certbot`, which added a bunch of additional config to handle 
+https.
+
+```
+server {
+    server_name maps.wcedmisten.dev;
+    location / {
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:8080;
+        proxy_redirect off;
+    }
+}
+
+server {
+    server_name valhalla.wcedmisten.dev;
+    location / {
+        proxy_set_header Host $host;
+        proxy_pass http://127.0.0.1:8002;
+        proxy_redirect off;
+    }
+}
+```
+
+### Port forwarding
+
+Finally, to get external traffic from the internet connected to my computer 
+(and specifically to Nginx), I had to set up port-forwarding on my router.
+The Netgear admin interface shows each device connected to the network,
+so this was just a matter of forwarding port 80 (HTTP) and port (443) to the computer.
+This part was much easier (and less scary) than I expected.
+
+## Cost Comparison
+
+It takes a *lot* of memory to handle running a rough alternative to
+Google Maps, but it's still technically feasible with consumer hardware
+and with a good amount of disposable income.
+
+### Google Maps API Cost
+
+As of writing this, Google Maps waives the first $200 of Maps API 
+requests every month[^google-maps]. It also allows for unlimited use of the 
+embedded Google Maps API, which shows an interactive map on a website.
+However, this is only unlimited for web use. The pricing for iOS/Android 
+is $7 / 1,000 requests.
+
+The directions API (not including traffic data) is $5 / 1,000 requests.
+
+Finally, the geocoding API is also $5 / 1,000 requests.
+
+With some rough napkin math, we could assume each visitor using the 
+webapp will search 2 places (geocoding), 
+load the embedded map view, and make a routing request.
+This would mean each 1,000 visitors would use $15 of API credits.
+
+In order words, the free tier could support around 13,000 visitors per month,
+assuming minimal app usage for each visitor. After the free credits expire,
+each visitor would cost $0.015.
+
+### Self Hosting Costs
+
+* domain name: $1.43 / mo
+* Residential ISP Bill: $69.99 / mo
+* PC: $1,670 (one time)
+* total: $1,670 one time + $71.42 / mo
+
+Assuming the purchase is amortized over two years
+(that's how long I've had it):
+
+* total: ($1,670 / 24) + $71.42 = $141.00 / mo
+
+### "Self Hosting" in the Cloud
+
+Based on the cheapest instance that matches my own PC's specs.
+These comparisons aren't quite apples to apples because of other
+considerations like egress costs, but I think these numbers 
+should be close enough for napkin math.
+
+DigitalOcean Droplet (Memory Optimized):
+* 128 GB RAM, 16 vCPUs, 1,170 GB SSD -	$832.00 / mo
+* Total - $832.00 / mo
+
+AWS r6a.4xlarge EC2 Instance:
+* 128 GB RAM, 16 vCPUs - $653.18 / mo
+* 1TB SSD Storage - $82.24 / mo
+* Total - $735.42 / mo
+
+Azure D32as v5 VM Instance:
+* 128 GB RAM, 32 vCPUs - $1,004.48 / mo
+* 1TB SSD Storage - $122.88 / mo
+* Total - $1127.36 / mo
+
+### Self Hosting vs. Google Maps API
+
+It seems clear that in terms of raw cost, self hosting on my 
+own hardware is way cheaper than using cloud compute.
+Of course, this isn't apples to apples. Cloud buys a lot of things 
+that running a machine in my closet doesn't afford: backups,
+IT expertise, on-call support, help desk, etc. But as a 
+hobbyist that's a fine tradeoff for me. I'm trying to learn 
+more anyway, so those are almost benefits.
+
+But what about Google Maps API? It would allow for 13,000 visitors 
+per month just on Google's free credits! That's a lot of traffic.
+When does it make more sense to self-host on my hardware?
+
+13,000
+
+Previously we said past the free tier, each visitor would
+cost $0.015 on Google's APIs. And assuming the self-hosted 
+setup costs $141.00 / mo, which would mean we'd need 
+141.00 / 0.015 = 9,400 additional visitors to break even.
+A total of 9,400 + 13,000 = 22,400 visitors per month.
+
+22,400 per month is around 747 per day, or only 
+user every two minutes.
+
+I'm fairly confident my machine could handle that much traffic.
+
+The issue with comparing these numbers is the same as with 
+comparing self hosting costs directly to cloud compute costs.
+The nuance is in the value that Google Maps brings:
+expertise, scalability, and proprietary map data.
+
+But for hobby projects like this one, I think self hosting 
+clearly makes sense.
+
+Even for professional applications, it's worth doing the math.
+With docker, installing these services has been greatly simplified,
+even if it takes some time.
+
+The assumptions here also assume a very light API load on the map.
+If we are assuming heavier use of the map services, the tradeoff 
+may be even sooner. Especially with an application requiring batch
+processing of large datasets.
+
+#
+
+[^ google-footnote]: in exchange for our personal data
+[^ osm-requirements]: https://osm2pgsql.org/doc/manual.html#main-memory
+[^ desktop]: https://www.microcenter.com/product/630917/powerspec-g436-gaming-computer
+[^ tile]: https://github.com/Overv/openstreetmap-tile-server
+[^ valhalla]: https://github.com/valhalla/valhalla
+[^ nominatim]: https://nominatim.org
+[^ valhalla-app]: https://github.com/gis-ops/valhalla-app
+[^ google-maps]: https://mapsplatform.google.com/pricing/
