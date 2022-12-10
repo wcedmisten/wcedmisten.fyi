@@ -1,0 +1,233 @@
+---
+title: "Upgrading My Self Hosted Maps with Headway"
+date: "2022-12-11"
+thumbnail: "/thumbnails/upgrading-with-headway-maps.png"
+thumbnailAlt: "A screenshot of a map showing Denver"
+description: "Improving my self hosted maps stack by moving to Headway."
+tags: ["openstreetmap", "valhalla", "pelias", "vector-tiles", "self-hosting", "headway"]
+---
+## Previously
+I recently created a new project[^ docker-openstreetmap-stack] that 
+connects some existing services via docker-compose to create a
+self-hosted alternative to Google Maps.
+I wrote about this in my 
+[previous blog post](https://wcedmisten.fyi/post/self-hosting-osm/).
+This kicked off some great discussions[^discussion] on 
+Hacker News and Reddit.
+
+One of the things I appreciate about these discussions is that 
+they frequently question the approach being used and suggest improvements.
+
+This almost seems like an extension of Cunningham's Law:
+"The best way to get the right answer on the Internet is not to ask a question;
+it's to post the wrong answer."
+
+In this case, I set up a whole project for the wrong answer.
+But, I did learn a lot doing it, and that's what really matters.
+
+Here I'll tackle some of the questions that were raised with my 
+initial approach:
+
+### Why use raster tiles?
+This was a great point that I hadn't even considered.
+Most "slippy maps" use tiles to trick you into thinking
+that you have a single map that you can drag, zoom, and explore.
+But behind the scenes, you have small squares of map that get 
+seamlessly tessellated into a large map by the frontend.
+
+You can see behind the facade by opening the
+network tab in the browser's developer tools.
+What looks like one big map is actually composed of 256x256 PNGs.
+These are raster tiles.
+Raster tiles are rendered on the server and sent directly as images.
+![Network tab for openstreetmap.org](/upgrading-with-headway-maps/network-raster-tiles.png)
+
+Maps can also use vector tiles, meaning the squares sent to you 
+are not images, but rather binary data 
+representing vectors for each linear feature (roads, for example).
+Then the client renders these into images that compose the map.
+
+Here's a similar screenshot of network traffic when viewing a map 
+that uses vector tiles. The response is not a PNG image, but 
+binary encoded vector data (using protobuf encoding,
+indicated by the pbf extension).
+![Vector tiles in the network tab](/upgrading-with-headway-maps/network-vector-tiles.png)
+
+The tradeoffs are:
+
+* vector tiles are much smaller (20%-50% of the size)
+* vector tiles require fewer server resources (memory and storage)
+* raster tiles need less client computation, so they're more accessible to low-end devices
+
+Based on my constrained server hardware, I'm definitely interested in 
+exploring vector tiles.
+
+### Why use nominatim?
+
+Another question discussed was the use of geocoding service.
+A geocoder takes a query as input, like "101 Main Street Chicago IL"
+and returns possible locations corresponding to that query.
+This is obviously an important service for a map webapp,
+because users need a way to find things!
+
+Nominatim is the geocoder used by openstreetmap.org,
+so it was the default in my mind.
+However, its performance in terms of hardware and
+search results leaves much to be desired.
+Nominatim's architecture relies on a rigid address 
+scheme, and so Elasticsearch also provides more 
+flexibility in search results.
+
+Elasticsearch, a full-text search engine was developed
+for full-text searching document databases,
+but has been adapted for use on 
+OpenStreetMap data in many projects, including Pelias.
+
+This architecture diagram from the Pelias docs shows 
+how Elasticsearch is leveraged to handle search queries
+on a given dataset.
+
+![Pelias architecture diagram](/upgrading-with-headway-maps/pelias-architecture.png)
+
+In [Qualitative Comparison of Geocoding Systems using OpenStreetMap Data](https://www.thinkmind.org/articles/soft_v8_n34_2015_7.pdf),
+Konstantin Clemens compares the performance of Nominatim against Elasticsearch.
+Elasticsearch basically blows Nominatim out of the water on
+index size and search performance on Nominatim's own dataset.
+
+Nominatim uses ~20x more data and can't perform at all when 
+address details are shuffled (e.g. not following a standard
+address order).
+
+Knowing all this, switching geocoders is another obvious improvement.
+
+### How to handle data updates?
+
+The canonical OpenStreetMap data file is updated on a weekly cadence
+with the newest user contributions to the map.
+For many applications, it's not practical to re-run the import process
+(which generates hundreds of GB) every week, because it takes too long.
+Instead, projects allow a diff to be processed, so that weekly updates 
+don't require importing from scratch.
+
+The services used in docker-openstreetmap-stack do allow 
+for managing updates, but I didn't explore them much,
+because this was more of a one-off project.
+
+## Headway
+
+Headway[^headway]
+is a map stack that conveniently addresses the first two of these issues.
+It uses Pelias[^pelias] for geocoding, which is based on Elasticsearch.
+It uses tileserver-gl[^tileserver-gl] for serving vector tiles.
+Currently, Headway has data update support
+as a requested feature, but it's not yet implemented.
+
+But to quote Meat Loaf, "two out of three ain't bad"[^meatloaf], so I went ahead
+and set up my own Headway system at
+[map-demo.wcedmisten.dev](https://map-demo.wcedmisten.dev).
+This demo is using the North America OSM extract.
+
+I probably should have investigated Headway before 
+rolling my own version of it, but I was previously under the impression
+that it was only suitable for city-sized OpenStreetMap extracts.
+This is not the case, and it can be used for a full planet map.
+For example, [maps.earth](https://maps.earth) runs on Headway.
+
+The networking configuration (DDNS, router port-forwarding, certbot)
+was all re-usable from my previous post,
+so all I had to do was run the Headway project and change 
+the port used in my nginx config.
+
+The only hitch I ran into was that importing the North America 
+extract (11.9 GB) kept timing out during the Pelias import step.
+Increasing the timeout limit from 30 seconds to 10 minutes
+fixed this for me. I've also put up a Pull Request[^pr] for this change.
+
+### Server Performance 
+
+Headway is noticeably smaller than my homemade stack:
+
+```
+docker system df -v
+VOLUME NAME                            LINKS     SIZE
+headway_tileserver_data                2         18.46GB
+headway_valhalla_data                  2         18.92GB
+headway_pelias_config_data             3         1.073kB
+headway_pelias_elasticsearch_data      2         16.34GB
+headway_frontend_data                  2         3.551MB
+headway_pelias_placeholder_data        2         1.043GB
+```
+
+For a total storage of just 55 GB.
+This was down from 667 GB from docker-openstreetmap-stack running 
+on North America.
+
+Itemized improvements:
+* tile server: 338GB -> 19GB
+* router: 38GB -> 19GB
+* geocoder: 292GB -> 16GB
+
+It also only uses ~6GB of RAM at runtime, compared to 28GB of RAM 
+at runtime previously.
+
+### Client Performance 
+Despite my low expectations around client performance of vector maps,
+I actually noticed a large performance improvement due to the speed
+at which vector tiles were rendered. When self-hosting raster tiles,
+there was a noticeable delay when tiles were first rendered, even 
+as long as a minute. But with vector tiles, the first-render time 
+is almost unnoticeable. Normally caching tiles would make this 
+difference negligible, but due to low traffic, the tile 
+cache is cold and very slow to serve tiles because 
+the server needs to render them first.
+
+When zooming in to dense urban areas with lots of features,
+there can be some lagginess panning around, even on my relatively
+recent 2018 Android (OnePlus 6T).
+
+I also noticed that Firefox handles vector maps much worse than 
+Chrome. There was none of this lagginess noticeable when visiting
+the same places in Chrome.
+This issue was also discussed in a blog post[^broken-vector-maps],
+although it didn't really address the possibility of this being 
+browser-specific. There is also a Mozilla issue 
+mentioning this performance degradation on Firefox vs. Chrome 
+[here](https://bugzilla.mozilla.org/show_bug.cgi?id=1732049).
+
+In any case, I found this tradeoff to be acceptable for my hobbyist 
+use-case, especially considering the order of magnitude performance
+and storage improvements made with the tradeoff.
+
+My plan with this map server is to use it for upcoming projects 
+that involve visualizing map data in the browser.
+
+### Demo User Interface
+The frontend interface was not too important to me, because 
+I plan on making my own visualizations that don't use the 
+default webapp client. However, there were some features that 
+I missed from the `valhalla-app` demo client:
+
+* No Isochrones
+* The turn-by-turn UI shows fewer details than valhalla-app 
+* Fewer customization options for the router
+
+There were also some improvements:
+
+* alternate routes are shown in addition to the main route 
+* location search has autocomplete, and is generally more accurate thanks to Pelias
+
+## Conclusion
+Headway has been an awesome project to start using, and it's clearly
+the effort of some passionate developers. It really pushes the boundaries 
+of self-hosting by reducing server hardware requirements and improving 
+performance.
+
+[^ discussion]: [Hacker News](https://news.ycombinator.com/item?id=33704801)
+[Reddit](https://www.reddit.com/r/selfhosted/comments/z18248/self_hosting_a_google_maps_alternative_with)
+[^ headway]: https://github.com/headwaymaps/headway
+[^ pelias]: https://pelias.io/
+[^ tileserver-gl]: https://github.com/maptiler/tileserver-gl
+[^ pr]: https://github.com/headwaymaps/headway/pull/199
+[^ docker-openstreetmap-stack]: https://github.com/wcedmisten/docker-openstreetmap-stack
+[^ broken-vector-maps]: https://blog.kronis.dev/everything%20is%20broken/vector-maps-are-laggy
+[^ meatloaf]: https://www.youtube.com/watch?v=k5hWWe-ts2s
