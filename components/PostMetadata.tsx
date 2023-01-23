@@ -11,15 +11,28 @@ const toPrettyDate = (date: string) => {
 export default function PostMetadata({ date, readingLength }:
     { date: string, readingLength?: string }) {
     return (
-        <Container fluid className="justify-content-md-center">
-            <Row>
+        <Container fluid className="justify-content-center">
+            <Row style={{ marginLeft: "5px" }} >
                 {/* Use all columns if readingLength is omited */}
                 <Col xs={12} md={readingLength ? 6 : 12} >
-                    <p><BsCalendarFill /> {toPrettyDate(date)}</p>
+                    <div className="d-flex">
+                        <div className="align-self-center">
+                            <BsCalendarFill style={{ fontSize: "20px" }}/></div>
+                        <div className="align-self-center">
+                            <p style={{ margin: "2px 0 0 5px" }}>{toPrettyDate(date)}</p>
+                        </div>
+                    </div>
                 </Col>
                 {readingLength &&
                     <Col xs={12} md={4} >
-                        <p><BsClockFill /> {readingLength}</p>
+                        <div className="d-flex">
+                            <div className="align-self-center">
+                                <BsClockFill style={{ fontSize: "20px" }}/>
+                            </div>
+                            <div className="align-self-center">
+                                <p style={{ margin: "2px 0 0 5px" }}>{readingLength}</p>
+                            </div>
+                        </div>
                     </Col>}
             </Row>
         </Container>

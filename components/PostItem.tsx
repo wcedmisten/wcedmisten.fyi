@@ -9,10 +9,10 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
     { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength?: string }) {
     return (
         <ListGroup.Item className={style.PostThumbnail}>
-            <Container fluid className="justify-content-md-center">
+            <Container fluid className="justify-content-md-center" style={{padding: "2 0 2 0"}}>
                 <Row>
                     <Col xs={12} md={4} >
-                        <Container fluid className="justify-content-md-center">
+                        <Container fluid className="justify-content-md-center" style={{padding: "2 0 2 0"}}>
                             <Row>
                                 <Link href={href}>
                                     <a>
@@ -22,7 +22,7 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                                             width={"100%"}
                                             rounded
                                             alt={thumbnailAlt}
-                                            className="post-thumbnail border"></Image>
+                                            className="post-thumbnail border" />
                                     </a>
                                 </Link>
                             </Row>
@@ -32,14 +32,14 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                         <Container fluid className="justify-content-md-center">
                             <Row>
                                 <Link href={href}>
-                                    {title}
+                                    <a style={{fontSize: "22px"}} >{title}</a>
                                 </Link>
                             </Row>
                             <Row>
                                 <PostMetadata date={date} readingLength={readingLength} />
                             </Row>
                             <Row>
-                                <p>
+                                <p className={style.PostDescription}>
                                     {description}
                                 </p>
                             </Row>

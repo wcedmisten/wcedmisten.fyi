@@ -1,14 +1,24 @@
 .NavbarImage {
     padding: 0px 0px 0px 0px;
+    margin-right: 10px;
 }
 
 .NavbarBrand {
-    font-family: 'Rubik';
+    font-family: 'Roboto';
     font-size: 1.25rem;
     padding: 0px 0px 0px 0px;
 }
 
 .Navbar {
     /* padding-bottom: 50px; */
-    font-family: 'Rubik';
+    font-family: 'Roboto';
+    font-size: 1.5rem
+}
+
+.NavBarLogoText {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 0;
+    font-family: Rowdies;
+    font-size: 22px
 }

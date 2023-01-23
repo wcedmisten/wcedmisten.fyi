@@ -3,3 +3,7 @@
     max-width: max-content;
     background-color: #f8f7f2;
 }
+
+.PostDescription {
+    margin: 8px 0px 2px 0px;
+}
