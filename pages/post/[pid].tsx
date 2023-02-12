@@ -53,8 +53,10 @@ export default function TestPage(props: { source: any }) {
     )
 }
 
+const ARTICLES_DIR = 'articles'
+
 export async function getStaticPaths() {
-    const postsDirectory = path.join(process.cwd(), 'mdx')
+    const postsDirectory = path.join(process.cwd(), ARTICLES_DIR)
     const filenames = await fs.readdir(postsDirectory)
 
     const posts = filenames.map(async (filename) => {
@@ -75,7 +77,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: { params: any }) {
     const { pid } = params;
 
-    const postsDirectory = path.join(process.cwd(), 'mdx')
+    const postsDirectory = path.join(process.cwd(), ARTICLES_DIR)
     const filenames = await fs.readdir(postsDirectory)
 
     const post: any = filenames.find((x: any) => x === `${pid}.mdx`);

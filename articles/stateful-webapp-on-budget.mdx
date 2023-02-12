@@ -1,0 +1,163 @@
+---
+title: "Making A Stateful Webapp on a Budget in 2023"
+date: "2023-02-12"
+thumbnail: "/thumbnails/stateful-webapp-on-budget.png"
+thumbnailAlt: "A screenshot of makemetouchgrass.com"
+description: "My reflections on making a stateful webapp at minimal cost."
+tags: ["python", "nextjs", "fastapi", "postgresql"]
+---
+## Backends Are Scary
+
+A backend is a part of a website that handles data and stores state.
+It's a necessary component for most websites, because they need to be dynamic - it's not enough
+to show the same page to every visitor.
+For instance, adding an item to a shopping cart or posting a new tweet will 
+require sending data to a backend to be saved.
+This blog, however, has no backend. It shows the same page to every visitor, and 
+can only be changed when the entire thing is built again. It is static.
+This helps keep down hosting costs, because the entire blog can be cached in a CDN 
+like Cloudflare (for free), which improve page load speed for users.
+
+Historically I've avoided making webapps with backends for my hobby projects.
+A backend comes with all sorts of baggage: databases, managing user data,
+authentication, backups, and increased server load. This complexity adds cost to a project:
+both in time and hosting costs. So I've avoided them when possible.
+
+Normally when I couldn't get away with providing a static frontend, I've skirted the issue by
+writing software meant to be run by the user on their own computer.
+But this limits the accessibility of my projects to technical users who can run my code.
+The benefit of a webapp is that anyone can use it.
+
+When my girlfriend pitched me an idea for a webapp to help her organize her life and help 
+compete with the digital temptations that weren't bringing her value,
+I knew I would have to find a new approach to backends.
+
+## Tools
+
+To get up and running quickly, I mostly reached for some tools that were familiar to me:
+Python, NextJS, and Docker.
+
+### Backend
+
+To accelerate development, I relied on the Python framework FastAPI [^ fastapi], which provides support for
+getting an API working out of the box without much boilerplate. I had no prior experience working with this 
+framework, but it's been great so far.
+
+I found the FastAPI OAuth2 tutorial [^ fastapi-oauth2] to be especially helpful for quickly setting up authentication
+for my backend. This part of the system is critical for keeping user data protected. The tutorial allowed
+me to quickly set up APIs for logging into the system as well the groundwork for signing up new users.
+The entire code to support this is around 100 lines of Python.
+
+### Frontend
+
+I reached for NextJS (which uses React) because I knew this webapp would have a relatively
+complex frontend state, so React was preferred. I also prefer using NextJS over Create 
+React App, as in my experience it's more performant.
+
+### Database
+
+While developing, I started out just using in memory data structures for the API at first, then I moved to use 
+SQLite for better persistence and to gain the benefits of SQL and a relational database.
+Then I moved to PostgreSQL after I became concerned
+over concurrency constraints of using SQLite. I haven't used SQLite much professionally, but my understanding
+is that because it relies on a single database file, it is better suited to single-user applications
+than something with many concurrent users making writes to the database.
+
+### Reverse Proxy
+
+I'm using nginx as a reverse proxy for the system so that the frontend and backend can be accessed at the same 
+domain. This helps mitigate CORS issues.
+
+The config for nginx to do this is simple as well.
+
+```
+worker_processes 1;
+ 
+events { worker_connections 1024; }
+ 
+http {
+    index    index.html;
+    root /usr/share/nginx/html/;
+    include mime.types;
+
+    sendfile on;
+ 
+    server {
+        resolver 127.0.0.11;
+        listen 8080 default_server;
+
+        location /api/  {
+            proxy_pass      http://backend:4000/;
+        }
+
+        location / {
+            proxy_pass      http://frontend:80/;
+        }
+    }
+}
+```
+
+This forwards all requests to the frontend docker container except requests starting with `/api`,
+which are sent to the backend.
+
+### Docker
+
+Because of the numerous dependencies I'm using, Docker was very helpful for tying the whole thing together
+and manage dependencies. I'm also using docker compose to manage the networking here, which exposes
+each container under the container name by default. This is why the nginx can reference the services 
+as `http://backend`
+
+The docker compose file to support this is also quite minimal:
+
+```
+services:
+    database:
+        build: database
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=postgres
+        volumes:
+            - database-volume:/var/lib/postgresql/data
+
+    reverseproxy:
+        build: reverseproxy
+        ports:
+            - 8080:8080
+        restart: always
+
+    frontend:
+        build: web
+        depends_on:
+            - reverseproxy
+        restart: always
+
+    backend:
+        depends_on:
+            - reverseproxy
+            - database
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        build: backend
+        restart: always
+
+volumes:
+  database-volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/postgres_data'
+```
+
+## Code
+
+I removed all the application-specific parts of the repo and uploaded them
+[here](https://github.com/wcedmisten/python-nextjs-template),
+so anyone wanting to build a full stack webapp powered by the same tools can
+follow along.
+
+
+[^ fastapi]: https://fastapi.tiangolo.com/
+[^ fastapi-oauth2]: https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/
