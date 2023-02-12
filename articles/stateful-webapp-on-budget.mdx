@@ -1,9 +1,9 @@
 ---
-title: "Making A Stateful Webapp on a Budget in 2023"
+title: "Making A Stateful Webapp on a $7.68 per Month Budget"
 date: "2023-02-12"
 thumbnail: "/thumbnails/stateful-webapp-on-budget.png"
 thumbnailAlt: "A screenshot of makemetouchgrass.com"
-description: "My reflections on making a stateful webapp at minimal cost."
+description: "My reflections on making a stateful webapp at minimal cost, using Python, NextJS, and PostgreSQL."
 tags: ["python", "nextjs", "fastapi", "postgresql"]
 ---
 ## Backends Are Scary
@@ -15,8 +15,8 @@ For instance, adding an item to a shopping cart or posting a new tweet will
 require sending data to a backend to be saved.
 This blog, however, has no backend. It shows the same page to every visitor, and 
 can only be changed when the entire thing is built again. It is static.
-This helps keep down hosting costs, because the entire blog can be cached in a CDN 
-like Cloudflare (for free), which improve page load speed for users.
+This helps lower hosting costs, because the entire blog can be cached in a CDN 
+like Cloudflare (for free), which improves page load speed for users.
 
 Historically I've avoided making webapps with backends for my hobby projects.
 A backend comes with all sorts of baggage: databases, managing user data,
@@ -32,9 +32,11 @@ When my girlfriend pitched me an idea for a webapp to help her organize her life
 compete with the digital temptations that weren't bringing her value,
 I knew I would have to find a new approach to backends.
 
+We decided to call this project [Make Me Touch Grass](https://makemetouchgrass.com).
+
 ## Tools
 
-To get up and running quickly, I mostly reached for some tools that were familiar to me:
+To get up and running quickly, I mostly reached for tools that were familiar to me:
 Python, NextJS, and Docker.
 
 ### Backend
@@ -156,7 +158,58 @@ volumes:
 I removed all the application-specific parts of the repo and uploaded them
 [here](https://github.com/wcedmisten/python-nextjs-template),
 so anyone wanting to build a full stack webapp powered by the same tools can
-follow along.
+get a head start following the same approach I did.
+
+## Deployment
+
+To actually push this project out into the world, I had to set up some infrastructure.
+I chose a $7/month Digital Ocean droplet that bought me just 1 GB of RAM
+and a single virtual intel CPU. I have no idea if this will provide enough compute to 
+run the project long-term, but for now, this is my budget for the project.
+
+I also bought a domain name (makemetouchgrass.com) for $0.68/month from NameCheap.
+
+To decrease latency and increase reliability for the website, I'm using Cloudflare to 
+cache the static assets on a CDN. This is a free service offered by Cloudflare.
+
+So far the base load on my server has been fairly minimal, but I also don't have many
+real users yet. I'll have to see how this project scales with more users, and possibly
+re-evaluate hosting options.
+
+So far the only issue I've had with this limited server is running builds. Generally
+the CPU usage hovers at less than 5%, but during the build step it spikes and really bottlenecks.
+
+![Digital Ocean CPU Usage](/stateful-webapp-on-budget/digitalocean.png)
+
+Memory usage generally stays under 50%, but does also uses a lot for cache. I suspect this 
+is the bigger bottleneck.
+
+![htop memory usage](/stateful-webapp-on-budget/memory-usage.png)
+
+As a result of these constraints, I have to take the server down when making updates,
+causing downtime for users. This is not ideal, and is the biggest downside I've faced
+of such a tight budget. But then again, I don't have many users to begin with.
+
+Generally the build takes around 1 minute, and is noticably slower than when running on my 
+local development environment. Running NextJS's export command `next export` is the culprit
+here.
+
+### Cloud Hybrid?
+
+I had another idea to mitigate the limited compute available on my budget: run the actual server on 
+prem (my home office), and forward the requests from the DigitalOcean droplet that is associated with
+my domain name. This approach would involve running the app at my `wcedmisten.dev` personal domain
+that's pointing at an unused desktop in my home office. Then I would configure nginx running on 
+my DigitalOcean droplet to rewrite all traffic to this subdomain.
+
+## Conclusions and future work
+
+So far, despite my prior hesitation to make a project with a backend, the project has
+gone smoothly so far. The real issue is now a need to acquire users and get some 
+feedback. If you want to check out the app, please go to (makemetouchgrass.com)[https://makemetouchgrass.com]
+and make a free account. I'd love to get your feedback at
+[feedback@wcedmisten.fyi](mailto:feedback@wcedmisten.fyi). Thanks!
+
 
 
 [^ fastapi]: https://fastapi.tiangolo.com/
