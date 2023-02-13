@@ -6,7 +6,7 @@ thumbnailAlt: "A screenshot of makemetouchgrass.com"
 description: "My reflections on making a stateful webapp at minimal cost, using Python, NextJS, and PostgreSQL."
 tags: ["python", "nextjs", "fastapi", "postgresql"]
 ---
-## Backends Are Scary
+## Backends Are Useful, But Scary
 
 A backend is a part of a website that handles data and stores state.
 It's a necessary component for most websites, because they need to be dynamic - it's not enough
@@ -15,7 +15,7 @@ For instance, adding an item to a shopping cart or posting a new tweet will
 require sending data to a backend to be saved.
 This blog, however, has no backend. It shows the same page to every visitor, and 
 can only be changed when the entire thing is built again. It is static.
-This helps lower hosting costs, because the entire blog can be cached in a CDN 
+This helps reduce hosting costs, because the entire blog can be cached in a CDN 
 like Cloudflare (for free), which improves page load speed for users.
 
 Historically I've avoided making webapps with backends for my hobby projects.
@@ -52,7 +52,7 @@ The entire code to support this is around 100 lines of Python.
 
 ### Frontend
 
-I reached for NextJS (which uses React) because I knew this webapp would have a relatively
+I reached for NextJS [^ nextjs] because I knew this webapp would have a relatively
 complex frontend state, so React was preferred. I also prefer using NextJS over Create 
 React App, as in my experience it's more performant.
 
@@ -202,11 +202,16 @@ my domain name. This approach would involve running the app at my `wcedmisten.de
 that's pointing at an unused desktop in my home office. Then I would configure nginx running on 
 my DigitalOcean droplet to rewrite all traffic to this subdomain.
 
+This would help solve my memory constraints, because this desktop has 128 GB 
+of RAM. Comparatively, even the cheapest 4 GB DigitalOcean droplet is $24/month,
+which is more than I want to spend on this project.
+
 ## Conclusions and future work
 
 So far, despite my prior hesitation to make a project with a backend, the project has
 gone smoothly so far. The real issue is now a need to acquire users and get some 
-feedback. If you want to check out the app, please go to (makemetouchgrass.com)[https://makemetouchgrass.com]
+feedback. If you want to check out the app, please go to
+[makemetouchgrass.com](https://makemetouchgrass.com)
 and make a free account. I'd love to get your feedback at
 [feedback@wcedmisten.fyi](mailto:feedback@wcedmisten.fyi). Thanks!
 
@@ -214,3 +219,4 @@ and make a free account. I'd love to get your feedback at
 
 [^ fastapi]: https://fastapi.tiangolo.com/
 [^ fastapi-oauth2]: https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/
+[^ nextjs]: https://nextjs.org/
