@@ -8,34 +8,41 @@ tags: ["python", "nextjs", "fastapi", "postgresql"]
 ---
 ## Backends Are Useful, But Scary
 
-A backend handles user data for a website.
-Most websites need a backend, because they need to be dynamic—it's not enough
+A backend is part of a website that handles user data.
+Most websites need a backend because they need to be dynamic—it's not enough
 to show the same page to every visitor.
 Visitors need to interact with the website:
 whether it's checking out an order on Amazon or posting a hot take on Twitter.
 
 This blog, however, has no backend. It shows the same page to every visitor, and 
 will not handle any user data. It is static.
-This reduces my hosting costs, because the entire blog can be cached in a 
-CDN (Content Delivery Network)
-like Cloudflare, for free.
-Using a CDN provides faster load times and increased reliability.
+This reduces my hosting costs because the entire blog can be cached in a 
+free CDN (Content Delivery Network) [^ CDN]
+like Cloudflare, and needs nothing else to run.
 
-Historically I've avoided making webapps with backends for my hobby projects.
+Some of my other projects taking this approach include:
+
+* [Recipe Graph](http://localhost:3000/project/foodGraph/)
+* [Painting Guesser](http://localhost:3000/project/paintingGuesser/)
+* [Low Polygon Image Filter](http://localhost:3000/project/lowPoly/)
+
+These only rely on static content (mainly javascript) to provide complex functionality.
+
+Historically, I've avoided making webapps with backends for my hobby projects.
 A backend comes with all sorts of baggage: databases, managing user data,
 authentication, backups, and increased server load.
 This complexity adds cost to a project: both in time and hosting costs.
 So I've avoided them when possible.
 
-Normally, when I couldn't get away with providing a static frontend,
+Normally, when I couldn't get away with providing just a static frontend,
 I've avoided the issue by writing software meant to be run by the user
-on their own computer.
+on their own computer, rather than a website.
 But this limits the accessibility of my projects to technical users who
 are familiar with linux and a command line interface.
-The benefit of a webapp is that anyone can use it.
+A webapp, however, is usable to anyone with a phone or computer.
 
 When my girlfriend pitched me an idea for a webapp to help her organize her life and help 
-compete with the digital temptations that weren't bringing her value,
+compete with the digital distractions that weren't bringing her value,
 I decided to face my apprehension of backends.
 
 We decided to call this project [Make Me Touch Grass](https://makemetouchgrass.com).
@@ -43,19 +50,20 @@ We decided to call this project [Make Me Touch Grass](https://makemetouchgrass.c
 ## Tools
 
 To get the project up and running quickly, I reached for tools that were familiar to me:
-Python, NextJS, and Docker.
+Python, NextJS, PostgreSQL, and Docker.
 
 ### Backend
 
 To further accelerate development, I relied on the Python web framework FastAPI [^ fastapi],
 which provides most of the base functionality needed for setting up a backend.
 I had no prior experience working with this 
-framework, but found it beneficial.
+framework, but found it quite beneficial.
 
 The FastAPI OAuth2 tutorial [^ fastapi-oauth2] was especially helpful for quickly setting up authentication
 for my backend.
-There's no room for error in this part of the system, in order to protect user data.
-The tutorial allowed me to quickly set up API endpoints
+There's no room for error in this part of the system because even a minor flaw could
+expose private user data.
+By following this guide, I quickly set up API endpoints
 for registering new users, logging in, and retrieving user data.
 With FastAPI, this was done in only 100 lines of Python.
 
@@ -64,11 +72,11 @@ With FastAPI, this was done in only 100 lines of Python.
 NextJS [^ nextjs] provides an opinionated framework built
 on top of React, allowing the frontend codebase to scale with added complexity.
 I prefer using NextJS over Create React App (another library for setting up React projects),
-as in my experience it's has better performance for static deployments.
+because it has better performance for static deployments.
 
 ### Database
 
-While developing, I started out just using in memory data structures for the API at first, then I moved to 
+While developing, I started out just using in-memory data structures for the API at first, then I moved to 
 SQLite, a single-file relational database.
 Using a relational database allows the backend to safely modify data 
 concurrently, and also stores the data more persistently than in-memory data structures.
@@ -78,13 +86,15 @@ over concurrency constraints of using SQLite.
 I haven't used SQLite much professionally, but my understanding
 is that because it relies on a single database file, it is better suited to single-user applications
 than something with many concurrent users making writes to the database.
+Some people claim "SQLite is the only database you will ever need in most cases" [^ sqlite-only],
+but I was skeptical of this claim when it comes to creating a highly concurrent webapp backend.
 
 ### Reverse Proxy
 
 I'm using nginx as a reverse proxy for the system so that the frontend and backend can be accessed at the same 
-domain. This helps mitigate CORS issues.
+domain. This helps mitigate CORS (Cross Origin Resource Sharing) issues, because there is only one origin used.
 
-The config for nginx to do this is simple as well.
+The config for nginx is fairly simple, with just a few `location` definitions under one server:
 
 ```
 worker_processes 1;
@@ -113,17 +123,18 @@ http {
 }
 ```
 
-This forwards all requests to the frontend docker container except requests starting with `/api`,
+This tells nginx to forward all requests to the frontend docker container except requests starting with `/api`,
 which are sent to the backend.
 
 ### Docker
 
-Because of the numerous dependencies I'm using, Docker was very helpful for tying the whole thing together
-and manage dependencies. I'm also using docker compose to manage the networking here, which exposes
-each container under the container name by default. This is why the nginx can reference the services 
-as `http://backend`
+Because of the numerous dependencies I'm using, Docker was useful for tying the whole thing together
+and manage dependencies.
+I'm also using docker compose to manage the networking between services.
+By default docker-compose exposes all services under the same network, allowing them to communicate.
+This is why the nginx can reference the services as `http://backend`, where `backend` is the name of the service.
 
-The docker compose file to support this is also quite minimal:
+The docker compose file to support this is also minimalist:
 
 ```
 services:
@@ -173,52 +184,60 @@ I removed all the application-specific parts of the repo and uploaded them
 [here](https://github.com/wcedmisten/python-nextjs-template),
 so anyone wanting to build a full stack webapp powered by the same tools can
 get a head start following the same approach I did.
+I haven't decided what license to release Make Me Touch Grass under, but for now, the project is private.
+I may release it as open source, like most of my projects, but I'll leave that option open for now.
 
 ## Deployment
 
 To actually push this project out into the world, I had to set up some infrastructure.
 I chose a $7/month Digital Ocean droplet that bought me just 1 GB of RAM
-and a single virtual intel CPU. I have no idea if this will provide enough compute to 
-run the project long-term, but for now, this is my budget for the project.
+and a single virtual intel CPU.
+I'm uncertain if this will be enough to run the project with a real user base,
+but for now, this is sufficient and within my budget.
 
 I also bought a domain name (makemetouchgrass.com) for $0.68/month from NameCheap.
 
 To decrease latency and increase reliability for the website, I'm using Cloudflare to 
-cache the static assets on a CDN. This is a free service offered by Cloudflare.
+cache the static assets on a CDN.
+Cloudflare quite generously provides a free tier, so this isn't included in my total costs.
 
-So far the base load on my server has been fairly minimal, but I also don't have many
+The base load on my server has been fairly minimal, but I also don't have many
 real users yet. I'll have to see how this project scales with more users, and possibly
 re-evaluate hosting options.
 
 So far the only issue I've had with this limited server is running builds. Generally
-the CPU usage hovers at less than 5%, but during the build step it spikes and really bottlenecks.
+the CPU usage hovers at less than 5%, but during the build step, it spikes.
 
 ![Digital Ocean CPU Usage](/stateful-webapp-on-budget/digitalocean.png)
 
-Memory usage generally stays under 50%, but does also uses a lot for cache. I suspect this 
-is the bigger bottleneck.
+Active memory usage generally stays under 50%, but also uses a good chunk for cache.
+I suspect this is the bottleneck for my project.
 
 ![htop memory usage](/stateful-webapp-on-budget/memory-usage.png)
 
 As a result of these constraints, I have to take the server down when making updates,
-causing downtime for users. This is not ideal, and is the biggest downside I've faced
-of such a tight budget. But then again, I don't have many users to begin with.
+causing downtime for users. This is the biggest limitation I've faced
+with such a tight budget.
+Alternatively, I could pre-build the frontend in a CI/CD pipeline and `rsync` it to my
+server, but this is a bit tedious with my docker setup.
+Then again, I don't have many users to begin with, so a little downtime can't hurt.
 
-Generally the build takes around 1 minute, and is noticably slower than when running on my 
-local development environment. Running NextJS's export command `next export` is the culprit
-here.
+Generally, the build takes around 1-2 minutes and is noticeably slower than when running on my 
+local desktop. Running NextJS's export command `next export` is the culprit here.
 
 ### Cloud Hybrid?
 
-I had another idea to mitigate the limited compute available on my budget: run the actual server on 
-prem (my home office), and forward the requests from the DigitalOcean droplet that is associated with
-my domain name. This approach would involve running the app at my `wcedmisten.dev` personal domain
-that's pointing at an unused desktop in my home office. Then I would configure nginx running on 
-my DigitalOcean droplet to rewrite all traffic to this subdomain.
+I had another idea to mitigate the limited hardware available on my budget: run the actual server on 
+prem (my home office) and forward requests from my cloud server to this desktop.
+This would involve running the webapp at a subdomain of my personal `wcedmisten.dev` domain.
+Then I would configure nginx running on my DigitalOcean droplet to rewrite all traffic to this subdomain.
 
-This would help solve my memory constraints, because this desktop has 128 GB 
+This would help solve my memory constraints because this desktop has 128 GB 
 of RAM. Comparatively, even the cheapest 4 GB DigitalOcean droplet is $24/month,
 which is more than I want to spend on this project.
+
+This would also have the downside of limiting availability to depend on my local network and power
+situation, but that's probably acceptable for a hobby project.
 
 ## Conclusions and future work
 
@@ -234,3 +253,5 @@ and make a free account. I'd love to get your feedback at
 [^ fastapi]: https://fastapi.tiangolo.com/
 [^ fastapi-oauth2]: https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/
 [^ nextjs]: https://nextjs.org/
+[^ CDN]: https://en.wikipedia.org/wiki/Content_delivery_network
+[^ sqlite-only]: https://unixsheikh.com/articles/sqlite-the-only-database-you-will-ever-need-in-most-cases.html
