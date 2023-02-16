@@ -261,7 +261,7 @@ function Triangles() {
         <>
             <Container>
                 <Row className="justify-content-center text-center">
-                    <h1>Low Poly Image Filter</h1>
+                    <h1>Low Polygon Image Filter</h1>
                 </Row>
                 <Row className="justify-content-center">
                     <Form className="w-75 text-center">
@@ -299,7 +299,7 @@ export async function getStaticProps() {
     return {
         props: { 
             opengraph: {
-                title: "Low Poly Image Filter",
+                title: "Low Polygon Image Filter",
                 image: "https://wcedmisten.fyi/og-images/low-poly.jpg",
                 type: "website",
                 url: "https://wcedmisten.fyi/project/lowPoly/"
