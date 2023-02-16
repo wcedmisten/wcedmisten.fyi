@@ -1,6 +1,6 @@
 ---
 title: "Making A Stateful Webapp on a $7.68 per Month Budget"
-date: "2023-02-12"
+date: "2023-02-15"
 thumbnail: "/thumbnails/stateful-webapp-on-budget.png"
 thumbnailAlt: "A screenshot of makemetouchgrass.com"
 description: "My reflections on making a stateful webapp at minimal cost, using Python, NextJS, and PostgreSQL."
@@ -8,60 +8,74 @@ tags: ["python", "nextjs", "fastapi", "postgresql"]
 ---
 ## Backends Are Useful, But Scary
 
-A backend is a part of a website that handles data and stores state.
-It's a necessary component for most websites, because they need to be dynamic - it's not enough
+A backend handles user data for a website.
+Most websites need a backend, because they need to be dynamic—it's not enough
 to show the same page to every visitor.
-For instance, adding an item to a shopping cart or posting a new tweet will 
-require sending data to a backend to be saved.
+Visitors need to interact with the website:
+whether it's checking out an order on Amazon or posting a hot take on Twitter.
+
 This blog, however, has no backend. It shows the same page to every visitor, and 
-can only be changed when the entire thing is built again. It is static.
-This helps reduce hosting costs, because the entire blog can be cached in a CDN 
-like Cloudflare (for free), which improves page load speed for users.
+will not handle any user data. It is static.
+This reduces my hosting costs, because the entire blog can be cached in a 
+CDN (Content Delivery Network)
+like Cloudflare, for free.
+Using a CDN provides faster load times and increased reliability.
 
 Historically I've avoided making webapps with backends for my hobby projects.
 A backend comes with all sorts of baggage: databases, managing user data,
-authentication, backups, and increased server load. This complexity adds cost to a project:
-both in time and hosting costs. So I've avoided them when possible.
+authentication, backups, and increased server load.
+This complexity adds cost to a project: both in time and hosting costs.
+So I've avoided them when possible.
 
-Normally when I couldn't get away with providing a static frontend, I've skirted the issue by
-writing software meant to be run by the user on their own computer.
-But this limits the accessibility of my projects to technical users who can run my code.
+Normally, when I couldn't get away with providing a static frontend,
+I've avoided the issue by writing software meant to be run by the user
+on their own computer.
+But this limits the accessibility of my projects to technical users who
+are familiar with linux and a command line interface.
 The benefit of a webapp is that anyone can use it.
 
 When my girlfriend pitched me an idea for a webapp to help her organize her life and help 
 compete with the digital temptations that weren't bringing her value,
-I knew I would have to find a new approach to backends.
+I decided to face my apprehension of backends.
 
 We decided to call this project [Make Me Touch Grass](https://makemetouchgrass.com).
 
 ## Tools
 
-To get up and running quickly, I mostly reached for tools that were familiar to me:
+To get the project up and running quickly, I reached for tools that were familiar to me:
 Python, NextJS, and Docker.
 
 ### Backend
 
-To accelerate development, I relied on the Python framework FastAPI [^ fastapi], which provides support for
-getting an API working out of the box without much boilerplate. I had no prior experience working with this 
-framework, but it's been great so far.
+To further accelerate development, I relied on the Python web framework FastAPI [^ fastapi],
+which provides most of the base functionality needed for setting up a backend.
+I had no prior experience working with this 
+framework, but found it beneficial.
 
-I found the FastAPI OAuth2 tutorial [^ fastapi-oauth2] to be especially helpful for quickly setting up authentication
-for my backend. This part of the system is critical for keeping user data protected. The tutorial allowed
-me to quickly set up APIs for logging into the system as well the groundwork for signing up new users.
-The entire code to support this is around 100 lines of Python.
+The FastAPI OAuth2 tutorial [^ fastapi-oauth2] was especially helpful for quickly setting up authentication
+for my backend.
+There's no room for error in this part of the system, in order to protect user data.
+The tutorial allowed me to quickly set up API endpoints
+for registering new users, logging in, and retrieving user data.
+With FastAPI, this was done in only 100 lines of Python.
 
 ### Frontend
 
-I reached for NextJS [^ nextjs] because I knew this webapp would have a relatively
-complex frontend state, so React was preferred. I also prefer using NextJS over Create 
-React App, as in my experience it's more performant.
+NextJS [^ nextjs] provides an opinionated framework built
+on top of React, allowing the frontend codebase to scale with added complexity.
+I prefer using NextJS over Create React App (another library for setting up React projects),
+as in my experience it's has better performance for static deployments.
 
 ### Database
 
-While developing, I started out just using in memory data structures for the API at first, then I moved to use 
-SQLite for better persistence and to gain the benefits of SQL and a relational database.
+While developing, I started out just using in memory data structures for the API at first, then I moved to 
+SQLite, a single-file relational database.
+Using a relational database allows the backend to safely modify data 
+concurrently, and also stores the data more persistently than in-memory data structures.
+
 Then I moved to PostgreSQL after I became concerned
-over concurrency constraints of using SQLite. I haven't used SQLite much professionally, but my understanding
+over concurrency constraints of using SQLite.
+I haven't used SQLite much professionally, but my understanding
 is that because it relies on a single database file, it is better suited to single-user applications
 than something with many concurrent users making writes to the database.
 
