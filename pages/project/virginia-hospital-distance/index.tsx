@@ -33,22 +33,10 @@ const Map = () => {
             "type": "vector",
             "url": "pmtiles:///virginia-hospital-distance/virginia-smaller.pmtiles"
           },
-          "isochrone_0": {
-            "type": "geojson",
-            "data": "/virginia-hospital-distance/polygon_0.json",
+          "isochrone": {
+            "type": "vector",
+            "url": "pmtiles:///virginia-hospital-distance/virginia_iso.pmtiles",
           },
-          "isochrone_1": {
-            "type": "geojson",
-            "data": "/virginia-hospital-distance/polygon_1.json"
-          },
-          "isochrone_2": {
-            "type": "geojson",
-            "data": "/virginia-hospital-distance/polygon_2.json"
-          },
-          "isochrone_3": {
-            "type": "geojson",
-            "data": "/virginia-hospital-distance/polygon_3.json"
-          }
         },
         layers: layer as any
       },

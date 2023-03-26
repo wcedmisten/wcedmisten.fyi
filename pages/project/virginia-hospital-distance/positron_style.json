@@ -1627,8 +1627,8 @@
     {
         "id": "isochrone0",
         "type": "fill",
-        "source": "isochrone_0",
-        "layout": {},
+        "source": "isochrone",
+        "source-layer": "polygon_0",
         "paint": {
             "fill-color": "#440154",
             "fill-opacity": 0.1,
@@ -1638,8 +1638,8 @@
     {
         "id": "isochrone1",
         "type": "fill",
-        "source": "isochrone_1",
-        "layout": {},
+        "source": "isochrone",
+        "source-layer": "polygon_1",
         "paint": {
             "fill-color": "#31688e",
             "fill-opacity": 0.2,
@@ -1649,8 +1649,8 @@
     {
         "id": "isochrone2",
         "type": "fill",
-        "source": "isochrone_2",
-        "layout": {},
+        "source": "isochrone",
+        "source-layer": "polygon_2",
         "paint": {
             "fill-color": "#35b779",
             "fill-opacity": 0.2,
@@ -1660,8 +1660,8 @@
     {
         "id": "isochrone3",
         "type": "fill",
-        "source": "isochrone_3",
-        "layout": {},
+        "source": "isochrone",
+        "source-layer": "polygon_3",
         "paint": {
             "fill-color": "#fde725",
             "fill-opacity": 0.3,
