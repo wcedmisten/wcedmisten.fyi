@@ -70,7 +70,7 @@ const Map = () => {
       // Add an image to use as a custom marker
       function (error, image: any) {
         if (error) throw error;
-        map.current.addImage('hospitalMarker', image);
+        map.current?.addImage('hospitalMarker', image);
       })
   });
 
