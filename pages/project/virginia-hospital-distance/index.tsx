@@ -4,14 +4,17 @@ import { useEffect, useRef, useState } from "react"
 import maplibregl from "maplibre-gl";
 import * as pmtiles from "pmtiles";
 import layer from "./positron_style.json"
-
+import hospitals from "./hospitals_layer.json"
 
 // const [initialLon, initialLat] = [41.1533, 20.1683]
 const [initialLon, initialLat] = [-76.5059133431, 37.6227077717]
 
 const Map = () => {
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<maplibregl.Map>();
+
+  const popup = useRef<maplibregl.Popup>();
+
   const [lng] = useState(initialLon);
   const [lat] = useState(initialLat);
 
@@ -31,25 +34,44 @@ const Map = () => {
         "sources": {
           "openmaptiles": {
             "type": "vector",
-            "url": "pmtiles:///virginia-hospital-distance/virginia-smaller.pmtiles"
+            "url": "pmtiles:///virginia-hospital-distance/virginia.pmtiles"
           },
           "isochrone": {
             "type": "vector",
             "url": "pmtiles:///virginia-hospital-distance/virginia_iso.pmtiles",
           },
+          "hospitals": {
+            "type": "geojson",
+            "data": hospitals
+          },
         },
-        layers: layer as any
+        layers: layer as any,
       },
-      // style: "https://demotiles.maplibre.org/style.json",
       center: [lng, lat],
       zoom: zoom,
-      maxBounds: [
-        [-84.71490710282056,
-          35.77320086387027],
-        [-73.94080914265395,
-          39.73148308878754]],
+      // maxBounds: [
+      //   [-84.71490710282056,
+      //     35.77320086387027],
+      //   [-73.94080914265395,
+      //     39.73148308878754]],
       customAttribution: ["© OpenMapTiles", "© OpenStreetMap contributors"],
-    }) as any;
+    });
+
+    if (!popup.current) {
+      // Create a popup, but don't add it to the map yet.
+      popup.current = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false
+      });
+    }
+
+    map.current.loadImage(
+      '/virginia-hospital-distance/hospital-solid.png',
+      // Add an image to use as a custom marker
+      function (error, image: any) {
+        if (error) throw error;
+        map.current.addImage('hospitalMarker', image);
+      })
   });
 
   return (
@@ -58,7 +80,8 @@ const Map = () => {
       <div id="state-legend" className="legend">
         <h2>Driving Time to Nearest Hospital</h2>
         <div className="legend-group">
-          <div className="legend-element"><span style={{ backgroundColor: "#fde725" }}></span>&lt; 10 minutes</div>
+          <div className="legend-element">
+            <span style={{ backgroundColor: "#fde725", opacity: .3 }} />&lt; 10 minutes</div>
           <div className="legend-element"><span style={{ backgroundColor: "#35b779" }}></span>&lt; 20 minutes</div>
         </div>
         <div className="legend-group">

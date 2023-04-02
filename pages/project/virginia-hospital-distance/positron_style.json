@@ -1479,47 +1479,6 @@
         }
     },
     {
-        "id": "boundary_state",
-        "type": "line",
-        "metadata": {
-            "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
-        },
-        "source": "openmaptiles",
-        "source-layer": "boundary",
-        "filter": [
-            "==",
-            "admin_level",
-            4
-        ],
-        "layout": {
-            "line-cap": "round",
-            "line-join": "round",
-            "visibility": "visible"
-        },
-        "paint": {
-            "line-blur": 0.4,
-            "line-color": "rgb(230, 204, 207)",
-            "line-dasharray": [
-                2,
-                2
-            ],
-            "line-opacity": 1,
-            "line-width": {
-                "base": 1.3,
-                "stops": [
-                    [
-                        3,
-                        1
-                    ],
-                    [
-                        22,
-                        15
-                    ]
-                ]
-            }
-        }
-    },
-    {
         "id": "boundary_country_z0-4",
         "type": "line",
         "metadata": {
@@ -1666,6 +1625,47 @@
             "fill-color": "#fde725",
             "fill-opacity": 0.3,
             "fill-outline-color": "rgb(28, 28, 27)"
+        }
+    },
+    {
+        "id": "boundary_state2",
+        "type": "line",
+        "metadata": {
+            "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
+        },
+        "source": "openmaptiles",
+        "source-layer": "boundary",
+        "filter": [
+            "==",
+            "admin_level",
+            4
+        ],
+        "layout": {
+            "line-cap": "round",
+            "line-join": "round",
+            "visibility": "visible"
+        },
+        "paint": {
+            "line-blur": 0.4,
+            "line-color": "rgb(92, 85, 82)",
+            "line-dasharray": [
+                2,
+                2
+            ],
+            "line-opacity": 1,
+            "line-width": {
+                "base": 1.3,
+                "stops": [
+                    [
+                        3,
+                        1
+                    ],
+                    [
+                        22,
+                        15
+                    ]
+                ]
+            }
         }
     },
     {
@@ -2370,5 +2370,33 @@
             "text-halo-color": "rgba(236,236,234,0.7)",
             "text-halo-width": 1.4
         }
+    },
+    {
+        "id": "hospital_names",
+        "type": "symbol",
+        "source": "hospitals",
+        "layout": {
+            "text-field": ["get", "name"],
+            "text-font": [
+                "Roboto Regular"
+            ],
+            "text-size": 10,
+            "text-offset": [
+                0,
+                -2
+            ],
+            
+            "icon-image": "hospitalMarker",
+            "icon-size": 1,
+            "icon-allow-overlap": true
+        },
+        "paint": {
+            "icon-color": "rgb(24, 26, 24)",
+            "text-color": "rgb(24, 26, 24)",
+            "text-halo-blur": 1,
+            "text-halo-color": "rgb(242,243,240)",
+            "text-halo-width": 1
+        },
+        "minzoom": 8
     }
 ]
