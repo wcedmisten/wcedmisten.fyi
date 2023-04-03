@@ -1,0 +1,298 @@
+---
+title: "An Interactive Visualization of Hospital Accessibility using OpenStreetMap"
+date: "2023-04-02"
+thumbnail: "/og-images/virginia-hospital-distance.png"
+thumbnailAlt: "A map of Virginia showing driving distance to hospitals."
+description: "Using OpenStreetMap data to craft an interactive visualization of hospital accessibility in Virginia."
+tags: ["openstreetmap", "valhalla", "isochrones", "python", "planetiler"]
+---
+
+## Rural Hospital Accessibility
+
+Rural Americans face many challenges accessing medical care.
+Hospitals and other medical facilities tend to cluster in denser population areas,
+leaving residents of rural areas without nearby access to medical care, especially 
+for specialty medicine. Rural facilities may struggle to stay funded due to lack
+of patient population.
+
+According to the Department of Health and Human Services,
+65.83% of designated Health Professional Shortage Areas are rural. [^ rural-shortages] [^ rural-health-info]
+
+![Map of Health Professional Shortage Areas](/visualizing-hospital-accessibility/hpsa-primary-care.jpg)
+
+Increased distance to a hospital during a medical emergency also increases mortality rates.
+A 2007 study found that a 10km increase in distance to the hospital 
+during an emergency resulted in a 1% increase in mortality. [^ hospital-study]
+
+### Driving Distance Hospital Accessibility
+
+For this project, I wanted to see how much of my state was within a certain driving time 
+of a hospital.
+By calculating an Isochrones map [^ isochrones] in 10 minute increments, we can view the 
+area around a hospital that is drivable within those time constraints.
+
+## OpenStreetMap
+
+OpenStreetMap (OSM) is a crowd-sourced map dataset spanning the entire world.
+For this project, I used the data in two ways:
+
+1. finding a list of hospitals and their locations
+2. finding the Isochrone map for each hospital
+
+I used the OSM extract provided by GeoFabrik for the state of Virginia.
+
+### Finding all hospitals in Virginia
+
+To find all hospitals in OpenStreetMap, I searched for the tag 
+`amenity=hospital`. This tag differs from `amenity=clinic` subtly.
+The difference between a clinic and a hospital is not always obvious.
+However, the main distinction is that a hospital offers inpatient
+care, while a clinic does not.
+
+To search the dataset, I first considered using the Overpass API [^ overpass-api],
+but I two problems:
+1. the size of my query was too big to use the free public instance (Overpass Turbo)
+2. setting up the software to run locally seemed too complicated compared to just using PostGIS
+
+So ultimately I decided to just use PostGIS, which was more familiar to me.
+
+I used `osm2pgsql` to import the data, and then could easily query it using SQL.
+
+To get all hospitals and their names and locations, only two simple queries were required:
+
+```sql
+SELECT ST_AsText(ST_Transform(way,4326)) as centroid,osm_id,name
+FROM planet_osm_point
+WHERE amenity='hospital';
+```
+
+To get all hospitals that were tagged as points, and:
+
+```sql
+SELECT ST_AsText(ST_Transform(ST_Centroid(way),4326)) AS centroid, osm_id, name
+FROM planet_osm_polygon
+WHERE amenity='hospital';
+```
+
+To get all hospitals that were tagged as polygons.
+For my purpose I wanted a point to represent each hospital, so I just calculated the 
+centroid of each polygon with the `ST_Centroid` function.
+In both cases I also projected the data into EPSG:4326.
+
+### Isochrones 
+
+Once I had this list of hospitals and their locations, I needed to find the 
+area representing maximum travel time around each of them. For this,
+I used set up Valhalla's Isochrones API on the OSM extract.
+This API uses the road structure and speed limits (tagged or estimated) to determine the boundary 
+that can be travelled within a given time.
+
+The API also allows multiple time boundaries to be specified at once,
+reducing the number of API calls required.
+The following payload was used to request the isochrone for each hospital.
+Here we provide the coordinates of each hospital and specify that we want 
+isocrhones provided for 10, 20, 30, and 40 minute boundaries.
+
+The API returns a geoJSON polygon for each contour.
+
+```python
+name = record["name"]
+lon = record["lon"]
+lat = record["lat"]
+
+payload = {
+    "locations":[
+        {"lat": lat,"lon": lon}
+    ],
+    "costing":"auto",
+    "denoise":"0.5",
+    "generalize":"0",
+    "contours":[{"time":10},{"time":20},{"time":30},{"time":40}],
+    "polygons":True
+}
+
+request = f"http://localhost:8002/isochrone?json={json.dumps(payload)}"
+isochrone = requests.get(request).json()
+```
+
+After calculating the polygons for each hospital, I found the union of 
+all polygons at each contour level.
+This meant that overlapping polygons of the same level were joined together.
+
+Let's dive into a result showing two hospitals in Virginia.
+The two lime green splotches around each hospital represent the area that 
+is within a 10 minute drive of either hospital.
+The turquoise boundary indicates the area where the drive time would be 
+between 10-20 minutes.
+The purple boundary represents 20-30 minutes, and the pink boundary represents 30-40 minutes.
+White represents a drive of at least 40 minutes to a hospital.
+
+![Isochrones Map of Two Hospitals in Central Virginia](/visualizing-hospital-accessibility/hospital-isochrones.png)
+
+This can be displayed for the entire state:
+
+![Isochrones Map of Two Hospitals in Central Virginia](/visualizing-hospital-accessibility/virginia-isochrones-big.png)
+
+Even at a high level, we can see where in the state has varying options for hospital acccessibility.
+Generally, hospitals cluster around cities, which can also be seen here.
+Northern VA has a lot of green, so does Richmond, as well as the Norfolk and VA Beach areas.
+Areas of white (indicating low access to hospitals) are mostly in central and southwest VA.
+
+## Population Analysis
+
+Although it's clear many places in Virginia are far from hospitals (plenty of white on the map),
+I was curious what percent of residence this distribution actually affects.
+Since most Americans live in cities, perhaps these areas are mostly unpopulated.
+
+To answer this question, I turned to a dataset provided by the European Union:
+The Global Human Settlement Layer (GHS) Population dataset [^ GHS-POP].
+This dataset provides an estimate of population distribution across the entire globe.
+The dataset is formatted as an image of 100m x 100m squares, each containing the 
+estimated population residing in each square.
+
+The following image shows the raw data provided in an extract of this dataset.
+The brighter colors indicate higher population, so the image here shows 
+cities along the coastline. However due to the unconventional projection used
+(Mollweide [^ Mollweide]), the image appears slanted and skewed compared to 
+a more traditional projection. The missing chunk in the bottom right
+corner is the Atlantic Ocean.
+
+![GHS Population Image Visualized](/visualizing-hospital-accessibility/GHS-POP.png)
+
+### Rasterstats
+
+The Python library rasterstats [^ rasterstats] was created to calculate statistics 
+over geospatial raster image datasets like GHS-POP.
+By supplying a polygon and the image file, the library will calculate various statistics 
+about the data contained in that polygon.
+
+Since the dataset is in Mollweide and my polygons are in EPSG:4326,
+I had to transform the polygons into Mollweide before using them.
+
+```python
+def estimate_population(dataset, geom):
+  polygon = shape(geom)
+
+  project_to_mollweide = pyproj.Transformer.from_proj(
+          pyproj.Proj('epsg:4326'), # source coordinate system
+          pyproj.Proj('esri:54009'),
+          always_xy=True
+  )
+
+  projected = transform(project_to_mollweide.transform, polygon)
+
+  window = geometry_window(dataset, [projected], pad_x=10, pad_y=10)
+
+  dataset.read(masked=True, window=window)[0]
+
+  zs = zonal_stats(projected, GHS_POP_FILENAME, stats="sum")
+  return round(zs[0]["sum"])
+```
+
+To sanity check my approach of estimating population, I used the boundaries of Washington DC
+and compared the result to the official census record.
+
+```python
+with open("dc.json", "r") as f:
+   dc_geom = json.load(f)
+
+print(estimate_population(dataset, dc_geom))
+```
+
+This outputs: 
+
+```
+707662
+```
+
+Compared to the official 2020 census estimate [^ census-dc-estimate] of 712,816, this is off by less than 1%.
+Not bad!
+
+### Population Estimates on Hospital Isochrones 
+
+In my case, I just needed to sum all the values inside the polygon to get the total population.
+I just supplied each multipolygon of joined contours at each level
+(10 mins, 20 mins, 30 mins, and 40 mins), and the library calculated the population
+within each one.
+
+Another consideration was that I needed to intersect the Virginia state boundary with 
+the Isochrones that were calculated. This is due to an artifact of how OSM extracts work.
+When OSM extracts get made, they do not cut off existing features exactly at state 
+boundaries. So our dataset includes roads in bordering states, which means our 
+isochrones will leak into these states as well.
+
+If we allowed this leakage to happen, our population estimates would include some
+residents from neighboring states, causing a misleading statistic when calculating the percentage.
+
+![GHS Population Image Visualized](/visualizing-hospital-accessibility/isochrone-overflow.png)
+
+However, using `shapely`, we can calculate the intersection of the VA boundary against the 
+isochrones to remove any residents from other states.
+
+When intersected, we can see that the boundaries no longer leak into other states.
+
+![GHS Population Image Visualized](/visualizing-hospital-accessibility/isochrone-cut-off.png)
+
+```python
+with open("states.json", "r") as f:
+    states = json.load(f)
+
+virginia = states["features"][46]
+va_geom = shape(virginia["geometry"])
+in_va = estimate_population(dataset, va_geom)
+
+print(f"Estimated population of Virginia: {in_va}")
+
+times = [40, 30, 20, 10]
+
+for i in range(4):
+  with open(f"polygon_{i}.json", "r") as f:
+      iso_geom = shape(json.load(f))
+
+  # intersection is needed to cut off isochrones that extend beyond VA borders
+  # this is because the OSM extract includes roads that don't
+  # get cut strictly at the border, but extend into other states
+  # we don't want to include those populations in the numerator
+  iso_va_intersection = va_geom.intersection(iso_geom)
+
+  near_hospitals = estimate_population(dataset, iso_va_intersection)
+
+  print(f"Estimated {near_hospitals} residents within {times[i]} mins of a hospital.")
+  print(f"{near_hospitals / in_va * 100} percent of Virginia residents")
+  print()
+```
+
+When reformatted into a table for readability:
+
+Total Estimated VA Population: 8,433,266
+
+| Travel Time (mins)  | Population |           VA Pop. (%) | VA Area. (%) |
+| ------------------  | ---------- | --------------------: |-------------:|
+| 10                  | 5,514,068  | 65.38                 | 9.11         |
+| 20                  | 7,454,683  | 88.40                 | 31.68        |
+| 30                  | 8,094,637  | 95.98                 | 59.29        |
+| 40                  | 8,343,513  | 98.94                 | 80.44        |
+
+##
+
+These results are kind of surprising! From the map, it's not obvious that
+99% of Virginia residents are within 40 minutes of a hospital, because there
+is a lot of white space on the map.
+It's also interesting that 65% of the population lives in 9% of the area
+that's within 10 minutes of a hospital.
+
+Another interesting conclusion is that only 1% of the VA population lives 
+in the remaining 20% of Virginia that is 40+ minutes from a hospital.
+
+##
+
+[^ rural-shortages]: https://data.hrsa.gov/Default/GenerateHPSAQuarterlyReport
+[^ rural-health-info]: https://www.ruralhealthinfo.org/topics/healthcare-access
+[^ isochrones]: https://en.wikipedia.org/wiki/Isochrone_map
+[^ hospital-study]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2464671/
+[^ overpass-api]: https://dev.overpass-api.de/overpass-doc/en/
+[^ GHS-POP]: https://ghsl.jrc.ec.europa.eu/download.php?ds=pop
+[^ rasterstats]: https://pythonhosted.org/rasterstats/
+[^ Mollweide]: https://en.wikipedia.org/wiki/Mollweide_projection
+[^ census-dc-estimate]: https://datacommons.org/place/geoId/11001?utm_medium=explore&mprop=count&popt=Person&hl=en#
+
