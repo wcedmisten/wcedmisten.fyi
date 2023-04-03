@@ -273,7 +273,7 @@ Total Estimated VA Population: 8,433,266
 | 30                  | 8,094,637  | 95.98                 | 59.29        |
 | 40                  | 8,343,513  | 98.94                 | 80.44        |
 
-##
+## Conclusions
 
 These results are kind of surprising! From the map, it's not obvious that
 99% of Virginia residents are within 40 minutes of a hospital, because there
@@ -283,6 +283,38 @@ that's within 10 minutes of a hospital.
 
 Another interesting conclusion is that only 1% of the VA population lives 
 in the remaining 20% of Virginia that is 40+ minutes from a hospital.
+
+On the other hand, looking at distance to the nearest hospital is only 
+one piece of the puzzle. This metric by itself is a bit optimistic,
+because it does not account for specialty medicine that may not 
+be available at the nearest hospital, despite one being near.
+
+The data here is also crowd-sourced, and may not be 100% accurate or up to date.
+
+I went through the data and found some places where hospitals were tagged incorrectly.
+In many cases, clinics were being tagged as hospitals. I also found some 
+"veterinary hospitals" tagged as hospitals and fixed these occurrences.
+
+In my [reddit post](https://www.reddit.com/r/dataisbeautiful/comments/121w4f8/oc_map_of_hospital_accessibility_by_car_in/)
+on /r/dataisbeautiful, some users pointed out other inaccuracies.
+I fixed the data where posssible in OpenStreetMap, but other errors may still exist.
+
+If you see any, feel free to point them my way, or fix them yourself on OpenStreetMap.
+
+## Creating the Interactive Map
+
+The coolest part of this project was that the interactive map was entirely 
+self-hosted on my own DigitalOcean droplet. The files are even small 
+enough to fit into version control without issues. 
+This approach will be incredibly useful for independent GIS enthusiasts
+who can cut cost and don't need any Map API subscriptions to create
+very powerful map experiences.
+
+TODO: fill in how I made these maps!
+
+### MapLibreGL
+
+### Protomaps
 
 ##
 
