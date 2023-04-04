@@ -1,10 +1,10 @@
 ---
-title: "An Interactive Visualization of Hospital Accessibility using OpenStreetMap"
+title: "Mapping Hospital Accessibility with OpenStreetMap"
 date: "2023-04-02"
 thumbnail: "/og-images/virginia-hospital-distance.png"
 thumbnailAlt: "A map of Virginia showing driving distance to hospitals."
-description: "Using OpenStreetMap data to craft an interactive visualization of hospital accessibility in Virginia."
-tags: ["openstreetmap", "valhalla", "isochrones", "python", "planetiler"]
+description: "Using OpenStreetMap data to craft a self-hosted interactive map of hospital accessibility in Virginia."
+tags: ["openstreetmap", "valhalla", "isochrones", "python", "planetiler", "protomaps"]
 ---
 
 ## Rural Hospital Accessibility
@@ -12,24 +12,22 @@ tags: ["openstreetmap", "valhalla", "isochrones", "python", "planetiler"]
 Rural Americans face many challenges accessing medical care.
 Hospitals and other medical facilities tend to cluster in denser population areas,
 leaving residents of rural areas without nearby access to medical care, especially 
-for specialty medicine. Rural facilities may struggle to stay funded due to lack
-of patient population.
+for specialty medicine.
 
 According to the Department of Health and Human Services,
 65.83% of designated Health Professional Shortage Areas are rural. [^ rural-shortages] [^ rural-health-info]
 
-![Map of Health Professional Shortage Areas](/visualizing-hospital-accessibility/hpsa-primary-care.jpg)
-
 Increased distance to a hospital during a medical emergency also increases mortality rates.
-A 2007 study found that a 10km increase in distance to the hospital 
+A 2007 study found on average, a 10km increase in distance to the hospital 
 during an emergency resulted in a 1% increase in mortality. [^ hospital-study]
+
+Due to these factors, residents without access to nearby hospitals may face worse medical outcomes.
 
 ### Driving Distance Hospital Accessibility
 
-For this project, I wanted to see how much of my state was within a certain driving time 
+For this project, I wanted to see how much of my state, Virginia, was within a given driving time 
 of a hospital.
-By calculating an Isochrones map [^ isochrones] in 10 minute increments, we can view the 
-area around a hospital that is drivable within those time constraints.
+Specifically, how much is within 10 minutes, 20 minutes, 30 minutes, and 40 minutes of a hospital?
 
 ## OpenStreetMap
 
@@ -37,7 +35,7 @@ OpenStreetMap (OSM) is a crowd-sourced map dataset spanning the entire world.
 For this project, I used the data in two ways:
 
 1. finding a list of hospitals and their locations
-2. finding the Isochrone map for each hospital
+2. finding the Isochrone map[^ isochrones] for each hospital
 
 I used the OSM extract provided by GeoFabrik for the state of Virginia.
 
@@ -50,7 +48,7 @@ However, the main distinction is that a hospital offers inpatient
 care, while a clinic does not.
 
 To search the dataset, I first considered using the Overpass API [^ overpass-api],
-but I two problems:
+but I hit two problems:
 1. the size of my query was too big to use the free public instance (Overpass Turbo)
 2. setting up the software to run locally seemed too complicated compared to just using PostGIS
 
@@ -77,21 +75,21 @@ WHERE amenity='hospital';
 To get all hospitals that were tagged as polygons.
 For my purpose I wanted a point to represent each hospital, so I just calculated the 
 centroid of each polygon with the `ST_Centroid` function.
-In both cases I also projected the data into EPSG:4326.
+In both cases, I also projected the data into EPSG:4326.
 
 ### Isochrones 
 
 Once I had this list of hospitals and their locations, I needed to find the 
-area representing maximum travel time around each of them. For this,
-I used set up Valhalla's Isochrones API on the OSM extract.
+area representing the maximum travel time around each of them.
+For this, I used set up Valhalla's Isochrones API on the OSM extract.
 This API uses the road structure and speed limits (tagged or estimated) to determine the boundary 
-that can be travelled within a given time.
+that can be traveled within a given time.
 
 The API also allows multiple time boundaries to be specified at once,
 reducing the number of API calls required.
 The following payload was used to request the isochrone for each hospital.
 Here we provide the coordinates of each hospital and specify that we want 
-isocrhones provided for 10, 20, 30, and 40 minute boundaries.
+isochrones provided for 10, 20, 30, and 40 minute boundaries.
 
 The API returns a geoJSON polygon for each contour.
 
@@ -133,15 +131,15 @@ This can be displayed for the entire state:
 
 ![Isochrones Map of Two Hospitals in Central Virginia](/visualizing-hospital-accessibility/virginia-isochrones-big.png)
 
-Even at a high level, we can see where in the state has varying options for hospital acccessibility.
+Even at a high level, we can see regions with better and worse hospital accessibility.
 Generally, hospitals cluster around cities, which can also be seen here.
-Northern VA has a lot of green, so does Richmond, as well as the Norfolk and VA Beach areas.
-Areas of white (indicating low access to hospitals) are mostly in central and southwest VA.
+Northern VA, Richmond, Norfolk and VA Beach show up mostly green.
+Low-accessibility areas (white) are mostly in central and southwest VA.
 
 ## Population Analysis
 
 Although it's clear many places in Virginia are far from hospitals (plenty of white on the map),
-I was curious what percent of residence this distribution actually affects.
+I was curious what percentage of residents this distribution truly affects.
 Since most Americans live in cities, perhaps these areas are mostly unpopulated.
 
 To answer this question, I turned to a dataset provided by the European Union:
@@ -151,8 +149,9 @@ The dataset is formatted as an image of 100m x 100m squares, each containing the
 estimated population residing in each square.
 
 The following image shows the raw data provided in an extract of this dataset.
-The brighter colors indicate higher population, so the image here shows 
-cities along the coastline. However due to the unconventional projection used
+The brighter colors indicate a higher population. 
+The concentrations of bright colors indicate cities.
+However, due to the unconventional projection used
 (Mollweide [^ Mollweide]), the image appears slanted and skewed compared to 
 a more traditional projection. The missing chunk in the bottom right
 corner is the Atlantic Ocean.
@@ -189,7 +188,7 @@ def estimate_population(dataset, geom):
   return round(zs[0]["sum"])
 ```
 
-To sanity check my approach of estimating population, I used the boundaries of Washington DC
+To sanity check my approach for estimating population, I used the boundaries of Washington DC,
 and compared the result to the official census record.
 
 ```python
@@ -229,7 +228,7 @@ residents from neighboring states, causing a misleading statistic when calculati
 However, using `shapely`, we can calculate the intersection of the VA boundary against the 
 isochrones to remove any residents from other states.
 
-When intersected, we can see that the boundaries no longer leak into other states.
+In the intersection, we can see that the isochrone boundaries no longer leak into other states.
 
 ![GHS Population Image Visualized](/visualizing-hospital-accessibility/isochrone-cut-off.png)
 
@@ -276,45 +275,195 @@ Total Estimated VA Population: 8,433,266
 ## Conclusions
 
 These results are kind of surprising! From the map, it's not obvious that
-99% of Virginia residents are within 40 minutes of a hospital, because there
+99% of Virginia residents are within 40 minutes of a hospital because there
 is a lot of white space on the map.
 It's also interesting that 65% of the population lives in 9% of the area
 that's within 10 minutes of a hospital.
 
 Another interesting conclusion is that only 1% of the VA population lives 
-in the remaining 20% of Virginia that is 40+ minutes from a hospital.
+in the remaining 20% of Virginia which is 40+ minutes from a hospital.
 
 On the other hand, looking at distance to the nearest hospital is only 
-one piece of the puzzle. This metric by itself is a bit optimistic,
-because it does not account for specialty medicine that may not 
-be available at the nearest hospital, despite one being near.
+one piece of the puzzle. This metric by itself is a bit optimistic
+because it does not account for the services offered at each hospital.
+A patient seeking specialty care would find no comfort living next to 
+a hospital that doesn't provide what they need.
+This metric also does not account for the value of multiple hospitals nearby,
+which would grant more options to patients than a singular monopoly in the region.
 
 The data here is also crowd-sourced, and may not be 100% accurate or up to date.
 
 I went through the data and found some places where hospitals were tagged incorrectly.
-In many cases, clinics were being tagged as hospitals. I also found some 
+In many cases, clinics were tagged as hospitals. I also found some 
 "veterinary hospitals" tagged as hospitals and fixed these occurrences.
 
 In my [reddit post](https://www.reddit.com/r/dataisbeautiful/comments/121w4f8/oc_map_of_hospital_accessibility_by_car_in/)
 on /r/dataisbeautiful, some users pointed out other inaccuracies.
-I fixed the data where posssible in OpenStreetMap, but other errors may still exist.
+I fixed the data where possible in OpenStreetMap, but other errors may still exist.
 
 If you see any, feel free to point them my way, or fix them yourself on OpenStreetMap.
 
 ## Creating the Interactive Map
 
-The coolest part of this project was that the interactive map was entirely 
-self-hosted on my own DigitalOcean droplet. The files are even small 
-enough to fit into version control without issues. 
-This approach will be incredibly useful for independent GIS enthusiasts
-who can cut cost and don't need any Map API subscriptions to create
-very powerful map experiences.
+Once I had the data, I still wanted to display it in a more interactive format.
+It's one thing to see the data on my own computer, but I wanted to share it with the world.
 
-TODO: fill in how I made these maps!
+Normally, this would require setting up a backend to serve map tiles.
+However, using some new open source tools, I could create an interactive map 
+with only a few MB of files hosted in a CDN.
+No backend is required. No paid subscription to a service like Google Maps or Mapbox.
+No additional costs.
 
-### MapLibreGL
 
-### Protomaps
+I was inspired by Kevin Schaul's article[^ washington-post-maps] about The Washington Post adopting
+open source tools for their map visualizations, so I started out 
+with the tools he suggested.
+
+### MapLibreGL [^ maplibregl]
+
+This is the frontend client used to display the map on my website.
+The project is an open source fork of Mapbox GL JS, which was 
+originally open source, but was relicensed to be proprietary.
+This frontend uses vector tiles rather than raster tiles,
+reducing the size of data transferred from the backend.
+
+### Protomaps [^ protomaps]
+
+This awesome piece of software is changing the game for serving map tiles.
+Instead of requiring a tile server running on a backend to serve tiles 
+at specific coordinates, Protomaps uses HTTP range requests to directly
+query a single file, which can be hosted as a static asset.
+
+This approach is similar to how web clients streaming video can seek to a timestamp
+without downloading the whole file. The client only downloads what they need,
+rather than burdening the server with unnecessary bandwidth.
+This also saves time for the client.
+
+Allegedly, this reduces the cost of hosting tiles to 1% of the cost using a tile server.[^ protomaps-cost]
+
+### OpenMapTiles [^ openmaptiles]
+
+This tool is used to generate vector tiles, which are needed to display a 
+"base map" of my region, to provide context to the data.
+This shows things like major roads, city names, borders, and other landmark features.
+
+I initially used this tool to create the base map, but after some research, I discovered
+Planetiler is a better alternative.
+
+### Planetiler [^ planetiler]
+
+Planetiler also generates vector tiles, so it's an alternative to OpenMapTiles.
+However, it's way faster.
+OpenMapTiles took around 3 hours to generate a base map with the GeoFabrik US South 
+extract [^ us-south-extract].
+Planetiler took just 3 minutes.
+
+### Tippecanoe [^ tippecanoe]
+
+Used for generating custom vector tiles.
+In my case, I used these to convert my GeoJSON isochrone boundaries into map tiles.
+This improves performance of the client by transferring the data only as needed.
+With a tiled approach, only higher zoom levels will render the fully detailed polygon.
+
+I also used the go-pmtiles project to convert these into the Protomaps tile format,
+because tippecanoe does not yet support direct conversion to PMTiles.
+
+### OpenMapTiles/fonts [^ openmaptiles-fonts]
+
+This tool was used to generate the font files needed for MapLibreGL.
+
+This provides the "glyphs" used for all text on the map.
+The glyphs are also self hosted under `/public/glyphs`.
+
+I initially had some issues installing the dependencies, but I was able to get them installed
+by using node `v16.18.0` and manually running `npm install fontnik@0.7.0` before installing the
+project dependencies.
+
+## Generating the Files 
+
+The basic steps I took were:
+
+1. Convert the GeoJSON isochrone polygons into MBTiles with `tippecanoe`
+2. Convert the MBTiles into PMTiles with `go-pmtiles`
+3. Set up the frontend with MapLibreGL to use the base map tiles
+4. Tweak a style.json file for styling these tiles 
+5. Add a PMTiles data source for the isochrones layer 
+6. Add a layer into the style.json spec for displaying the isochrones sources (I had to pick which layers should be above or below this to look right)
+7. Add a GeoJSON data source for the hospital locations and names 
+8. Add a layer into the style spec for displaying these names with a custom symbol I made in GIMP
+
+### A note on colors
+
+I based the color of each distance threshold on the viridis color scheme, which uses yellow on one end 
+and dark purple on the other.
+
+![viridis color map](/visualizing-hospital-accessibility/viridis.png)
+
+However, due to opacity and how the polygons were layered on top of each other,
+the colors didn't quite come out right.
+The colors shown on the legend would match the colors of the polygon if opacity 
+was set to 1.
+But because they're transparent, the background colors bleed into them.
+This resulted in a confusing color scale in my legend, as many users on /r/dataisbeautiful 
+[tactfully pointed out](https://www.reddit.com/r/dataisbeautiful/comments/121w4f8/comment/jdpdv6s/).
+
+Bad legend colors:
+
+![actual map colors](/visualizing-hospital-accessibility/map-colors.png)
+![bad legend colors](/visualizing-hospital-accessibility/bad-color-legend.png)
+
+I couldn't figure out how to determine the actual color as presented in the map,
+so I ended up taking a screenshot and finding the RGB values with a color inspector tool.
+But even using *those* values, the colors still looked wrong.
+
+I think this was because of the way that colors can appear different to the brain based on context.
+For example, the [Checker Shadow Illusion](https://en.wikipedia.org/wiki/Checker_shadow_illusion).
+
+![optical illusion of checkerboard colors appearing different from a shadow](/visualizing-hospital-accessibility/color-illusion.png)
+
+The colors of A and B are actually the same. 100% identical RGB codes. This hurts my brain.
+
+I ended up just tweaking these colors manually until they looked about right to me.
+
+![actual map colors](/visualizing-hospital-accessibility/map-colors.png)
+![better colors](/visualizing-hospital-accessibility/better-color-legend.png)
+
+The colors still don't match 100%, but at least they 
+can be matched to the corresponding map color now.
+
+## Code 
+
+The repo for generating this analysis can be found at
+[wcedmisten/hospital-accessibility-map](https://github.com/wcedmisten/hospital-accessibility-map)
+
+And the frontend code for the interactive map can be found
+[here](https://github.com/wcedmisten/wcedmisten.fyi/tree/main/pages/project/virginia-hospital-distance),
+with all the other source code powering this blog.
+
+## Future Work 
+
+### Scale
+
+I'd like to get this visualization set up for the entire United States,
+and eventually compare metrics between states.
+
+As an intermediate step, I ran this code with an extract of the US South region.
+
+One issue I ran into was that WebGL, which is used by MapLibreGL to render 
+vector tiles, can only render 65,535 vertices.
+With my massive isochrone polygons, I was hitting this limit at low zoom levels.
+
+The solution to this was to pass `--simplify 6` to my tippecanoe file generation
+command, to reduce the number of points needed for each polygon.
+This also reduces the accuracy slightly, but at high zoom levels it's 
+not really noticeable.
+
+### Filtering by Service
+
+Another enhancement would be to allow filtering hospitals by services offered.
+It would be interesting to see how this map looks for a patient seeking specialty medicine.
+I'm not quite sure where to get a standardized dataset of services offered by hospital,
+so if anyone has a suggestion, please reach out!
 
 ##
 
@@ -327,4 +476,13 @@ TODO: fill in how I made these maps!
 [^ rasterstats]: https://pythonhosted.org/rasterstats/
 [^ Mollweide]: https://en.wikipedia.org/wiki/Mollweide_projection
 [^ census-dc-estimate]: https://datacommons.org/place/geoId/11001?utm_medium=explore&mprop=count&popt=Person&hl=en#
+[^ protomaps-cost]: https://protomaps.com/blog/serverless-maps-now-open-source
+[^ us-south-extract]: https://download.geofabrik.de/north-america/us-south.html
+[^ washington-post-maps]: https://www.kschaul.com/post/2023/02/16/how-the-post-is-replacing-mapbox-with-open-source-solutions
 
+[^ maplibregl]: https://github.com/maplibre/maplibre-gl-js
+[^ protomaps]: https://protomaps.com
+[^ openmaptiles]: https://github.com/openmaptiles/openmaptiles
+[^ planetiler]: https://github.com/onthegomap/planetiler
+[^ tippecanoe]: https://github.com/felt/tippecanoe
+[^ openmaptiles-fonts]: https://github.com/openmaptiles/fonts
