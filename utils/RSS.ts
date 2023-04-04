@@ -21,7 +21,7 @@ export default async function generateRSS(posts: any[]) {
             url: `${siteURL}/post/${post.filename}`,
             author: "William Edmisten <wcedmisten@gmail.com>",
             categories: post.meta.tags,
-            date: post.meta.date,
+            date: post.meta.date + "T12:00:00.000",
             description: post.meta.description,
         });
     });
