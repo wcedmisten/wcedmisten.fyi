@@ -29,6 +29,9 @@ For this project, I wanted to see how much of my state, Virginia, was within a g
 of a hospital.
 Specifically, how much is within 10 minutes, 20 minutes, 30 minutes, and 40 minutes of a hospital?
 
+If you're dying to know the answer, the interactive map answering this question can be found
+[here](https://wcedmisten.fyi/project/virginia-hospital-distance/).
+
 ## OpenStreetMap
 
 OpenStreetMap (OSM) is a crowd-sourced map dataset spanning the entire world.
@@ -55,24 +58,22 @@ but I hit two problems:
 So ultimately I decided to just use PostGIS, which was more familiar to me.
 
 I used `osm2pgsql` to import the data, and then could easily query it using SQL.
+To get all hospitals names and locations, only two simple queries were required:
 
-To get all hospitals and their names and locations, only two simple queries were required:
-
+To get all hospitals that were tagged as points:
 ```sql
 SELECT ST_AsText(ST_Transform(way,4326)) as centroid,osm_id,name
 FROM planet_osm_point
 WHERE amenity='hospital';
 ```
 
-To get all hospitals that were tagged as points, and:
-
+And to get all hospitals that were tagged as polygons:
 ```sql
 SELECT ST_AsText(ST_Transform(ST_Centroid(way),4326)) AS centroid, osm_id, name
 FROM planet_osm_polygon
 WHERE amenity='hospital';
 ```
 
-To get all hospitals that were tagged as polygons.
 For my purpose I wanted a point to represent each hospital, so I just calculated the 
 centroid of each polygon with the `ST_Centroid` function.
 In both cases, I also projected the data into EPSG:4326.
@@ -82,7 +83,7 @@ In both cases, I also projected the data into EPSG:4326.
 Once I had this list of hospitals and their locations, I needed to find the 
 area representing the maximum travel time around each of them.
 For this, I used set up Valhalla's Isochrones API on the OSM extract.
-This API uses the road structure and speed limits (tagged or estimated) to determine the boundary 
+This API uses the road structure and speed limits to determine the boundary 
 that can be traveled within a given time.
 
 The API also allows multiple time boundaries to be specified at once,
@@ -298,15 +299,16 @@ In many cases, clinics were tagged as hospitals. I also found some
 "veterinary hospitals" tagged as hospitals and fixed these occurrences.
 
 In my [reddit post](https://www.reddit.com/r/dataisbeautiful/comments/121w4f8/oc_map_of_hospital_accessibility_by_car_in/)
-on /r/dataisbeautiful, some users pointed out other inaccuracies.
+on /r/dataisbeautiful, some users pointed out other inaccuracies,
+such as hospitals that have since closed down.
 I fixed the data where possible in OpenStreetMap, but other errors may still exist.
 
-If you see any, feel free to point them my way, or fix them yourself on OpenStreetMap.
+If you see any more, feel free to point them my way, or fix them yourself on OpenStreetMap.
 
-## Creating the Interactive Map
+## Creating the Self-Hosted Interactive Map
 
 Once I had the data, I still wanted to display it in a more interactive format.
-It's one thing to see the data on my own computer, but I wanted to share it with the world.
+It's one thing to see the data on my own computer, but I wanted to share it with the world!
 
 Normally, this would require setting up a backend to serve map tiles.
 However, using some new open source tools, I could create an interactive map 
@@ -321,10 +323,12 @@ with the tools he suggested.
 
 ### MapLibreGL [^ maplibregl]
 
-This is the frontend client used to display the map on my website.
+This is the frontend client used to display the map.
+It supports panning and zooming around the map, making it interactive.
+
 The project is an open source fork of Mapbox GL JS, which was 
-originally open source, but was relicensed to be proprietary.
-This frontend uses vector tiles rather than raster tiles,
+originally open source, but later versions were relicensed by Mapbox as proprietary.
+This library uses vector tiles rather than raster tiles,
 reducing the size of data transferred from the backend.
 
 ### Protomaps [^ protomaps]
@@ -332,7 +336,7 @@ reducing the size of data transferred from the backend.
 This awesome piece of software is changing the game for serving map tiles.
 Instead of requiring a tile server running on a backend to serve tiles 
 at specific coordinates, Protomaps uses HTTP range requests to directly
-query a single file, which can be hosted as a static asset.
+query a single file, which can be hosted as a static asset on a CDN.
 
 This approach is similar to how web clients streaming video can seek to a timestamp
 without downloading the whole file. The client only downloads what they need,
@@ -383,14 +387,15 @@ project dependencies.
 
 The basic steps I took were:
 
-1. Convert the GeoJSON isochrone polygons into MBTiles with `tippecanoe`
-2. Convert the MBTiles into PMTiles with `go-pmtiles`
-3. Set up the frontend with MapLibreGL to use the base map tiles
-4. Tweak a style.json file for styling these tiles 
-5. Add a PMTiles data source for the isochrones layer 
-6. Add a layer into the style.json spec for displaying the isochrones sources (I had to pick which layers should be above or below this to look right)
-7. Add a GeoJSON data source for the hospital locations and names 
-8. Add a layer into the style spec for displaying these names with a custom symbol I made in GIMP
+1. Generate base map tiles with planetiler
+2. Convert the GeoJSON isochrone polygons into MBTiles with `tippecanoe`
+3. Convert the MBTiles into PMTiles with `go-pmtiles`
+4. Set up the frontend with MapLibreGL to use the base map tiles
+5. Tweak a style.json file for styling these tiles 
+6. Add a PMTiles data source for the isochrones layer 
+7. Add a layer into the style.json spec for displaying the isochrones sources (I had to pick which layers should be above or below this to look right)
+8. Add a GeoJSON data source for the hospital locations and names 
+9. Add a layer into the style spec for displaying these names with a custom symbol I made in GIMP
 
 ### A note on colors
 
