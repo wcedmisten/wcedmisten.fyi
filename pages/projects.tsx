@@ -7,6 +7,13 @@ function ProjectsPage() {
             <h1 className="post-title">Projects</h1>
             <ListGroup variant="flush">
                 <PostItem
+                    href="/project/north-america-hospital-distance"
+                    thumbnailURL="/og-images/north-america-hospital-distance.png"
+                    thumbnailAlt="A map of North America showing the drive time to the nearest hospital."
+                    title="North America Hospital Accessibility"
+                    description='A map visualizing the travel time by car to the nearest hospital in North America.'
+                    date='2023-04-30' />
+                <PostItem
                     href="/project/virginia-hospital-distance"
                     thumbnailURL="/og-images/virginia-hospital-distance.png"
                     thumbnailAlt="A map of Virginia showing the drive time to the nearest hospital."
