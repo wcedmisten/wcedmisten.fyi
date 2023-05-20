@@ -81,13 +81,14 @@ const Map = () => {
       <div id="state-legend" className="legend">
         <h2>Driving Time to Nearest Hospital</h2>
         <div className="legend-group">
-          <div className="legend-element"><span style={{ backgroundColor: "#b5e425", border: "1px solid black" }} />&lt; 10 mins</div>
-          <div className="legend-element"><span style={{ backgroundColor: "#41847c", border: "1px solid black" }}></span>10-20 mins</div>
+          <div className="legend-element">
+            <span className="legend-color" style={{ backgroundColor: "#b5e425" }} />&lt; 10 mins</div>
+          <div className="legend-element"><span className="legend-color" style={{ backgroundColor: "#41847c" }}></span>10-20 mins</div>
         </div>
         <div className="legend-group">
-          <div className="legend-element"><span style={{ backgroundColor: "#657188", border: "1px solid black" }}></span>20-30 mins</div>
-          <div className="legend-element"><span style={{ backgroundColor: "#c2aac2", border: "1px solid black" }}></span>30-40 mins</div>
-          <div className="legend-element"><span style={{ backgroundColor: "white", border: "1px solid black" }}></span>&gt; 40 mins</div>
+          <div className="legend-element"><span className="legend-color" style={{ backgroundColor: "#657188" }}></span>20-30 mins</div>
+          <div className="legend-element"><span className="legend-color" style={{ backgroundColor: "#c2aac2" }}></span>30-40 mins</div>
+          <div className="legend-element"><span className="legend-color" style={{ backgroundColor: "white" }}></span>&gt; 40 mins</div>
         </div>
       </div>
     </div>
