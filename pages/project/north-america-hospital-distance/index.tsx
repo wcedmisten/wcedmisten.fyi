@@ -113,10 +113,10 @@ export async function getStaticProps() {
   return {
     props: {
       opengraph: {
-        title: "Drive Time to Nearest Hospital in Virginia",
-        image: "https://wcedmisten.fyi/og-images/virginia-hospital-distance.png",
+        title: "North America Hospital Accessibility Map",
+        image: "https://wcedmisten.fyi/og-images/north-america-hospital-distance.png",
         type: "website",
-        url: "https://wcedmisten.fyi/project/virginia-hospital-distance"
+        url: "https://wcedmisten.fyi/project/north-america-hospital-distance"
       }
     }
   }
