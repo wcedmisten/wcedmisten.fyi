@@ -97,7 +97,7 @@ export default function Isochrone() {
   return (
     <>
       <Head>
-        <title>Virginia Hospital Accessibility Map</title>
+        <title>North America Hospital Accessibility Map</title>
         <meta name="description" content="A map visualizing the travel time by car to the nearest hospital in Virginia." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
