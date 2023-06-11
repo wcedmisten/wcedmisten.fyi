@@ -28,6 +28,13 @@ function AboutPage() {
                     <p>
                         My other hobbies include programming, gardening, cooking, and hiking.
                     </p>
+
+                    <p>
+                        You can contact me at <a href="mailto:wcedmisten@gmail.com?subject=Feedback on wcedmisten.fyi">
+                            wcedmisten@gmail.com
+                        </a> with
+                        questions, comments, or criticism! Or just to say hi!
+                    </p>
                 </Col>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
                     <Image
