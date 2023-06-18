@@ -32,13 +32,16 @@ export default function NavbarHeader() {
                     <div className="d-flex justify-content-end">
                         <Nav activeKey="/" onSelect={() => setExpanded(false)}>
                             <Link href="/" passHref>
-                                <Nav.Link>Home</Nav.Link>
+                                <Nav.Link>Posts</Nav.Link>
                             </Link>
                             <Link href="/about" passHref>
                                 <Nav.Link>About</Nav.Link>
                             </Link>
                             <Link href="/projects" passHref>
                                 <Nav.Link>Projects</Nav.Link>
+                            </Link>
+                            <Link href="/talks" passHref>
+                                <Nav.Link>Talks</Nav.Link>
                             </Link>
                         </Nav>
                     </div>

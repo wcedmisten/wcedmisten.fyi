@@ -5,14 +5,26 @@ import PostMetadata from "./PostMetadata";
 
 import style from "./postitem.module.css"
 
-export default function PostItem({ href, thumbnailURL, title, description, date, thumbnailAlt, readingLength }:
-    { href: string, thumbnailURL: string, title: string, description: string, date: string, thumbnailAlt: string, readingLength?: string }) {
+interface PostItemProps {
+    href: string,
+    thumbnailURL: string,
+    title: string,
+    description: string | JSX.Element,
+    date: string,
+    thumbnailAlt: string,
+    readingLength?: string,
+    location?: string | JSX.Element
+}
+
+export default function PostItem(props: PostItemProps
+) {
+    const { href, thumbnailURL, title, description, date, thumbnailAlt, readingLength, location } = props;
     return (
         <ListGroup.Item className={style.PostThumbnail}>
-            <Container fluid className="justify-content-md-center" style={{padding: "2 0 2 0"}}>
+            <Container fluid className="justify-content-md-center" style={{ padding: "2 0 2 0" }}>
                 <Row>
                     <Col xs={12} md={4} >
-                        <Container fluid className="justify-content-md-center" style={{padding: "2 0 2 0"}}>
+                        <Container fluid className="justify-content-md-center" style={{ padding: "2 0 2 0" }}>
                             <Row>
                                 <Link href={href}>
                                     <a>
@@ -32,11 +44,11 @@ export default function PostItem({ href, thumbnailURL, title, description, date,
                         <Container fluid className="justify-content-md-center">
                             <Row>
                                 <Link href={href}>
-                                    <a style={{fontSize: "22px"}} >{title}</a>
+                                    <a style={{ fontSize: "22px" }} >{title}</a>
                                 </Link>
                             </Row>
                             <Row>
-                                <PostMetadata date={date} readingLength={readingLength} />
+                                <PostMetadata date={date} readingLength={readingLength} location={location} />
                             </Row>
                             <Row>
                                 <p className={style.PostDescription}>
