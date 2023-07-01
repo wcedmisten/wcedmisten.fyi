@@ -284,7 +284,7 @@ export const FoodGraph = () => {
     const [graphData, setGraphData] = useState<any>();
 
     useEffect(() => {
-        fetch("/d3_graph.json").then(response => {
+        fetch("/recipe_d3_graph.json").then(response => {
             return response.json();
         }).then(data => {
             // Work with JSON data here
