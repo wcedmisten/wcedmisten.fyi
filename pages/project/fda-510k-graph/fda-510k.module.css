@@ -5,8 +5,17 @@
     margin-right: auto;
 }
 
+.InfoSection {
+    margin: auto;
+    width: 30%;
+    margin: 5px;
+    padding: 10px;
+    text-align: center;
+    border: black;
+}
+
 @media only screen and (max-width: 600px) {
-    .SearchInput {
-        margin: 20px;
+    .InfoSection {
+        width: 90%;
     }
   }
