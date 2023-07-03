@@ -31,7 +31,8 @@
     "rehype-highlight": "^5.0.2",
     "rehype-slug": "^5.0.1",
     "remark-gfm": "^3.0.1",
-    "rss": "^1.2.2"
+    "rss": "^1.2.2",
+    "sql.js-httpvfs": "^0.8.12"
   },
   "devDependencies": {
     "@types/d3": "^7.4.0",
@@ -43,6 +44,10 @@
     "@types/rss": "^0.0.29",
     "eslint": "8.16.0",
     "eslint-config-next": "12.1.6",
-    "typescript": "^4.7.2"
+    "http-server": "^14.1.1",
+    "ts-loader": "^9.4.4",
+    "typescript": "^4.9.5",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
   }
 }

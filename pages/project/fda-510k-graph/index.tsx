@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import style from './fda-510k.module.css'
 
-import { useWindowSize } from "@react-hook/window-size";
+import { createDbWorker } from "sql.js-httpvfs"
 
 const ForceGraph = dynamic(() => import('../../../components/ForceGraph'), {
     ssr: false,
@@ -26,71 +26,179 @@ const SearchInput = ({ onInputChange }: { onInputChange: (e: any) => void }) => 
     return <input className={style.SearchInput} placeholder="Search for a device" onChange={e => setSearchInput(e.target.value)} />
 }
 
+const fetchSelectedNodeData = async () => {
+    // sadly there's no good way to package workers and wasm directly so you need a way to get these two URLs from your bundler.
+    // This is the webpack5 way to create a asset bundle of the worker and wasm:
+    const workerUrl = new URL(
+        "sql.js-httpvfs/dist/sqlite.worker.js",
+        import.meta.url,
+    );
+    const wasmUrl = new URL(
+        "sql.js-httpvfs/dist/sql-wasm.wasm",
+        import.meta.url,
+    );
+    // the legacy webpack4 way is something like `import wasmUrl from "file-loader!sql.js-httpvfs/dist/sql-wasm.wasm"`.
+
+    // the config is either the url to the create_db script, or a inline configuration:
+    const config: any = {
+        from: "inline",
+        config: {
+            serverMode: "full", // file is just a plain old full sqlite database
+            requestChunkSize: 4096, // the page size of the  sqlite database (by default 4096)
+            url: "/fda-510k-graph/devices-prepared.db" // url to the database (relative or full)
+        }
+    };
+
+    let maxBytesToRead = 10 * 1024 * 1024;
+
+    const worker = await createDbWorker(
+        [config],
+        workerUrl.toString(),
+        wasmUrl.toString(),
+        maxBytesToRead // optional, defaults to Infinity
+    );
+    // you can also pass multiple config objects which can then be used as separate database schemas with `ATTACH virtualFilename as schemaname`, where virtualFilename is also set in the config object.
+
+    // worker.db is a now SQL.js instance except that all functions return Promises.
+
+    // explain query plan 
+    const result = await worker.db.exec(`SELECT * FROM DEVICE WHERE k_number = ?;`, ["K223649"]);
+
+    // worker.worker.bytesRead is a Promise for the number of bytes read by the worker.
+    // if a request would cause it to exceed maxBytesToRead, that request will throw a SQLite disk I/O error.
+    console.log(await worker.worker.bytesRead);
+    // console.log(result);
+
+    // you can reset bytesRead by assigning to it:
+    worker.worker.bytesRead = 0;
+
+    const row = result[0].values[0]
+
+    console.log("row", row)
+
+    return {
+        id: row[0],
+        date: row[1],
+        generic_name: row[2],
+        name: row[3],
+        product_code: row[4]
+    }
+}
+
+
+const fetchData = async () => {
+    // sadly there's no good way to package workers and wasm directly so you need a way to get these two URLs from your bundler.
+    // This is the webpack5 way to create a asset bundle of the worker and wasm:
+    const workerUrl = new URL(
+        "sql.js-httpvfs/dist/sqlite.worker.js",
+        import.meta.url,
+    );
+    const wasmUrl = new URL(
+        "sql.js-httpvfs/dist/sql-wasm.wasm",
+        import.meta.url,
+    );
+    // the legacy webpack4 way is something like `import wasmUrl from "file-loader!sql.js-httpvfs/dist/sql-wasm.wasm"`.
+
+    // the config is either the url to the create_db script, or a inline configuration:
+    const config: any = {
+        from: "inline",
+        config: {
+            serverMode: "full", // file is just a plain old full sqlite database
+            requestChunkSize: 16384, // the page size of the  sqlite database (by default 4096)
+            url: "/fda-510k-graph/devices-prepared.db" // url to the database (relative or full)
+        }
+    };
+
+    let maxBytesToRead = 10 * 1024 * 1024;
+
+    const worker = await createDbWorker(
+        [config],
+        workerUrl.toString(),
+        wasmUrl.toString(),
+        maxBytesToRead // optional, defaults to Infinity
+    );
+    // you can also pass multiple config objects which can then be used as separate database schemas with `ATTACH virtualFilename as schemaname`, where virtualFilename is also set in the config object.
+
+    // worker.db is a now SQL.js instance except that all functions return Promises.
+
+    // explain query plan 
+    const result = await worker.db.exec(`WITH RECURSIVE
+    ancestor(n) AS (
+      VALUES(?)
+      UNION ALL
+      SELECT node_from FROM predicate_graph_edge, ancestor
+       WHERE predicate_graph_edge.node_to=ancestor.n
+    )
+    SELECT node_from,node_to,k_number,date_received,generic_name,device_name,product_code FROM predicate_graph_edge
+    JOIN device ON node_from = device.k_number WHERE predicate_graph_edge.node_to IN ancestor;`, ["K223649"]);
+
+    // worker.worker.bytesRead is a Promise for the number of bytes read by the worker.
+    // if a request would cause it to exceed maxBytesToRead, that request will throw a SQLite disk I/O error.
+    console.log(await worker.worker.bytesRead);
+    // console.log(result);
+
+    // you can reset bytesRead by assigning to it:
+    worker.worker.bytesRead = 0;
+
+    const seenLinks = new Set()
+
+    const links = result[0].values.map((row) => {
+        const key = row[0] + "|" + row[1]
+        if (seenLinks.has(key)) {
+            return null
+        }
+        seenLinks.add(key)
+        return { source: row[0], target: row[1] }
+    }).filter((x: any) => x != null)
+
+    const seenNodes = new Set()
+
+    const nodes = result[0].values.map((row) => {
+        if (seenNodes.has(row[2])) {
+            return null
+        }
+        seenNodes.add(row[2])
+        return {
+            id: row[2],
+            date: row[3],
+            generic_name: row[4],
+            name: row[5],
+            product_code: row[6]
+        }
+    }).filter((x: any) => x != null)
+
+    return { nodes, links }
+}
+
 export const DeviceGraph = () => {
     const [graphData, setGraphData] = useState<any>({ links: [], nodes: [] });
 
     const [selectedNode, setSelectedNode] = useState<string>("K223649");
-
-    const data = "/fda-510k-graph/d3_fda_510k_graph.json"
+    const [selectedNodeData, setSelectedNodeData] = useState({});
 
     useEffect(() => {
-        fetch("/fda-510k-graph/d3_fda_510k_graph.json").then(response => {
-            return response.json();
-        }).then(data => {
+        fetchData().then(data => {
             // Work with JSON data here
+            console.log(data)
             setGraphData(data);
+        }).catch(err => {
+            // Do something for an error here
+            console.log("Error Reading data " + err);
+        });
+
+        fetchSelectedNodeData().then(data => {
+            // Work with JSON data here
+            console.log(data)
+            setSelectedNodeData(data);
         }).catch(err => {
             // Do something for an error here
             console.log("Error Reading data " + err);
         });
     }, [])
 
-    const findNode = (nodeId: string) => {
-        return graphData.nodes.find((node: { id: string }) => node.id === nodeId)
-    }
+    const finalGraphData = graphData.nodes.length && selectedNodeData ? {nodes: [...graphData.nodes, selectedNodeData], links: graphData.links} : null;
 
-    const selectedNodeData = graphData.length ? null : findNode(selectedNode)
-
-    const findPredicates = (nodeId: string) => {
-        return graphData.links.filter((link: { source: string; target: string }) => link.target === nodeId)
-    }
-
-    const findSubgraph = (graphData: { nodes: any[], links: any[] }, nodeId: string) => {
-        const seen = new Set()
-
-        const tempEdges = []
-        const tempNodes = []
-
-        const device_tree = findPredicates(nodeId)
-
-        tempNodes.push(findNode(nodeId))
-        seen.add(nodeId)
-
-        while (device_tree.length) {
-            const { target, source } = device_tree.pop()
-            if (!seen.has(target)) {
-                tempNodes.push(findNode(target))
-                seen.add(target)
-            }
-
-            if (!seen.has(source)) {
-                tempNodes.push(findNode(source))
-                seen.add(source)
-
-                const sourcePredicates = findPredicates(source)
-                device_tree.push(...sourcePredicates)
-                tempEdges.push({ source, target })
-            }
-        }
-
-        return { nodes: tempNodes, links: tempEdges }
-    }
-
-    console.log(graphData, selectedNode)
-
-    const finalData = findSubgraph(graphData, selectedNode);
-
-    const [width, height] = useWindowSize()
+    console.log(finalGraphData)
 
     return <>
         <SearchInput onInputChange={setSelectedNode}></SearchInput>
@@ -103,15 +211,13 @@ export const DeviceGraph = () => {
             <span>Generic Name: {graphData?.product_descriptions?.[selectedNodeData?.product_code]}</span>
         </div>
 
-        <ForceGraph
-            graphData={finalData}
-            nodeLabel={node => `ID: ${node.id}<br>Date: ${node.date}<br>Category: ${node.product_code}`}
+        {finalGraphData ? <ForceGraph
+            graphData={finalGraphData}
+            nodeLabel={node => `Name: ${node.name}<br>ID: ${node.id}<br>Date: ${node.date}<br>Category: ${node.product_code}`}
             nodeAutoColorBy="product_code"
             linkDirectionalArrowLength={3.5}
             linkDirectionalArrowRelPos={1}
             dagMode="radialin"
-            width={width - 50}
-            height={height - 200}
             dagLevelDistance={20}
             nodeVal={(node: any) => node.id === selectedNode ? 10 : 1}
             nodeCanvasObject={(node, ctx, globalScale) => {
@@ -136,7 +242,7 @@ export const DeviceGraph = () => {
 
                 node.__bckgDimensions = bckgDimensions; // to re-use in nodePointerAreaPaint
             }}
-        />
+        /> : <p>Loading...</p>}
     </>
 };
 
