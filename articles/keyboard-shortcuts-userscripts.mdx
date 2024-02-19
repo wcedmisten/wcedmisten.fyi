@@ -131,7 +131,7 @@ If there are multiple results, the website displays a table with each 510k numbe
 
 ![Single Result](/keyboard-shortcuts-userscripts/multiple-results.png)
 
-In our code, we the URL for the string `?ID=`, which is only present on the single-result details page.
+In our code, we check the URL for the string `?ID=`, which is only present on the single-result details page.
 
 ```javascript
 if (location.href.includes("?ID=")) {
