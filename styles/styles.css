@@ -215,3 +215,13 @@ th {
         opacity: .3;
     }
 }
+
+/* Don't let long links overflow, because they will break
+the entire UI on mobile by making everything else smaller */
+.footnotes {
+    overflow: hidden;
+}
+
+a {
+    overflow: hidden;
+}
