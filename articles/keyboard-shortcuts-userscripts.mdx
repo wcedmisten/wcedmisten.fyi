@@ -1,0 +1,263 @@
+---
+title: "Adding Keyboard Shortcuts to a 24 Year Old Government Website with Userscripts"
+date: "2024-02-19"
+thumbnail: "/keyboard-shortcuts-userscripts/fda-510k-2000.png"
+thumbnailAlt: "A screenshot of the FDA's 510k databse in October, 2000"
+description: "Writing userscripts to optimize my data entry workflow with the FDA's 510k database."
+tags: ["javascript", "userscripts", "510k"]
+---
+
+## Background
+
+For the past year, I've been cleaning the data from the FDA's 510k database. [^510k-database]
+
+This database contains applications for the 510k program, the FDA's clearance process
+that is used for 99% of human medical devices. [^510k-study]
+
+A search on archive.org [^archive-search]
+reveals that this website has existed since at least October 18, 2000.
+In fact, we can even see what it looked like. Complete with the official comic sans logo at the top.
+
+![screenshot of the FDA 510k database in October, 2000](/keyboard-shortcuts-userscripts/fda-510k-2000.png)
+
+Here is the website as of 2024. Surpisingly, the appearance has not changed much in the last
+24 years.
+
+![screenshot of the FDA 510k database in 2024](/keyboard-shortcuts-userscripts/fda-510k-2024-02-16.png)
+
+The main interface seems almost unchanged since then, a living relic of a simpler time.
+Its styling is quite bare, and the pages are all server rendered.
+It contains almost no JavaScript, apart from some code for the date picker.
+
+Based on the `.cfm` file extension, it seems to be built from a 1995 tool called
+Adobe ColdFusion. [^cold-fusion]
+
+## Data entry
+
+To clean the data, I'm using the search functionality of the database to find medical devices by name.
+
+However, there are a few problems with the data that slow me down.
+
+The device and company names are not standardized, and may have abbreviations,
+acronyms, or plain old typos.
+The website's search functionality does not provide fuzzy string matching, so finding a device
+often takes some trial and error.
+My workflow involves me clicking on the search input box, entering a name (possibly several times),
+and then highlighting text with a mouse to copy it into another program.
+
+This process felt very inefficient. I have to move my hands from the mouse to the keyboard 
+and back multiple times for each search.
+
+I was manually searching for thousands of devices, so every step to optimize the process would be worth it.
+Plus, it's more fun to write code than do manual data entry, so this gave me an opportunity for a fun break.
+
+My goal was to extend the website's functionality so that I could do most of the tasks without leaving the keyboard.
+
+## Userscripts 
+
+What are userscripts? A userscript [^userscript]
+is basically a JavaScript program written to provide additional features to a website other than
+what the original developers intended.
+
+In this case, to provide keyboard shortcuts to the FDA's 510k database website.
+
+I wanted shortcuts for the following tasks:
+
+* opening the search page
+* focusing on the search input for "device name"
+* copying a device's 510K ID number
+
+### ViolentMonkey
+
+There are a number of browser extensions for supporting userscripts, but the one I used is a tool 
+called ViolentMonkey. It's an open source alternative to the more popular extension TamperMonkey.
+
+This tool basically provides a nice way to run custom JavaScript on different websites.
+It provides an in-browser JavaScript editor, and also allows users to install other people's 
+scripts from various userscript repositories.
+
+Luckily, because the website is fairly plain HTML, the code for writing these shortcuts was simple.
+
+### Shortcuts
+
+ViolentMonkey makes it very easy to register shortcuts with its shortcut extension [^vm-shortcut].
+With this one line in the header, I can easily register shortcuts:
+
+```
+// @require https://cdn.jsdelivr.net/npm/@violentmonkey/shortcut@1
+```
+
+### Opening the search page
+
+This was the simplest shortcut to write. We just set the location to the URL of the search page.
+When ctrl + alt + n is pressed, the tab is redirected to https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfPMN/pmn.cfm
+
+```javascript
+VM.shortcut.register('ctrl-alt-n', () => {
+  location.href = 'https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfPMN/pmn.cfm';
+});
+```
+
+### Focus on the search input
+
+After opening the search page, I'll want to focus on the device name input field.
+
+Here is the HTML tag for this input. The developers have helpfully given it an ID of `DeviceName`,
+so we can use `document.getElementById()` to find it on the page.
+
+```html
+<input type="text" name="DeviceName" id="DeviceName" size="20" maxlength="20">
+```
+
+Here's the userscript. We find the element, and then use `focus()` to put our browser focus on it.
+
+```javascript
+VM.shortcut.register('ctrl-alt-s', () => {
+  const input = document.getElementById("DeviceName");
+  input.focus();
+});
+```
+
+### Copying device ID
+
+The last shortcut is slightly more complex, because it has to handle two cases.
+Upon submitting the search form on the website, the next page could be rendered in two ways:
+
+If there is only one result, the website displays the details for that result, including the 510k number.
+
+![Single Result](/keyboard-shortcuts-userscripts/single-result.png)
+
+If there are multiple results, the website displays a table with each 510k number and a link to the details of each submission.
+
+![Single Result](/keyboard-shortcuts-userscripts/multiple-results.png)
+
+In our code, we the URL for the string `?ID=`, which is only present on the single-result details page.
+
+```javascript
+if (location.href.includes("?ID=")) {
+    // copy the ID from the details page
+} else {
+    // copy the results from the table
+}
+```
+
+Unfortunately, the HTML element that shows the device 510k number does not use the `id` HTML attribute.
+So instead, we'll need to use the xpath of that element.
+
+The xpath is basically a unique path that provides directions to a nested element in a document.
+If the element moves on the page, the xpath would no longer be accurate.
+Luckily, due to this page being server templated HTML, the element doesn't really move around on the page.
+If this was a modern JavaScript webapp, we would need a different approach.
+
+We can use Firefox's handy "copy xpath" option from the dev tools to quickly find this value.
+
+Now we can use `window.navigator.clipboard.writeText()` to copy the node's `innerText` value to our clipboard.
+
+So far we have:
+
+```javascript
+if (location.href.includes("?ID=")) {
+    // copy the ID from the details page
+    var xpath = '/html/body/div[3]/maxamineignore/div[2]/div[2]/span[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td';
+    var deviceId = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+    ).singleNodeValue.innerText;
+    
+    window.navigator.clipboard.writeText(deviceId);
+  } else {
+    // copy the last result from the table
+}
+```
+
+Now to handle the case where we have multiple responses.
+Sometimes we have multiple 510k submissions for the same device.
+I've arbitrarily been using the oldest one as a tiebreaker, so I'll write my script to do that too.
+
+Similar to before, we're using the xpath of the table to find it in the document.
+Then we find the last row in the table, and get its third child, the column containing the 510K number.
+Once we have this column, we get its first child, and write its text to the clipboard.
+
+```javascript
+  } else {
+    // copy the last result from the table
+    var xpath = '/html/body/div[3]/maxamineignore/div[2]/div[2]/span[2]/table[2]/tbody/tr/td/table/tbody';
+    var table = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+    ).singleNodeValue;
+
+    var tableLength = table.children.length;
+    var lastRow = table.children[tableLength-1]
+    
+    // get the ID from the last element
+    var deviceId = lastRow.children[2].firstChild.text;
+
+    window.navigator.clipboard.writeText(deviceId);
+  }
+```
+
+Finally, we wrap this in a callback for `VM.shortcut.register()` to get our final script.
+Now when I press ctrl + shift + c, the 510k number gets automatically written to my clipboard,
+saving me from having to manually highlight the 510k number with the mouse. 
+
+```javascript
+VM.shortcut.register('ctrl-shift-c', () => {
+  if (location.href.includes("?ID=")) {
+    // copy the ID from the details page
+    var xpath = '/html/body/div[3]/maxamineignore/div[2]/div[2]/span[2]/table[2]/tbody/tr/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td';
+    var deviceId = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+    ).singleNodeValue.innerText;
+
+    window.navigator.clipboard.writeText(deviceId);
+  } else {
+    // copy the last result from the table
+    var xpath = '/html/body/div[3]/maxamineignore/div[2]/div[2]/span[2]/table[2]/tbody/tr/td/table/tbody';
+    var table = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+    ).singleNodeValue;
+
+    var tableLength = table.children.length;
+    var lastRow = table.children[tableLength-1]
+
+    // get the ID from the last element
+    var deviceId = lastRow.children[2].firstChild.text;
+
+    window.navigator.clipboard.writeText(deviceId);
+  }
+});
+```
+
+## Conclusion
+
+If you find yourself burdened with some repetitive task on a website, I highly recommend trying to
+automate some of it with userscripts.
+
+The cool part is that you can take this into your own hands and save yourself some time.
+
+It's hard to quantify how much time I've saved myself here, but my workflow is definitely
+easier now that I have to take my hands off the keyboard less.
+
+#
+
+[^510k-study]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10465388/
+[^510k-database]: https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm
+[^archive-search]: https://web.archive.org/web/20001015000000*/https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm
+[^cold-fusion]: https://en.wikipedia.org/wiki/Adobe_ColdFusion
+[^userscript]: https://en.wikipedia.org/wiki/Userscript
+[^vm-shortcut]: https://github.com/violentmonkey/vm-shortcut
