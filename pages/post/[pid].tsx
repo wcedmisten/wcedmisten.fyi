@@ -116,7 +116,8 @@ export async function getStaticProps({ params }: { params: any }) {
                 title: meta.title,
                 image: `https://wcedmisten.fyi${meta.thumbnail}`,
                 type: "article",
-                url: `https://wcedmisten.fyi/post/${source.filename}/`
+                url: `https://wcedmisten.fyi/post/${source.filename}/`,
+                description: meta.description
             }
         },
     }

@@ -9,6 +9,7 @@ interface OpenGraph {
     image: string;
     type: string;
     url: string;
+    description: string;
 }
 
 interface LayoutProps {
@@ -22,13 +23,14 @@ const Layout: React.FC<LayoutProps> = ({
 }) => (
     <>
         <Head>
-            <title>William Edmisten</title>
-            <meta name="description" content="William Edmisten" />
+            <title>{opengraph?.title || "William Edmisten"}</title>
+            <meta name="description" content={opengraph?.description || "William Edmisten's personal developer blog."} />
             {opengraph && <>
                 <meta property="og:title" content={opengraph.title} />
                 <meta property="og:type" content={opengraph.type} />
                 <meta property="og:image" content={opengraph.image} />
                 <meta property="og:url" content={opengraph.url} />
+                {opengraph?.description && <meta property="og:description" content={opengraph.description} />}
             </>}
             <link rel="icon" href="/favicon.ico" />
             <link
