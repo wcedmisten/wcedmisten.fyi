@@ -1,0 +1,182 @@
+---
+title: "A Copy of a Copy of a Copy: the Story of FDA Medical Device Clearances"
+date: "2024-03-03"
+thumbnail: "/medical-device-analysis/thumbnail.png"
+thumbnailAlt: ""
+description: "What I found by spending a year cleaning medical device data from the FDA."
+tags: ["python", "sqlite", "510k"]
+---
+
+## Introduction
+
+Back in the Fall of 2022, I watched the 2018 documentary The Bleeding Edge[^the-bleeding-edge],
+which investigates the FDA's medical device clearance process, and a few cases where medical device defects
+slipped through the cracks and resulted in severe patient injuries.
+
+Watching this documentary made me want to know just how many recalled devices provide the
+substantial equivalence for currently marketed devices. And I found that the FDA does not
+publish this information directly.
+
+Until 1976, medical devices were not regulated by the FDA. However, a 
+1976 amendment to the Federal Food, Drug, and Cosmetic Act[^food-drug-cosmetic-act] extended
+the FDA's jurisdiction to include medical devices.
+The 1976 amendment established 3 classes of medical devices: Class I, Class II, and Class III,
+ordered by level of risk to the patient.
+
+For example, latex examination gloves are a Class I device (low risk),
+but a pacemaker is a Class III device (high risk). Devices like joint implants and tooth fillings fall
+somewhere in the middle at Class II.
+
+There are a few pathways for device manufacturers to begin selling their device.[^device-pathways]
+I won't get into all of them, but the main pathways are PMA or 510(k).
+
+### PMA
+
+Premarket Approval (PMA) is a more thorough process which requires a clinical trial to 
+demonstrate that the device is safe and effective.
+All class III devices must go through this approval process to be legally marketed.
+However, only 1% [^510k-study] of medical device are cleared through this process.
+
+### 510(k)
+
+The 510(k) process provides a faster route to marketing a new device.
+New devices are allowed to be marketed if it is shown that they are "substantially equivalent"
+to a legally marketed device, and are either Class I or Class II.
+This process does not necessarily require a clinical trial to demonstrate safety or effectivenss,
+the applicant need only show that the device is equivalent to something legally on the market already.
+The device already on the market is referred to as the "predicate" device.
+
+There are a few different categories of predicate device.
+The predicate could be a pre-amendment device, meaning something that was on the market before 1976.
+Or, it could be a device that received Premarket Approval.
+
+Lastly, the predicate device could be itself have been cleared by the 510(k) process.
+
+This last detail is what sparked my curiosity.
+
+The implication is that a device could be equivalent to some long chain of 510(k) cleared
+devices, without any of these devices requiring a clinical trial.
+
+## Wait it's just a graph?
+
+This is where I had to dust off my computer science knowledge.
+We can model this as a graph, where each 510(k) submission is a node,
+and the predicate relationship is an edge.
+A device may use multiple predicates in their application.
+
+For example, if device A has predicate devices X and Y, the graph might look like this:
+
+![graph of predicates to a device](/medical-device-analysis/predicate-graph.png)
+
+We could imagine this extending out across dozens or hundreds of devices in
+a 510(k)'s "ancestry".
+
+## Finding the data
+
+The next problem I had was how to find the data.
+There were two sources for FDA 510(k) data that I found:
+The Premarket Notification Database[^pmn-database] and even better, the
+OpenFDA API dataset[^fda-api-dataset], which provided everything as a single
+JSON file.
+
+Great! I thought, this data will be perfect for mapping out predicate devices as a graph.
+
+Except for one issue: the data does not include predicate devices.
+
+As it turns out, the only way to find the predicates of a given device are by checking if a 
+PDF summary of the application is available, and if so, going and looking at it manually.
+
+As of March 2024, there are 85,791 510(k) applications with summaries available, so doing this
+manually was just not going to work.
+
+Another problem is that the FDA does not provide a dataset containing all of these PDFs, like they do
+with the API data.
+
+So, left with no other option, I decided to scrape the FDA's website to download all 85,791 PDFs.
+
+## Scraping PDFs
+
+I used Python and BeautifulSoup to scrape the database.
+Each entry in the database has a link to the summary PDF file.
+
+![device database](/medical-device-analysis/database-screenshot.png)
+
+The "Summary" link goes to a PDF file hosted on the FDA's website.
+
+![device summary PDF](/medical-device-analysis/device-summary-screenshot.png)
+
+With beautifulSoup, it was fairly simple to search for the word summary to find this link:
+
+
+```python
+from bs4 import BeautifulSoup
+
+soup = BeautifulSoup(response.data, features="html.parser")
+summary = soup.find("a", string="Summary")
+url = summary.attrs.get("href")
+```
+
+Once I had this link, I just downloaded each PDF and stored it locally.
+
+### Being a polite scraper
+
+The FDA's robots.txt includes the following lines:
+
+```
+Hit-rate: 30 # wait 30 seconds before starting a new URL request default=30
+Visiting-hours: 23:00EDT-05:00EDT #index this site between 11PM - 5AM EDT
+```
+
+Which means to be polite (and not get blocked), my scraper can only run between 11PM and 5AM (6 hours),
+and can only make a request every 30 seconds.
+
+This means we can only scrape 6 * 60 * (60 / 30) = 720 files per day.
+So it took 85,791 / 720 = 119 days to scrape every PDF.
+
+I just set up the scraper on a $6/mo DigitalOcean droplet and let it go to work,
+then I checked back in 4 months.
+
+## Parsing Predicates
+
+Now that I had all the PDFs, the next problem was parsing them.
+
+With the `pypdf` Python library, it was easy to grab the embedded text from each document.
+Once I had the embedded text, I just ran a regex match for strings with a K followed by 6 digits like K123456.
+There were also some common variations like using a # after the K, which I stripped out.
+
+However, I hit another issue with older summary documents.
+The older PDF documents did not have embedded text, because they were often scanned PDFs, 
+not digital.
+Using tesseract, I ran OCR on the PDFs where I could not find predicate device IDs.
+This worked pretty well, but the OCR quality was fairly low.
+
+Finally, for documents that were still missing predicates, I manually entered them 
+using a python script to display the PDF and accept the ID as input.
+
+Sometimes this required searching for the predicate manually by name in the database.
+
+Out of the 85,791 devices with summaries, I was able to find predicates for 63,389 (74%) devices.
+
+Sometimes the summary would omit the exact predicate used, or would provide a name that was 
+not specific enough to identify a 510(k) application.
+These I ignored.
+
+## Setting up a website
+
+Lastly, I set up a website to visualize all the data I collected.
+It can be found at [510k.fyi](https://www.510k.fyi/)
+
+It uses sqlite for the database, although I hope to upgrade to PostgreSQL soon.
+
+Surprisingly, sqlite handles graph queries surprisingly well, using a recursive CTE.
+I was thinking a dedicated graph DB like neo4j might be needed, but the performance
+so far has been great.
+
+# 
+
+[^the-bleeding-edge]: https://en.wikipedia.org/wiki/The_Bleeding_Edge
+[^food-drug-cosmetic-act]: https://en.wikipedia.org/wiki/Federal_Food,_Drug,_and_Cosmetic_Act
+[^device-pathways]: https://www.fda.gov/medical-devices/device-advice-comprehensive-regulatory-assistance/how-study-and-market-your-device
+[^510k-study]: https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/227466
+[^pmn-database]: https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfpmn/pmn.cfm
+[^fda-api-dataset]: https://open.fda.gov/apis/device/510k/download/
