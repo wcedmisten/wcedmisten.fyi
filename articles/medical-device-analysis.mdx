@@ -3,23 +3,40 @@ title: "A Copy of a Copy of a Copy: the Story of FDA Medical Device Clearances"
 date: "2024-03-03"
 thumbnail: "/medical-device-analysis/thumbnail.png"
 thumbnailAlt: ""
-description: "What I found by spending a year cleaning medical device data from the FDA."
+description: "What I found uncovering medical device data from the FDA's 510k database."
 tags: ["python", "sqlite", "510k"]
 ---
 
-## Introduction
+## Motivation
 
 Back in the Fall of 2022, I watched the 2018 documentary The Bleeding Edge[^the-bleeding-edge],
 which investigates the FDA's medical device clearance process, and a few cases where medical device defects
 slipped through the cracks and resulted in severe patient injuries.
 
-Watching this documentary made me want to know just how many recalled devices provide the
-substantial equivalence for currently marketed devices. And I found that the FDA does not
-publish this information directly.
+![The Bleeding Edge Poster - Copyright imdb](/medical-device-analysis/the-bleeding-edge.png)
 
-Until 1976, medical devices were not regulated by the FDA. However, a 
-1976 amendment to the Federal Food, Drug, and Cosmetic Act[^food-drug-cosmetic-act] extended
-the FDA's jurisdiction to include medical devices.
+The documentary made me want to know if there could be other devices like this
+that haven't gotten the publicity yet, but I found that there was no public
+data available that would answer my questions.
+
+So I put on my detective hat and began investigating the data that was available.
+
+Before I dive into the details, it's important to know a little backstory on
+how medical devices get regulated in America.
+
+### A Brief History of Medical Device Regulation
+
+Before 1938, there were a few laws regulating food and drug quality, but 
+the Federal government did not have much authority to enforce them.
+
+In 1938, the Federal Food, Drug, and Cosmetic Act[^food-drug-cosmetic-act]
+was signed into law, granting the FDA (Food and Drug Administration) much 
+more authority to regulate food and drugs, and requiring a pre-market 
+review for new drugs to verify safety and effectiveness.
+
+Until 1976, however, medical devices were not regulated by the FDA.
+In 1976, an amendment to the Federal Food, Drug, and Cosmetic Act
+extended the FDA's jurisdiction to include medical devices.
 The 1976 amendment established 3 classes of medical devices: Class I, Class II, and Class III,
 ordered by level of risk to the patient.
 
@@ -54,8 +71,10 @@ Lastly, the predicate device could be itself have been cleared by the 510(k) pro
 
 This last detail is what sparked my curiosity.
 
-The implication is that a device could be equivalent to some long chain of 510(k) cleared
-devices, without any of these devices requiring a clinical trial.
+A cleared device could be equivalent to some long chain of 510(k) cleared
+devices, without any of these devices requiring a clinical trial!
+
+This was not how I expected medical devices to be cleared for the market.
 
 ## Wait it's just a graph?
 
@@ -89,14 +108,14 @@ PDF summary of the application is available, and if so, going and looking at it 
 As of March 2024, there are 85,791 510(k) applications with summaries available, so doing this
 manually was just not going to work.
 
-Another problem is that the FDA does not provide a dataset containing all of these PDFs, like they do
+Another problem is that the FDA does not provide a single dataset containing all of these PDFs, like they do
 with the API data.
 
 So, left with no other option, I decided to scrape the FDA's website to download all 85,791 PDFs.
 
 ## Scraping PDFs
 
-I used Python and BeautifulSoup to scrape the database.
+I used Python's BeautifulSoup library to scrape the database.
 Each entry in the database has a link to the summary PDF file.
 
 ![device database](/medical-device-analysis/database-screenshot.png)
@@ -163,14 +182,81 @@ These I ignored.
 
 ## Setting up a website
 
-Lastly, I set up a website to visualize all the data I collected.
-It can be found at [510k.fyi](https://www.510k.fyi/)
+Lastly, I set up a website to visualize all the data I collected: [510k.fyi](https://www.510k.fyi/)
 
-It uses sqlite for the database, although I hope to upgrade to PostgreSQL soon.
+The website is open source, free to use, and requires no account. Check it out!
 
-Surprisingly, sqlite handles graph queries surprisingly well, using a recursive CTE.
+The tech stack for this website is:
+
+* Python and FastAPI for the backend
+* sqlite for the database (although I plan to switch to PostgreSQL later)
+* NextJS and React for the frontend
+
+The most interesting part of this setup is using sqlite instead of a graph database.
 I was thinking a dedicated graph DB like neo4j might be needed, but the performance
-so far has been great.
+so far with sqlite has been great.
+
+My schema looks like this:
+
+```sql
+CREATE TABLE predicate_graph_edge(node_from TEXT,node_to TEXT,
+FOREIGN KEY(node_from) REFERENCES device(k_number),
+FOREIGN KEY(node_to) REFERENCES device(k_number),
+PRIMARY KEY(node_from, node_to));
+```
+
+In other words, the predicate_graph_edge table holds all edges (relationships from predicate devices to the new device).
+These edge columns are also foreign keys to the `device` table, which represent the nodes in our graph.
+
+Using a recursive CTE, we can query for all the predicate ancestors of a given device.
+This query will return all the edges.
+
+```sql
+WITH RECURSIVE ancestor(n)
+AS (
+    VALUES(?)
+    UNION
+    SELECT node_from FROM predicate_graph_edge, ancestor
+    WHERE predicate_graph_edge.node_to=ancestor.n
+)
+SELECT node_to, node_from
+FROM predicate_graph_edge
+WHERE predicate_graph_edge.node_to IN ancestor
+```
+
+But we also want the node data, so we can embed this in a subquery and JOIN it on the 
+device table (and the recalls table).
+
+```sql
+SELECT device.k_number, recall_id, recall.reason_for_recall
+FROM (
+    WITH RECURSIVE ancestor(n)
+    AS (
+        VALUES(?)
+        UNION
+        SELECT node_from FROM predicate_graph_edge, ancestor
+        WHERE predicate_graph_edge.node_to=ancestor.n
+    )
+    SELECT node_to, node_from
+    FROM predicate_graph_edge
+    WHERE predicate_graph_edge.node_to IN ancestor
+) ancestry
+JOIN device ON ancestry.node_from = device.k_number
+LEFT JOIN device_recall ON device_recall.k_number = device.k_number
+LEFT JOIN recall ON device_recall.recall_id = recall.id;
+```
+
+The `?` in this case would be replaced with the root device in question.
+
+For a nontrivial query (327 rows),
+
+Using sqlite's `.timer on` command, we can see how fast the query is:
+
+```
+Run Time: real 0.155 user 0.135287 sys 0.019959
+```
+
+You can also see this data visualized [here](https://www.510k.fyi/devices/?id=K121623)
 
 # 
 
