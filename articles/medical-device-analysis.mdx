@@ -3,20 +3,30 @@ title: "A Copy of a Copy of a Copy: the Story of FDA Medical Device Clearances"
 date: "2024-03-03"
 thumbnail: "/medical-device-analysis/thumbnail.png"
 thumbnailAlt: ""
-description: "What I found uncovering medical device data from the FDA's 510k database."
+description: "What I found uncovering medical device ancestry from the FDA's 510k data."
 tags: ["python", "sqlite", "510k"]
 ---
 
 ## Motivation
 
-Back in the Fall of 2022, I watched the 2018 documentary The Bleeding Edge[^the-bleeding-edge],
-which investigates the FDA's medical device clearance process, and a few cases where medical device defects
-slipped through the cracks and resulted in severe patient injuries.
+Back in the Fall of 2022, I watched the 2018 documentary *The Bleeding Edge*[^the-bleeding-edge],
+which investigates the FDA's medical device clearance process.
+I was surprised to learn that for many devices, clinical trials are not required.
+
+The documentary scrutinizes the FDA's 510(k) clearance process,
+through which some devices can be fast-tracked for use if they are 
+"substantially equivalent" to an existing device,
+even without a clinical trial.
+
+I was shocked to learn that several of these devices led to patient injuries including
+bleeding, organ puncture, and even cobalt poisoning.
 
 ![The Bleeding Edge Poster - Copyright imdb](/medical-device-analysis/the-bleeding-edge.png)
 
-The documentary made me want to know if there could be other devices like this
-that haven't gotten the publicity yet, but I found that there was no public
+Although the documentary led to some of these devices being pulled off the market [^essure],
+I wanted to know if there could be other devices that haven't
+gotten the publicity yet.
+But after some research, I found that there was no public
 data available that would answer my questions.
 
 So I put on my detective hat and began investigating the data that was available.
@@ -31,7 +41,7 @@ the Federal government did not have much authority to enforce them.
 
 In 1938, the Federal Food, Drug, and Cosmetic Act[^food-drug-cosmetic-act]
 was signed into law, granting the FDA (Food and Drug Administration) much 
-more authority to regulate food and drugs, and requiring a pre-market 
+more authority and requiring a pre-market 
 review for new drugs to verify safety and effectiveness.
 
 Until 1976, however, medical devices were not regulated by the FDA.
@@ -65,7 +75,7 @@ The device already on the market is referred to as the "predicate" device.
 
 There are a few different categories of predicate device.
 The predicate could be a pre-amendment device, meaning something that was on the market before 1976.
-Or, it could be a device that received Premarket Approval.
+It could also be a device that received Premarket Approval.
 
 Lastly, the predicate device could be itself have been cleared by the 510(k) process.
 
@@ -261,6 +271,7 @@ You can also see this data visualized [here](https://www.510k.fyi/devices/?id=K1
 # 
 
 [^the-bleeding-edge]: https://en.wikipedia.org/wiki/The_Bleeding_Edge
+[^essure]: https://en.wikipedia.org/wiki/Essure
 [^food-drug-cosmetic-act]: https://en.wikipedia.org/wiki/Federal_Food,_Drug,_and_Cosmetic_Act
 [^device-pathways]: https://www.fda.gov/medical-devices/device-advice-comprehensive-regulatory-assistance/how-study-and-market-your-device
 [^510k-study]: https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/227466
