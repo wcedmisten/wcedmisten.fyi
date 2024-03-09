@@ -11,8 +11,8 @@ function AboutPage() {
                     </p>
 
                     <p>
-                        I graduated from Virginia Tech with a B.S.
-                        in Computer Science.
+                        I have a Bachelor of Science
+                        in Computer Science from Virginia Tech.
                     </p>
 
                     <p>I frequently start hobby projects, and I'm hoping this blog
@@ -23,10 +23,6 @@ function AboutPage() {
 
                     <p>
                         I often write about Python, OpenStreetMap, web scraping, and data visualization.
-                    </p>
-
-                    <p>
-                        My other hobbies include programming, gardening, cooking, and hiking.
                     </p>
 
                     <p>
@@ -41,7 +37,7 @@ function AboutPage() {
                         src="/william.jpg"
                         rounded={true}
                         fluid={true}
-                        alt="William pointing at a lime tree at Lewis Ginter Botanical Gardens" />
+                        alt="William in front of a sunset" />
                 </Col>
             </Row>
         </Container>
