@@ -196,7 +196,7 @@ join it against the device data found in the API dump.
 
 ## Answering some questions
 
-## How many predicates does a device have on average?
+### How many predicates does a device have on average?
 
 Let's fetch the edges from the database and load them into a networkx graph.
 
@@ -254,13 +254,9 @@ which we can see by checking a logarithm-scaled histogram of the degrees.
 
 ![Graph showing the histogram of node degrees](/medical-device-analysis/degree-histogram.png)
 
-### How many non-recalled devices are predicated on a recalled device?
-
-
-
 ## Setting up a website
 
-Lastly, I set up a website to visualize all the data I collected: [510k.fyi](https://www.510k.fyi/)
+To make this data more accessible to anyone, I set up a website to visualize it: [510k.fyi](https://www.510k.fyi/)
 
 The website is open source, free to use, and requires no account. Check it out!
 
@@ -268,7 +264,7 @@ The tech stack for this website is:
 
 * Python and FastAPI for the backend
 * sqlite for the database (although I plan to switch to PostgreSQL later)
-* NextJS and React for the frontend
+* NextJS and React for the frontend, along with react-force-graph for visualizing the data
 
 The most interesting part of this setup is using sqlite instead of a graph database.
 I was thinking a dedicated graph DB like neo4j might be needed, but the performance
