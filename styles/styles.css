@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Roboto';
     src: url('/fonts/Roboto/Roboto-Regular.ttf');
@@ -12,7 +11,7 @@
     font-weight: 400;
     font-style: bold;
 }
-  
+
 @font-face {
     font-family: 'Roboto Mono';
     src: url('/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf');
@@ -47,7 +46,8 @@ body {
     margin: 0 auto;
 }
 
-p, li {
+p,
+li {
     font-family: 'Roboto';
     font-size: 1.1em;
 }
@@ -144,7 +144,7 @@ th {
     position: absolute;
     left: 10px;
     z-index: 1;
-    overflow-y:auto;
+    overflow-y: auto;
     max-height: 400px;
 }
 
@@ -169,7 +169,7 @@ th {
     cursor: pointer;
 }
 
-    
+
 .legend-element {
     background-color: #fff;
     display: flex;
@@ -186,7 +186,8 @@ th {
 }
 
 .maplibregl-ctrl-bottom-right {
-    background-color: rgba(0,0,0,0);;
+    background-color: rgba(0, 0, 0, 0);
+    ;
 }
 
 @media only screen and (max-width: 768px) {
@@ -201,16 +202,14 @@ th {
         font-family: sans-serif;
         position: absolute;
         z-index: 1;
-        top:auto;
-        width: 45%;
-        bottom: 30px;
+        top: auto;
         max-height: 200px;
     }
-    
+
     .legend h4 {
         margin: 0 0 10px;
     }
-    
+
     .legend div span {
         border-radius: 50%;
         display: inline-block;

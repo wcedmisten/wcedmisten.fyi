@@ -2369,5 +2369,20 @@
             "text-halo-width": 1
         },
         "minzoom": 7
+    },
+    {
+        "id": "hospital_symbol",
+        "type": "symbol",
+        "source": "hospitals",
+        "layout": {
+            "icon-image": "hospitalMarker",
+            "icon-size": 0.5,
+            "icon-allow-overlap": true
+        },
+        "paint": {
+            "icon-color": "rgb(24, 26, 24)"
+        },
+        "maxzoom": 7,
+        "minzoom": 0
     }
 ]

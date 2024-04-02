@@ -1,14 +1,49 @@
 import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
 
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+
 import maplibregl from "maplibre-gl";
 import * as pmtiles from "pmtiles";
 import layer from "./positron_style.json"
 import hospitals from "./hospitals_layer.json"
 import voronoi from "./voronoi.json"
+import Accordion from 'react-bootstrap/Accordion';
 
 // const [initialLon, initialLat] = [41.1533, 20.1683]
-const [initialLon, initialLat] = [-76.5059133431, 37.6227077717]
+const [initialLon, initialLat] = [-76.5059133431, 37.6227077717];
+
+function InfoModal({ show, handleClose }: { show: boolean; handleClose: any }) {
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>About</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>This project uses OpenStreetMap data to find all the hospitals in Virginia and
+          calculates a{' '}
+          <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" target="_blank">voronoi diagram</a>
+          {' '}
+          to show the region that is closest to each hospital,
+          representing a hospital's "territory".
+        </p>
+        <p>Regions are color-coded by the hospital network that runs the hospital.</p>
+        <p>This shows which areas have more competition between hospital networks.</p>
+
+        <p>For example, we can see the large swath of Southwest Virginia which is operated
+          by Ballad Health, which was recently featured in an{' '}
+          <a href="https://kffhealthnews.org/news/article/ballad-health-er-wait-times-copa-monopoly-appalachia-hospitals/"
+            target="_blank"
+          >
+            article about increased ER wait times
+          </a>.
+        </p>
+      </Modal.Body>
+    </Modal>
+  );
+}
+
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -82,20 +117,20 @@ const Map = () => {
     map.current.on('click', 'voronoi', (e) => {
       new maplibregl.Popup()
         .setLngLat(e.lngLat)
-        .setHTML(e.features[0].properties.operator)
-        .addTo(map.current);
+        .setHTML(e?.features?.[0]?.properties?.operator)
+        .addTo(map.current as any);
 
-      if (e.features[0].properties.operator === "UNKNOWN") {
-        map.current.setPaintProperty(
+      if (e?.features?.[0]?.properties?.operator === "UNKNOWN") {
+        (map.current as any).setPaintProperty(
           "voronoi",
           'fill-opacity',
-          ['match', ['get', 'name'], e.features[0].properties.name, 0.5, 0.2]
+          ['match', ['get', 'name'], e?.features?.[0]?.properties?.name, 0.5, 0.1]
         );
       } else {
-        map.current.setPaintProperty(
+        (map.current as any).setPaintProperty(
           "voronoi",
           'fill-opacity',
-          ['match', ['get', 'operator'], e.features[0].properties.operator, 0.5, 0.2]
+          ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
         );
       }
 
@@ -103,12 +138,12 @@ const Map = () => {
 
     // Change the cursor to a pointer when the mouse is over the states layer.
     map.current.on('mouseenter', 'voronoi', () => {
-      map.current.getCanvas().style.cursor = 'pointer';
+      (map.current as any).getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a pointer when it leaves.
     map.current.on('mouseleave', 'voronoi', () => {
-      map.current.getCanvas().style.cursor = '';
+      (map.current as any).getCanvas().style.cursor = '';
     });
 
     map.current.fitBounds([
@@ -131,44 +166,53 @@ const Map = () => {
       // console.log("UNKNOWN!!!", e.properties.name)
       // colorMap[e.properties.name] = e.properties.color
     } else {
-      console.log("KNOWN!!!", e.properties.operator)
       colorMap[e.properties.operator] = e.properties.color
     }
   })
 
-  console.log(colorMap)
-
-  Object.entries(colorMap).forEach((operator, color) => { console.log(operator, color) })
+  console.log(showInfoModal)
 
   return (
     <div className="map-wrap">
+      <InfoModal show={showInfoModal} handleClose={() => setShowInfoModal(false)}></InfoModal>
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
-        <h2 style={{display: "inline-block"}}>Hospital Territory Map</h2>
-        <span style={{cursor: "pointer", "paddingLeft": "10px"}}>ⓘ</span>
-        <div className="legend-group">
-          {Object.entries(colorMap).map(([operator, color]) => {
-            return <><div className="legend-element"
-            onClick={() => {
-              map.current?.setPaintProperty(
-                "voronoi",
-                'fill-opacity',
-                ['match', ['get', 'operator'], operator, 0.5, 0.2]
-              );
-            }}>
-              <span
-                onClick={() => {
-                  map.current?.setPaintProperty(
-                    "voronoi",
-                    'fill-opacity',
-                    ['match', ['get', 'operator'], operator, 0.5, 0.2]
-                  );
-                }}
-                className="legend-color"
-                style={{ backgroundColor: color as any }} />{operator}</div>
-            </>
-          })}
-        </div>
+        <Accordion>
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>Hospital Territory Map</Accordion.Header>
+            <Accordion.Body>
+              <p
+                style={{ cursor: "pointer" }}
+                onClick={() => { setShowInfoModal(!showInfoModal) }}
+              >About ⓘ</p>
+              <p>Hospital Operators (click to focus)</p>
+              <div className="legend-group">
+                {Object.entries(colorMap).map(([operator, color]) => {
+                  return <><div className="legend-element"
+                    onClick={() => {
+                      map.current?.setPaintProperty(
+                        "voronoi",
+                        'fill-opacity',
+                        ['match', ['get', 'operator'], operator, 0.5, 0.1]
+                      );
+                    }}>
+                    <span
+                      onClick={() => {
+                        map.current?.setPaintProperty(
+                          "voronoi",
+                          'fill-opacity',
+                          ['match', ['get', 'operator'], operator, 0.5, 0.1]
+                        );
+                      }}
+                      className="legend-color"
+                      style={{ backgroundColor: color as any }} />{operator}</div>
+                  </>
+                })}
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+
       </div>
     </div>
   );
