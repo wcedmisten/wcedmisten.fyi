@@ -21,6 +21,8 @@ const Map = () => {
 
   const [zoom] = useState(4);
 
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
   useEffect(() => {
     if (map.current) return;
 
@@ -142,7 +144,8 @@ const Map = () => {
     <div className="map-wrap">
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
-        <h2>Hospital Territory Map</h2>
+        <h2 style={{display: "inline-block"}}>Hospital Territory Map</h2>
+        <span style={{cursor: "pointer", "paddingLeft": "10px"}}>ⓘ</span>
         <div className="legend-group">
           {Object.entries(colorMap).map(([operator, color]) => {
             return <><div className="legend-element"
