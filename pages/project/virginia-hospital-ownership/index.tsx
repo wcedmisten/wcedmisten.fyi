@@ -137,13 +137,27 @@ const Map = () => {
     });
 
     // Change the cursor to a pointer when the mouse is over the states layer.
-    map.current.on('mouseenter', 'voronoi', () => {
+    map.current.on('mouseenter', 'voronoi', (e) => {
       (map.current as any).getCanvas().style.cursor = 'pointer';
     });
+
+    map.current.on('mousemove', 'voronoi', (e) => {
+      (map.current as any).setPaintProperty(
+        "voronoi",
+        'fill-opacity',
+        ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
+      );
+    });
+
 
     // Change it back to a pointer when it leaves.
     map.current.on('mouseleave', 'voronoi', () => {
       (map.current as any).getCanvas().style.cursor = '';
+      (map.current as any).setPaintProperty(
+        "voronoi",
+        'fill-opacity',
+        0.5
+      );
     });
 
     map.current.fitBounds([
@@ -162,15 +176,10 @@ const Map = () => {
   const colorMap: any = {}
 
   voronoi.features.forEach((e) => {
-    if (e.properties.operator == "UNKNOWN") {
-      // console.log("UNKNOWN!!!", e.properties.name)
-      // colorMap[e.properties.name] = e.properties.color
-    } else {
+    if (e.properties.operator !== "UNKNOWN") {
       colorMap[e.properties.operator] = e.properties.color
     }
   })
-
-  console.log(showInfoModal)
 
   return (
     <div className="map-wrap">
@@ -239,7 +248,7 @@ export async function getStaticProps() {
   return {
     props: {
       opengraph: {
-        title: "Drive Time to Nearest Hospital in Virginia",
+        title: "Hospital Ownership in Virginia",
         image: "https://wcedmisten.fyi/og-images/virginia-hospital-ownership.png",
         type: "website",
         url: "https://wcedmisten.fyi/project/virginia-hospital-ownership"
