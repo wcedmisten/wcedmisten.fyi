@@ -71,6 +71,17 @@ const Map = () => {
         if (error) throw error;
         map.current?.addImage('hospitalMarker', image);
       })
+
+    map.current.fitBounds([
+      [
+        -127.66160226468281,
+        15.666577841851748
+      ], // southwestern corner of the bounds
+      [
+        -61.00992217769965,
+        52.83448773865328
+      ], // northeastern corner of the bounds
+    ]);
   });
 
   return (
