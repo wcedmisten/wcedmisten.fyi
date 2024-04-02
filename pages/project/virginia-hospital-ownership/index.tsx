@@ -223,8 +223,8 @@ export default function Isochrone() {
   return (
     <>
       <Head>
-        <title>Virginia Hospital Accessibility Map</title>
-        <meta name="description" content="A map visualizing the travel time by car to the nearest hospital in Virginia." />
+        <title>Virginia Hospital Territory Map</title>
+        <meta name="description" content="A map of hospital territory in Virginia and who controls it." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -240,9 +240,9 @@ export async function getStaticProps() {
     props: {
       opengraph: {
         title: "Drive Time to Nearest Hospital in Virginia",
-        image: "https://wcedmisten.fyi/og-images/virginia-hospital-distance.png",
+        image: "https://wcedmisten.fyi/og-images/virginia-hospital-ownership.png",
         type: "website",
-        url: "https://wcedmisten.fyi/project/virginia-hospital-distance"
+        url: "https://wcedmisten.fyi/project/virginia-hospital-ownership"
       }
     }
   }
