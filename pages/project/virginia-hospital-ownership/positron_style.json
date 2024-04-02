@@ -1592,7 +1592,7 @@
                 "get",
                 "color"
             ],
-            "fill-opacity": 0.3,
+            "fill-opacity": 0.5,
             "fill-outline-color": "rgb(28, 28, 27)"
         }
     },

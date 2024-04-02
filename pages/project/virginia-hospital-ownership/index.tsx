@@ -74,6 +74,41 @@ const Map = () => {
         if (error) throw error;
         map.current?.addImage('hospitalMarker', image);
       })
+
+    // When a click event occurs on a feature in the states layer, open a popup at the
+    // location of the click, with description HTML from its properties.
+    map.current.on('click', 'voronoi', (e) => {
+      new maplibregl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(e.features[0].properties.operator)
+        .addTo(map.current);
+
+      if (e.features[0].properties.operator === "UNKNOWN") {
+        map.current.setPaintProperty(
+          "voronoi",
+          'fill-opacity',
+          ['match', ['get', 'name'], e.features[0].properties.name, 0.5, 0.2]
+        );
+      } else {
+        map.current.setPaintProperty(
+          "voronoi",
+          'fill-opacity',
+          ['match', ['get', 'operator'], e.features[0].properties.operator, 0.5, 0.2]
+        );
+      }
+
+    });
+
+    // Change the cursor to a pointer when the mouse is over the states layer.
+    map.current.on('mouseenter', 'voronoi', () => {
+      map.current.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.current.on('mouseleave', 'voronoi', () => {
+      map.current.getCanvas().style.cursor = '';
+    });
+
   });
 
   return (
