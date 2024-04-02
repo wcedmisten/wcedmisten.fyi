@@ -56,7 +56,7 @@ const Map = () => {
       //     35.77320086387027],
       //   [-73.94080914265395,
       //     39.73148308878754]],
-      customAttribution: ["© OpenMapTiles", "© OpenStreetMap contributors"],
+      customAttribution: ["© OpenMapTiles", "© OpenStreetMap"],
     });
 
     if (!popup.current) {
@@ -109,11 +109,64 @@ const Map = () => {
       map.current.getCanvas().style.cursor = '';
     });
 
+    map.current.fitBounds([
+      [
+        -83.79043169282795,
+        36.53531313954011
+      ], // southwestern corner of the bounds
+      [
+        -74.96413368319128,
+        39.511129595313434
+      ], // northeastern corner of the bounds
+    ]);
+
   });
+
+  const colorMap: any = {}
+
+  voronoi.features.forEach((e) => {
+    if (e.properties.operator == "UNKNOWN") {
+      // console.log("UNKNOWN!!!", e.properties.name)
+      // colorMap[e.properties.name] = e.properties.color
+    } else {
+      console.log("KNOWN!!!", e.properties.operator)
+      colorMap[e.properties.operator] = e.properties.color
+    }
+  })
+
+  console.log(colorMap)
+
+  Object.entries(colorMap).forEach((operator, color) => { console.log(operator, color) })
 
   return (
     <div className="map-wrap">
       <div ref={mapContainer} className="map" />
+      <div id="state-legend" className="legend">
+        <h2>Hospital Territory Map</h2>
+        <div className="legend-group">
+          {Object.entries(colorMap).map(([operator, color]) => {
+            return <><div className="legend-element"
+            onClick={() => {
+              map.current?.setPaintProperty(
+                "voronoi",
+                'fill-opacity',
+                ['match', ['get', 'operator'], operator, 0.5, 0.2]
+              );
+            }}>
+              <span
+                onClick={() => {
+                  map.current?.setPaintProperty(
+                    "voronoi",
+                    'fill-opacity',
+                    ['match', ['get', 'operator'], operator, 0.5, 0.2]
+                  );
+                }}
+                className="legend-color"
+                style={{ backgroundColor: color as any }} />{operator}</div>
+            </>
+          })}
+        </div>
+      </div>
     </div>
   );
 }

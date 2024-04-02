@@ -144,6 +144,8 @@ th {
     position: absolute;
     left: 10px;
     z-index: 1;
+    overflow-y:auto;
+    max-height: 400px;
 }
 
 .legend h4 {
@@ -164,6 +166,7 @@ th {
     display: grid;
     column-gap: 15px;
     vertical-align: middle;
+    cursor: pointer;
 }
 
     
@@ -173,6 +176,7 @@ th {
     align-items: center;
     padding-bottom: 2px;
     padding-left: 10px;
+    cursor: pointer;
 }
 
 .legend-color {
@@ -200,6 +204,7 @@ th {
         top:auto;
         width: 45%;
         bottom: 30px;
+        max-height: 200px;
     }
     
     .legend h4 {
