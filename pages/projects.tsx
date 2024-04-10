@@ -12,7 +12,7 @@ function ProjectsPage() {
                     thumbnailAlt="A colored map showing hospital ownership in Virginia."
                     title="Virginia Hospital Ownership"
                     description="A visualization of hospital ownership in Virginia derived from OpenStreetMap data."
-                    date='2024-03-10' />
+                    date='2024-03-30' />
                 <PostItem
                     href="https://www.510k.fyi"
                     thumbnailURL="/medical-device-analysis/thumbnail.png"
