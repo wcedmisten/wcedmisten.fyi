@@ -16,6 +16,12 @@ interface PostItemProps {
     location?: string | JSX.Element
 }
 
+declare module "react" {
+    interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
+        fetchPriority?: 'high' | 'low' | 'auto';
+    }
+}
+
 export default function PostItem(props: PostItemProps
 ) {
     const { href, thumbnailURL, title, description, date, thumbnailAlt, readingLength, location } = props;
@@ -31,7 +37,7 @@ export default function PostItem(props: PostItemProps
                                         <Image
                                             src={thumbnailURL}
                                             fluid
-                                            width={"100%"}
+                                            width="400px"
                                             rounded
                                             alt={thumbnailAlt}
                                             className="post-thumbnail border" />
