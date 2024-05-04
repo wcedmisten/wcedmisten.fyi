@@ -226,12 +226,8 @@ th {
     }
 }
 
-/* Don't let long links overflow, because they will break
-the entire UI on mobile by making everything else smaller */
+/* Sometimes a URL won't have a natural place to break,
+this tells the browser it can break mid-word in a URL */
 .footnotes {
-    overflow: hidden;
-}
-
-a {
-    overflow: hidden;
+    overflow-wrap: break-word;
 }

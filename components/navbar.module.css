@@ -3,16 +3,11 @@
     margin-right: 10px;
 }
 
-.NavbarBrand {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.25rem;
-    padding: 0px 0px 0px 0px;
-}
-
 .Navbar {
     /* padding-bottom: 50px; */
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.5rem
+    font-family: 'Rowdies', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
 }
 
 .NavBarLogoText {

@@ -16,12 +16,10 @@ export default function NavbarHeader() {
                         <div>
                             <img
                                 alt=""
-                                src="/logo.png"
-                                width="50px"
-                                height="50px"
-                                className={style.NavbarImage}
+                                src="/owl-banner.svg"
+                                width="210px"
+                                height="80px"
                             />
-                            <p className={style.NavBarLogoText}>William Edmisten</p>
                         </div>
                     </Navbar.Brand>
                 </Link>
@@ -30,7 +28,7 @@ export default function NavbarHeader() {
                     aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                     <div className="d-flex justify-content-end">
-                        <Nav activeKey="/" onSelect={() => setExpanded(false)}>
+                        <Nav onSelect={() => setExpanded(false)}>
                             <Link href="/" passHref>
                                 <Nav.Link>Posts</Nav.Link>
                             </Link>
