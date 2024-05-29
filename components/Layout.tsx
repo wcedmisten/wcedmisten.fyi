@@ -39,6 +39,7 @@ const Layout: React.FC<LayoutProps> = ({
                 title="RSS Feed for wcedmisten.fyi"
                 href="/feed.xml"
             />
+            <script defer data-domain="wcedmisten.fyi" src="http://plausible.wcedmisten.dev/js/script.js"></script>
         </Head>
         <NavbarHeader />
         <main>{children}</main>
