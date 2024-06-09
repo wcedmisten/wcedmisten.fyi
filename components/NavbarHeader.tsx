@@ -41,6 +41,9 @@ export default function NavbarHeader() {
                             <Link href="/talks" passHref>
                                 <Nav.Link>Talks</Nav.Link>
                             </Link>
+                            <Link href="/william-edmisten-resume-2024.pdf" passHref>
+                                <Nav.Link>Résumé</Nav.Link>
+                            </Link>
                         </Nav>
                     </div>
                 </Navbar.Collapse>

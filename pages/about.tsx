@@ -26,6 +26,12 @@ function AboutPage() {
                     </p>
 
                     <p>
+                        I also run <a href="https://cvillecreativecoders.com/">
+                            C’ville Creative Coders
+                        </a>, a meetup group in Charlottesville, Virginia, meant for sharing projects we're working on.
+                    </p>
+
+                    <p>
                         You can contact me at <a href="mailto:wcedmisten@gmail.com?subject=Feedback on wcedmisten.fyi">
                             wcedmisten@gmail.com
                         </a> with
