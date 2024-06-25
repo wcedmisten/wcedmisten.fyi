@@ -87,6 +87,7 @@ code {
     margin: auto;
     max-width: 900px;
     padding: 15px;
+    overflow-y: auto;
 }
 
 .container-fluid {

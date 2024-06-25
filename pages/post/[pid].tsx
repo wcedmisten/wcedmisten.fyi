@@ -16,6 +16,7 @@ import PostMetadata from '../../components/PostMetadata';
 
 import style from './post.module.css'
 import './post.module.css'
+import { useEffect, useRef, useState } from 'react';
 
 const components = {
     img: (props: any) => (
@@ -31,20 +32,69 @@ const components = {
         <h1 className={style.PostH1} {...props} />
     ),
     h2: (props: any) => (
-        <h2 className={style.PostH2} {...props} />
+        <h2 className={style.PostH2} {...props} >
+            <a className={style.HeaderLink} href={"#" + props.id}>
+                {props.children}
+            </a>
+        </h2>
     ),
     h3: (props: any) => (
-        <h3 className={style.PostH3} {...props} />
-    )
+        <h3 className={style.PostH3} {...props} >
+            <a className={style.HeaderLink} href={"#" + props.id}>
+                {props.children}
+            </a>
+        </h3>
+    ),
+    h4: (props: any) => (
+        <h4 className={style.PostH4} {...props} >
+            <a className={style.HeaderLink} href={"#" + props.id}>
+                {props.children}
+            </a>
+        </h4>
+    ),
 };
 
-export default function TestPage(props: { source: any }) {
+export default function Post(props: { source: any }) {
     const source = props.source;
-    const metadata = source.mdx.frontmatter
+    const metadata = source.mdx.frontmatter;
+
+    const [windowHeight, setWindowHeight] = useState(0);
+    const [height, setHeight] = useState(0);
+    const [width, setWidth] = useState(0);
+    const pageRef = useRef(null);
+
+    const progressRef = useRef(null);
+    const [scrollPosition, setScrollPosition] = useState(0);
+
+    useEffect(() => {
+        setHeight((pageRef?.current as any)?.clientHeight);
+    })
+
+    useEffect(() => {
+        setWidth(window?.innerWidth);
+    })
+
+    useEffect(() => {
+        setWindowHeight(window?.innerHeight);
+    })
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    })
+
+    const handleScroll = () => {
+        setScrollPosition(window.scrollY);
+    };
+
+    const barWidth = scrollPosition === 0 ? 0 : ((scrollPosition + windowHeight) / height) * width;
 
     return (
         <>
-            <div className="post-wrapper">
+            <div className={style.ProgressContainer}>
+                <span className={style.ProgressBar} ref={progressRef} style={{ width: barWidth }}></span>
+            </div>
+            <div className="post-wrapper" ref={pageRef} onScroll={handleScroll}>
                 <h1>{metadata.title}</h1>
                 <PostMetadata date={metadata.date} readingLength={source.readingStats.text} />
                 <MDXRemote {...source.mdx} components={components} />

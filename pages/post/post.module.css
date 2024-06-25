@@ -1,6 +1,8 @@
 .PostImage {
     padding: 30px 0px 30px 0px;
-    margin: 0 auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     max-width: 100%;
 }
 
@@ -15,14 +17,60 @@
 .PostH1 {
     padding-top: 10px;
     padding-bottom: 20px;
+    font-size: 2em;
+    font-family: 'Rowdies', sans-serif;
 }
 
 .PostH2 {
     padding-top: 30px;
     padding-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color: #212529;
+}
+
+.HeaderLink {
+    text-decoration: none;
+    color: #212529;
+}
+
+.HeaderLink::after {
+    margin-left: 10px;
+    content: url('/icons/link.svg');
+    opacity: 50%;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .PostH3 {
     padding-top: 20px;
     padding-bottom: 15px;
+    font-size: 1.4em;
+    font-family: 'Roboto-Light', sans-serif;
+}
+
+.PostH4 {
+    font-size: 1.2em;
+    font-family: 'Roboto-Light', sans-serif;
+}
+
+
+.ProgressContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+    height: 5px;
+    display: block;
+    z-index: 1;
+}
+
+.ProgressBar {
+    background-color: #e55928;
+    width: 0%;
+    display: block;
+    height: inherit;
+    transition: "width 0.2s ease-in-out";
 }
