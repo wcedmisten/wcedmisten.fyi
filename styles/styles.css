@@ -114,9 +114,7 @@ figcaption {
 
 html,
 main,
-body,
-p,
-div {
+body {
     background-color: #f8f7f2;
 }
 

@@ -1,44 +1,29 @@
 import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
 
-import Modal from 'react-bootstrap/Modal';
+import * as d3 from "d3";
 
 import maplibregl from "maplibre-gl";
 import layer from "./positron_style.json"
 import sidewalks from "./sidewalks.json"
+import cville from "./cville.json"
+
+import colormap from 'colormap';
 
 const [initialLon, initialLat] = [-78.47932503996893, 38.030451563032585];
 
-function InfoModal({ show, handleClose }: { show: boolean; handleClose: any }) {
-  return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>About</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>This project uses OpenStreetMap data to find all the hospitals in Virginia and
-          calculates a{' '}
-          <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" target="_blank">voronoi diagram</a>
-          {' '}
-          to show the region that is closest to each hospital,
-          representing a hospital's "territory".
-        </p>
-        <p>Regions are color-coded by the hospital network that runs the hospital.</p>
-        <p>This shows which areas have more competition between hospital networks.</p>
 
-        <p>For example, we can see the large swath of Southwest Virginia which is operated
-          by Ballad Health, which was recently featured in an{' '}
-          <a href="https://kffhealthnews.org/news/article/ballad-health-er-wait-times-copa-monopoly-appalachia-hospitals/"
-            target="_blank"
-          >
-            article about increased ER wait times
-          </a>.
-        </p>
-      </Modal.Body>
-    </Modal>
-  );
+const popupHtml = (properties: any) => {
+  const street = `<p>🛣️ Street: <b>${properties.Street}</b></p>`
+  const cost = `<p>💲 Total Cost: <b>${properties["Total Cost"].replace(" ", "")}</b></p>`
+  const length = `<p>📏 Length: <b>${properties["Length (ft)"].toLocaleString()} feet</b></p>`
+  const year = `<p>📅 Construction Begins: <b>${properties["Engineering/Construction Begins (Fiscal Year)"]}</b></p>`
+
+
+  return street + cost + length + year;
 }
 
+const DEFAULT_COLOR = "#C5001A"
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -51,7 +36,66 @@ const Map = () => {
 
   const [zoom] = useState(12);
 
-  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [colorBy, setColorBy] = useState<string | null>();
+
+  const findColor = (colorBy: any, properties: any) => {
+    if (colorBy === null) {
+      return DEFAULT_COLOR
+    }
+
+    const vals = sidewalks.features.map(f => (f.properties as any)[colorBy]);
+
+    let bins: any = [];
+    switch (colorBy) {
+      case "Total Cost":
+        bins = d3.bin().thresholds([0, 50000, 100000, 150000, 200000])(vals);
+      case "Engineering/Construction Begins (Fiscal Year)":
+        bins = d3.bin().thresholds([2024, 2025, 2026, 2027, 2028, 2029, 2030])(vals);
+      case "Length (ft)":
+        bins = d3.bin()(vals);
+    };
+
+    const findBin = (val: any, bins: any[]) => {
+      for (let idx = 0; idx < bins.length; idx++) {
+        const b = bins[idx]
+        if (b.x0 > val) {
+          return idx - 1
+        }
+      }
+
+      return bins.length - 1;
+    }
+
+    const colors = colormap({
+      colormap: 'viridis',
+      nshades: Math.max(bins.length, 10),
+      format: 'hex',
+      alpha: 1
+    })
+
+    return DEFAULT_COLOR
+
+    if (colorBy === null) {
+      return DEFAULT_COLOR
+    }
+
+    if (properties[colorBy] === -1) {
+      return "#000000"
+    } else {
+      return colors[findBin(properties[colorBy], bins)]
+    }
+  }
+
+  const sidewalksWithColor = {
+    ...sidewalks,
+    features: sidewalks.features.map(f => {
+      return {
+        ...f, properties: {
+          ...f.properties, color: findColor(colorBy, f.properties)
+        }
+      }
+    })
+  }
 
   useEffect(() => {
     if (map.current) return;
@@ -69,101 +113,92 @@ const Map = () => {
           },
           "sidewalks": {
             "type": "geojson",
-            "data": sidewalks as any
+            "data": sidewalksWithColor as any
+          },
+          "cville": {
+            "type": "geojson",
+            "data": cville as any
           }
         },
         layers: layer as any,
       },
       center: [lng, lat],
       zoom: zoom,
-      sprite: [
-        {
-          "id": "circle-11",
-          "url": "/map-icons"
-        }
-      ],
       minZoom: 4,
       // maxBounds: [
       //   [-84.71490710282056,
       //     35.77320086387027],
       //   [-73.94080914265395,
       //     39.73148308878754]],
-      customAttribution: ["© OpenMapTiles", "© OpenStreetMap"],
     });
 
-    // if (!popup.current) {
-    //   // Create a popup, but don't add it to the map yet.
-    //   popup.current = new maplibregl.Popup({
-    //     closeButton: false,
-    //     closeOnClick: false
-    //   });
-    // }
+    map.current.addControl(new maplibregl.AttributionControl({ customAttribution: "© OpenMapTiles © OpenStreetMap" }), 'bottom-left');
+
+    if (!popup.current) {
+      // Create a popup, but don't add it to the map yet.
+      popup.current = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false
+      });
+    }
 
     // When a click event occurs on a feature in the states layer, open a popup at the
     // location of the click, with description HTML from its properties.
-    // map.current.on('click', 'sidewalks', (e) => {
-    //   new maplibregl.Popup()
-    //     .setLngLat(e.lngLat)
-    //     .setHTML(e?.features?.[0]?.properties?.operator)
-    //     .addTo(map.current as any);
+    map.current.on('click', 'sidewalks', (e) => {
+      new maplibregl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(popupHtml(e?.features?.[0]?.properties))
+        .addTo(map.current as any);
 
-    //   if (e?.features?.[0]?.properties?.operator === "UNKNOWN") {
-    //     (map.current as any).setPaintProperty(
-    //       "sidewalks",
-    //       'fill-opacity',
-    //       ['match', ['get', 'name'], e?.features?.[0]?.properties?.name, 0.5, 0.1]
-    //     );
-    //   } else {
-    //     (map.current as any).setPaintProperty(
-    //       "sidewalks",
-    //       'fill-opacity',
-    //       ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
-    //     );
-    //   }
+        // Geographic coordinates of the LineString
+        const coordinates = e?.features?.[0].geometry.type === "MultiLineString" ? e?.features?.[0].geometry.coordinates.flat() : e?.features?.[0].geometry.coordinates;
 
-    // });
+        console.log(coordinates.length);
+        console.log(e?.features?.[0].geometry.type)
+        console.log(coordinates.flat());
+
+        // Pass the first coordinates in the LineString to `lngLatBounds` &
+        // wrap each coordinate pair in `extend` to include them in the bounds
+        // result. A variation of this technique could be applied to zooming
+        // to the bounds of multiple Points or Polygon geometries - it just
+        // requires wrapping all the coordinates with the extend method.
+        const bounds = coordinates.reduce((bounds: any, coord: any) => {
+            return bounds.extend(coord);
+        }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+
+        map?.current?.fitBounds(bounds, {
+            padding: 40
+        });
+    });
 
     // Change the cursor to a pointer when the mouse is over the states layer.
-    // map.current.on('mouseenter', 'sidewalks', (e) => {
-    //   (map.current as any).getCanvas().style.cursor = 'pointer';
-    // });
+    map.current.on('mouseenter', 'sidewalks', (e) => {
+      (map.current as any).getCanvas().style.cursor = 'pointer';
+    });
 
-    // map.current.on('mousemove', 'sidewalks', (e) => {
-    //   (map.current as any).setPaintProperty(
-    //     "sidewalks",
-    //     'fill-opacity',
-    //     ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
-    //   );
-    // });
-
-
-    // Change it back to a pointer when it leaves.
-    // map.current.on('mouseleave', 'sidewalks', () => {
-    //   (map.current as any).getCanvas().style.cursor = '';
-    //   (map.current as any).setPaintProperty(
-    //     "sidewalks",
-    //     'fill-opacity',
-    //     0.5
-    //   );
-    // });
+    map.current.on('mouseleave', 'sidewalks', (e) => {
+      (map.current as any).getCanvas().style.cursor = 'default';
+    });
 
     map.current.fitBounds([
       [
         -78.53683017502908,
-          38.0024813672151
+        38.0024813672151
       ], // southwestern corner of the bounds
       [
         -78.43743951937498,
-          38.07029795409187
+        38.07029795409187
       ], // northeastern corner of the bounds
     ]);
 
-  });
+  }, [sidewalksWithColor]);
 
   return (
     <div className="map-wrap">
-      <InfoModal show={showInfoModal} handleClose={() => setShowInfoModal(false)}></InfoModal>
       <div ref={mapContainer} className="map" />
+      <div id="state-legend" className="legend">
+        <h3>Planned Sidewalks in Charlottesville</h3>
+      </div>
     </div>
   );
 }

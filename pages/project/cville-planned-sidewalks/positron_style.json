@@ -2342,15 +2342,57 @@
         }
     },
     {
-        "id": "sidewalks",
+        "id": "cville",
         "type": "line",
-        "source": "sidewalks",
+        "source": "cville",
         "layout": {
             "visibility": "visible"
         },
         "paint": {
-            "line-color": "#ff0000",
-            "line-width": 3
+            "line-color": "#808080",
+            "line-width": 2,
+            "line-dasharray": [
+                2,
+                1
+            ]
+        }
+    },
+    {
+        "id": "sidewalks",
+        "type": "line",
+        "source": "sidewalks",
+        "layout": {
+            "visibility": "visible",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "paint": {
+            "line-color": ["get", "color"],
+            "line-width": 4
+        }
+    },
+    {
+        "id": "sidewalk_name",
+        "type": "symbol",
+        "source": "sidewalks",
+        "layout": {
+            "symbol-placement": "line",
+            "symbol-spacing": 500,
+            "text-field": "{Street}",
+            "text-font": [
+                "Metropolis Regular"
+            ],
+            "text-rotation-alignment": "map",
+            "text-max-angle": 90,
+            "visibility": "visible",
+            "text-allow-overlap": true
+        },
+        "minzoom": 12,
+        "paint": {
+            "text-color": "#000000",
+            "text-halo-blur": 2,
+            "text-halo-color": "rgb(242,243,240)",
+            "text-halo-width": 1
         }
     }
 ]
