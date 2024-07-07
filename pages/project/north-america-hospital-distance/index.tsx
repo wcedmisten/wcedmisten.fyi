@@ -19,11 +19,11 @@ const Map = () => {
 
   const [zoom] = useState(1);
 
+  let protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile as any);
+
   useEffect(() => {
     if (map.current) return;
-
-    let protocol = new pmtiles.Protocol();
-    maplibregl.addProtocol("pmtiles", protocol.tile);
 
     map.current = new maplibregl.Map({
       container: mapContainer.current as any,
@@ -41,7 +41,7 @@ const Map = () => {
           },
           "hospitals": {
             "type": "geojson",
-            "data": hospitals
+            "data": hospitals as any
           },
         },
         layers: layer as any,
@@ -53,8 +53,9 @@ const Map = () => {
       //     35.77320086387027],
       //   [-73.94080914265395,
       //     39.73148308878754]],
-      customAttribution: ["© OpenMapTiles", "© OpenStreetMap contributors"],
     });
+
+    map.current.addControl(new maplibregl.AttributionControl({ customAttribution: "© OpenMapTiles © OpenStreetMap" }), 'bottom-left');
 
     if (!popup.current) {
       // Create a popup, but don't add it to the map yet.
@@ -64,13 +65,7 @@ const Map = () => {
       });
     }
 
-    map.current.loadImage(
-      '/virginia-hospital-distance/hospital-solid.png',
-      // Add an image to use as a custom marker
-      function (error, image: any) {
-        if (error) throw error;
-        map.current?.addImage('hospitalMarker', image);
-      })
+      // '/virginia-hospital-distance/hospital-solid.png'
 
     map.current.fitBounds([
       [

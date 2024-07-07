@@ -144,31 +144,27 @@ const Map = () => {
 
     // When a click event occurs on a feature in the states layer, open a popup at the
     // location of the click, with description HTML from its properties.
-    map.current.on('click', 'sidewalks', (e) => {
+    map.current.on('click', 'sidewalks', (e: any) => {
       new maplibregl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(popupHtml(e?.features?.[0]?.properties))
         .addTo(map.current as any);
 
-        // Geographic coordinates of the LineString
-        const coordinates = e?.features?.[0].geometry.type === "MultiLineString" ? e?.features?.[0].geometry.coordinates.flat() : e?.features?.[0].geometry.coordinates;
+      // Geographic coordinates of the LineString
+      const coordinates: any = e?.features?.[0].geometry.type === "MultiLineString" ? e?.features?.[0].geometry.coordinates.flat() : e?.features?.[0].geometry.coordinates;
 
-        console.log(coordinates.length);
-        console.log(e?.features?.[0].geometry.type)
-        console.log(coordinates.flat());
+      // Pass the first coordinates in the LineString to `lngLatBounds` &
+      // wrap each coordinate pair in `extend` to include them in the bounds
+      // result. A variation of this technique could be applied to zooming
+      // to the bounds of multiple Points or Polygon geometries - it just
+      // requires wrapping all the coordinates with the extend method.
+      const bounds = coordinates.reduce((bounds: any, coord: any) => {
+        return bounds.extend(coord);
+      }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
 
-        // Pass the first coordinates in the LineString to `lngLatBounds` &
-        // wrap each coordinate pair in `extend` to include them in the bounds
-        // result. A variation of this technique could be applied to zooming
-        // to the bounds of multiple Points or Polygon geometries - it just
-        // requires wrapping all the coordinates with the extend method.
-        const bounds = coordinates.reduce((bounds: any, coord: any) => {
-            return bounds.extend(coord);
-        }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
-
-        map?.current?.fitBounds(bounds, {
-            padding: 40
-        });
+      map?.current?.fitBounds(bounds, {
+        padding: 40
+      });
     });
 
     // Change the cursor to a pointer when the mouse is over the states layer.
