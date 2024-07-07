@@ -7,6 +7,13 @@ function ProjectsPage() {
             <h1 className="post-title">Projects</h1>
             <ListGroup variant="flush">
                 <PostItem
+                    href="/project/cville-planned-sidewalks"
+                    thumbnailURL="/og-images/cville-planned-sidewalks.png"
+                    thumbnailAlt="A map showing planned sidewalks in Charlottesville, Virginia."
+                    title="Charlottesville Planned Sidewalks"
+                    description="Sidewalks that are planned to be built in Charlottesville from 2024-2030."
+                    date='2024-07-07' />
+                <PostItem
                     href="/project/virginia-hospital-ownership"
                     thumbnailURL="/og-images/virginia-hospital-ownership.png"
                     thumbnailAlt="A colored map showing hospital ownership in Virginia."

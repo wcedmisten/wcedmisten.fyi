@@ -194,6 +194,7 @@ const Map = () => {
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
         <h3>Planned Sidewalks in Charlottesville</h3>
+        <p>Data adapted from <a href="https://charlottesville.gov/1764/Sidewalk-Priorities">charlottesville.gov</a></p>
       </div>
     </div>
   );
@@ -204,7 +205,7 @@ export default function Isochrone() {
   return (
     <>
       <Head>
-        <title>Virginia Hospital Territory Map</title>
+        <title>Charlottesville Planned Sidewalks</title>
         <meta name="description" content="A map of hospital territory in Virginia and who controls it." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -220,10 +221,10 @@ export async function getStaticProps() {
   return {
     props: {
       opengraph: {
-        title: "Hospital Ownership in Virginia",
-        image: "https://wcedmisten.fyi/og-images/virginia-hospital-ownership.png",
+        title: "Charlottesville Planned Sidewalks",
+        image: "https://wcedmisten.fyi/og-images/cville-planned-sidewalks.png",
         type: "website",
-        url: "https://wcedmisten.fyi/project/virginia-hospital-ownership"
+        url: "https://wcedmisten.fyi/project/cville-planned-sidewalks"
       }
     }
   }
