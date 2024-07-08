@@ -18,9 +18,10 @@ const popupHtml = (properties: any) => {
   const cost = `<p>💲 Total Cost: <b>${properties["Total Cost"].replace(" ", "")}</b></p>`
   const length = `<p>📏 Length: <b>${properties["Length (ft)"].toLocaleString()} feet</b></p>`
   const year = `<p>📅 Construction Begins: <b>${properties["Engineering/Construction Begins (Fiscal Year)"]}</b></p>`
+  const tier = `<p>💪 Difficulty Tier*: <b>${properties["Tier"]}</b></p>`
+  const explanation = "<br>* Tier 1 is the easiest/cheapest and Tier 3 is the hardest/most expensive. <a href=\"https://charlottesville.gov/1764/Sidewalk-Priorities\" >More info</a>"
 
-
-  return street + cost + length + year;
+  return street + cost + length + year + tier + explanation;
 }
 
 const DEFAULT_COLOR = "#C5001A"
@@ -194,7 +195,7 @@ const Map = () => {
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
         <h3>Planned Sidewalks in Charlottesville</h3>
-        <p>Data adapted from <a href="https://charlottesville.gov/1764/Sidewalk-Priorities">charlottesville.gov</a></p>
+        <p>Data adapted from <a href="https://charlottesvilleva.portal.civicclerk.com/event/2030/files/attachment/5197">charlottesville.gov</a></p>
       </div>
     </div>
   );

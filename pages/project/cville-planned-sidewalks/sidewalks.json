@@ -1216,42 +1216,201 @@
         {
             "type": "Feature",
             "properties": {
-                "Street": "18th Street NE",
-                "Location": "Both",
-                "Begin": "Little 18th Street",
-                "End": "E Market Street",
-                "Length (ft)": 735,
+                "Street": "Tarleton Dr",
+                "Location": "Either",
+                "Begin": "Greenbrier Dr",
+                "End": "Banbury St",
+                "Length (ft)": "1050",
                 "Tier": "Tier 2",
-                "Survey/Design Cost": " $118,222 ",
+                "Survey/Design Cost": " $168,888 ",
                 "Engineering/Construction Cost": " TBD ",
                 "Total Cost": " TBD ",
-                "Survey/Design Begins (Fiscal Year)": 2030,
-                "Engineering/Construction Begins (Fiscal Year)": 2030
+                "Survey/Design Begins (Fiscal Year)": "2030",
+                "Engineering/Construction Begins (Fiscal Year)": "2030"
             },
             "geometry": {
                 "coordinates": [
                     [
-                        [
-                            -78.46202186040696,
-                            38.024236271926696
-                        ],
-                        [
-                            -78.46083900526118,
-                            38.02604897120153
-                        ]
+                        -78.47036210027956,
+                        38.06198823880206
                     ],
                     [
-                        [
-                            -78.4619426120473,
-                            38.024196965450784
-                        ],
-                        [
-                            -78.46074801640408,
-                            38.026011977787306
-                        ]
+                        -78.47048560172959,
+                        38.06176337523169
+                    ],
+                    [
+                        -78.47059623844468,
+                        38.061554717426816
+                    ],
+                    [
+                        -78.47063997854143,
+                        38.061408859190266
+                    ],
+                    [
+                        -78.47062840028087,
+                        38.061275155551556
+                    ],
+                    [
+                        -78.47056021718868,
+                        38.06114752912316
+                    ],
+                    [
+                        -78.4703320835906,
+                        38.060930430209936
+                    ],
+                    [
+                        -78.47013782610186,
+                        38.060760260787305
+                    ],
+                    [
+                        -78.4700027463913,
+                        38.06070252464329
+                    ],
+                    [
+                        -78.46980462948278,
+                        38.060668085518216
+                    ],
+                    [
+                        -78.46956019952982,
+                        38.060668085518216
+                    ],
+                    [
+                        -78.46939038503656,
+                        38.060686317998545
+                    ],
+                    [
+                        -78.46926302416675,
+                        38.060732912093215
+                    ],
+                    [
+                        -78.46918712223379,
+                        38.06078254490109
+                    ],
+                    [
+                        -78.46905847489073,
+                        38.06092333982525
                     ]
                 ],
-                "type": "MultiLineString"
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Meade Ave",
+                "Location": "West",
+                "Begin": "Jefferson St",
+                "End": "E Market Street",
+                "Length (ft)": "340",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $51,907 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2028",
+                "Engineering/Construction Begins (Fiscal Year)": "2028"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4666055962261,
+                        38.02771666134507
+                    ],
+                    [
+                        -78.46741025893081,
+                        38.026518688013056
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.51495336238654,
+                        38.02053205554702
+                    ],
+                    [
+                        -78.51622878967447,
+                        38.020505667670335
+                    ],
+                    [
+                        -78.51634989085137,
+                        38.02048942897267
+                    ],
+                    [
+                        -78.51656117375593,
+                        38.02042244430524
+                    ],
+                    [
+                        -78.5167673034184,
+                        38.02032095226835
+                    ],
+                    [
+                        -78.51691417080325,
+                        38.020229609315464
+                    ],
+                    [
+                        -78.51704300184264,
+                        38.02012608716427
+                    ],
+                    [
+                        -78.51718986922691,
+                        38.01999820665753
+                    ],
+                    [
+                        -78.51729808729989,
+                        38.01994949021554
+                    ],
+                    [
+                        -78.5174526845472,
+                        38.01992919168839
+                    ]
+                ],
+                "type": "LineString"
+            },
+            "type": "Feature",
+            "properties": {
+                "Street": "Sunset Ave",
+                "Location": "Either",
+                "Begin": "Jefferson Park Ave",
+                "End": "Sunset Rd",
+                "Length (ft)": "620",
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Rugby Ave",
+                "Location": "North",
+                "Begin": "Rose Hill Dr",
+                "End": "Existing",
+                "Length (ft)": "460",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $70,227 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2028",
+                "Engineering/Construction Begins (Fiscal Year)": "2028"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48374492156955,
+                        38.045405567147526
+                    ],
+                    [
+                        -78.48582643558566,
+                        38.04563858596717
+                    ]
+                ],
+                "type": "LineString"
             }
         },
         {
