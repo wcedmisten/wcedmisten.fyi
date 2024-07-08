@@ -1327,6 +1327,35 @@
             "geometry": {
                 "coordinates": [
                     [
+                        -78.48506588046621,
+                        38.019182776394956
+                    ],
+                    [
+                        -78.48577487374693,
+                        38.01817073334172
+                    ]
+                ],
+                "type": "LineString"
+            },
+            "type": "Feature",
+            "properties": {
+                "Street": "6th Street SE",
+                "Location": "West",
+                "Begin": "Rockland Ave",
+                "End": "Palatine Ave",
+                "Length (ft)": "440",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $65,374 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2027",
+                "Engineering/Construction Begins (Fiscal Year)": "2027"
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    [
                         -78.51495336238654,
                         38.02053205554702
                     ],
