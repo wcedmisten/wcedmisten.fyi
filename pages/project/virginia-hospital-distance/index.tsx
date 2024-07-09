@@ -34,7 +34,7 @@ const Map = () => {
         "sources": {
           "openmaptiles": {
             "type": "vector",
-            "url": "pmtiles:///virginia-hospital-distance/virginia.pmtiles"
+            "url": "https://virginia-tiles.wcedmisten.dev/virginia-2024-07-06.json"
           },
           "isochrone": {
             "type": "vector",

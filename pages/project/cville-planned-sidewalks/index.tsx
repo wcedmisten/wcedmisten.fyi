@@ -109,7 +109,7 @@ const Map = () => {
         "sources": {
           "openmaptiles": {
             "type": "vector",
-            "tiles": ["https://virginia-tiles.wcedmisten.dev/virginia-2024-07-06/{z}/{x}/{y}.mvt"],
+            "url": "https://virginia-tiles.wcedmisten.dev/virginia-2024-07-06.json",
             "maxzoom": 14
           },
           "sidewalks": {
