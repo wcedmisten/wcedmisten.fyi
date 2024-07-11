@@ -2369,7 +2369,53 @@
         },
         "paint": {
             "line-color": "#000000",
-            "line-width": 2
+            "line-width": 2,
+            "line-opacity": [
+                "case",
+                [
+                    "==",
+                    [
+                        "get",
+                        "footway"
+                    ],
+                    "crossing"
+                ],
+                0,
+                1
+            ]
+        }
+    },
+    {
+        "id": "currentsidewalk_name",
+        "type": "line",
+        "source": "currentSidewalks",
+        "source-layer": "cvillesidewalks",
+        "layout": {
+            "visibility": "visible",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "minzoom": 12,
+        "paint": {
+            "line-color": "#808080",
+            "line-width": 2,
+            "line-dasharray": [
+                3,
+                3
+            ],
+            "line-opacity": [
+                "case",
+                [
+                    "==",
+                    [
+                        "get",
+                        "footway"
+                    ],
+                    "crossing"
+                ],
+                1,
+                0
+            ]
         }
     },
     {
@@ -2382,7 +2428,10 @@
             "line-join": "round"
         },
         "paint": {
-            "line-color": ["get", "color"],
+            "line-color": [
+                "get",
+                "color"
+            ],
             "line-width": 4
         }
     },
