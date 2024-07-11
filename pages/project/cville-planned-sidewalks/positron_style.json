@@ -2358,6 +2358,21 @@
         }
     },
     {
+        "id": "currentSidewalks",
+        "type": "line",
+        "source": "currentSidewalks",
+        "source-layer": "cvillesidewalks",
+        "layout": {
+            "visibility": "visible",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "paint": {
+            "line-color": "#000000",
+            "line-width": 2
+        }
+    },
+    {
         "id": "sidewalks",
         "type": "line",
         "source": "sidewalks",
