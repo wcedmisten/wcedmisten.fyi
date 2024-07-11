@@ -2342,6 +2342,22 @@
         }
     },
     {
+        "id": "cville-blur",
+        "type": "line",
+        "source": "cville",
+        "layout": {
+            "visibility": "visible",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "paint": {
+            "line-color": "#eb6ce6",
+            "line-width": 3,
+            "line-blur": 2,
+            "line-opacity": 0.5
+        }
+    },
+    {
         "id": "cville",
         "type": "line",
         "source": "cville",
@@ -2352,7 +2368,7 @@
             "line-color": "#808080",
             "line-width": 2,
             "line-dasharray": [
-                2,
+                1,
                 1
             ]
         }
@@ -2368,7 +2384,7 @@
             "line-join": "round"
         },
         "paint": {
-            "line-color": "#000000",
+            "line-color": "#020d1f",
             "line-width": 2,
             "line-opacity": [
                 "case",
@@ -2397,7 +2413,7 @@
         },
         "minzoom": 12,
         "paint": {
-            "line-color": "#808080",
+            "line-color": "#020d1f",
             "line-width": 2,
             "line-dasharray": [
                 3,
