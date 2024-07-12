@@ -207,7 +207,7 @@ export default function Isochrone() {
     <>
       <Head>
         <title>Charlottesville Planned Sidewalks</title>
-        <meta name="description" content="A map of hospital territory in Virginia and who controls it." />
+        <meta name="description" content="A map of planned sidewalks in Charlottesville, Virginia." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
