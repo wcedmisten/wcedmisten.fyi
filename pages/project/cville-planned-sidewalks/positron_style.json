@@ -2342,6 +2342,22 @@
         }
     },
     {
+        "id": "cville-blur",
+        "type": "line",
+        "source": "cville",
+        "layout": {
+            "visibility": "visible",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "paint": {
+            "line-color": "#eb6ce6",
+            "line-width": 3,
+            "line-blur": 2,
+            "line-opacity": 0.5
+        }
+    },
+    {
         "id": "cville",
         "type": "line",
         "source": "cville",
@@ -2352,8 +2368,69 @@
             "line-color": "#808080",
             "line-width": 2,
             "line-dasharray": [
-                2,
+                1,
                 1
+            ]
+        }
+    },
+    {
+        "id": "currentSidewalks",
+        "type": "line",
+        "source": "currentSidewalks",
+        "source-layer": "cvillesidewalks",
+        "layout": {
+            "visibility": "none",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "paint": {
+            "line-color": "#020d1f",
+            "line-width": 1,
+            "line-opacity": [
+                "case",
+                [
+                    "==",
+                    [
+                        "get",
+                        "footway"
+                    ],
+                    "crossing"
+                ],
+                0,
+                1
+            ]
+        }
+    },
+    {
+        "id": "currentsidewalkCrosswalks",
+        "type": "line",
+        "source": "currentSidewalks",
+        "source-layer": "cvillesidewalks",
+        "layout": {
+            "visibility": "none",
+            "line-cap": "round",
+            "line-join": "round"
+        },
+        "minzoom": 12,
+        "paint": {
+            "line-color": "#020d1f",
+            "line-width": 1,
+            "line-dasharray": [
+                3,
+                3
+            ],
+            "line-opacity": [
+                "case",
+                [
+                    "==",
+                    [
+                        "get",
+                        "footway"
+                    ],
+                    "crossing"
+                ],
+                1,
+                0
             ]
         }
     },
@@ -2367,7 +2444,10 @@
             "line-join": "round"
         },
         "paint": {
-            "line-color": ["get", "color"],
+            "line-color": [
+                "get",
+                "color"
+            ],
             "line-width": 4
         }
     },

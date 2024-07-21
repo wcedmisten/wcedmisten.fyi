@@ -8,6 +8,8 @@ import layer from "./positron_style.json"
 import sidewalks from "./sidewalks.json"
 import cville from "./cville.json"
 
+import * as pmtiles from "pmtiles";
+
 import colormap from 'colormap';
 
 const [initialLon, initialLat] = [-78.47932503996893, 38.030451563032585];
@@ -36,6 +38,8 @@ const Map = () => {
   const [lat] = useState(initialLat);
 
   const [zoom] = useState(12);
+
+  const [showExisting, setShowExisting] = useState(false);
 
   const [colorBy, setColorBy] = useState<string | null>();
 
@@ -98,6 +102,9 @@ const Map = () => {
     })
   }
 
+  let protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile as any);
+
   useEffect(() => {
     if (map.current) return;
 
@@ -115,6 +122,10 @@ const Map = () => {
           "sidewalks": {
             "type": "geojson",
             "data": sidewalksWithColor as any
+          },
+          "currentSidewalks": {
+            "type": "vector",
+            "url": "pmtiles:///cville-sidewalks.pmtiles",
           },
           "cville": {
             "type": "geojson",
@@ -190,12 +201,26 @@ const Map = () => {
 
   }, [sidewalksWithColor]);
 
+  const toggleExistingSidewalks = () => {
+    if (showExisting) {
+      map.current?.setLayoutProperty('currentSidewalks', 'visibility', 'none');
+      map.current?.setLayoutProperty('currentsidewalkCrosswalks', 'visibility', 'none');
+    } else {
+      map.current?.setLayoutProperty('currentSidewalks', 'visibility', 'visible');
+      map.current?.setLayoutProperty('currentsidewalkCrosswalks', 'visibility', 'visible');
+    }
+    setShowExisting(!showExisting);
+  }
+
   return (
     <div className="map-wrap">
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
         <h3>Planned Sidewalks in Charlottesville</h3>
         <p>Data adapted from <a href="https://charlottesvilleva.portal.civicclerk.com/event/2030/files/attachment/5197">charlottesville.gov</a></p>
+        <input checked={showExisting}
+          type="checkbox"
+          onClick={toggleExistingSidewalks} /> Show existing sidewalks and footpaths
       </div>
     </div>
   );
