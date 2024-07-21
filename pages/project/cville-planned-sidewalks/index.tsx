@@ -8,8 +8,6 @@ import layer from "./positron_style.json"
 import sidewalks from "./sidewalks.json"
 import cville from "./cville.json"
 
-import * as pmtiles from "pmtiles";
-
 import colormap from 'colormap';
 
 const [initialLon, initialLat] = [-78.47932503996893, 38.030451563032585];
@@ -102,9 +100,6 @@ const Map = () => {
     })
   }
 
-  let protocol = new pmtiles.Protocol();
-  maplibregl.addProtocol("pmtiles", protocol.tile as any);
-
   useEffect(() => {
     if (map.current) return;
 
@@ -125,7 +120,7 @@ const Map = () => {
           },
           "currentSidewalks": {
             "type": "vector",
-            "url": "pmtiles:///cville-sidewalks.pmtiles",
+            "url": "https://cville-current-sidewalks.wcedmisten.dev/cville-sidewalks.json",
           },
           "cville": {
             "type": "geojson",
