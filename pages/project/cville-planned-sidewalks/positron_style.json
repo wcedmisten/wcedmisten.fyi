@@ -2379,13 +2379,13 @@
         "source": "currentSidewalks",
         "source-layer": "cvillesidewalks",
         "layout": {
-            "visibility": "visible",
+            "visibility": "none",
             "line-cap": "round",
             "line-join": "round"
         },
         "paint": {
             "line-color": "#020d1f",
-            "line-width": 2,
+            "line-width": 1,
             "line-opacity": [
                 "case",
                 [
@@ -2402,19 +2402,19 @@
         }
     },
     {
-        "id": "currentsidewalk_name",
+        "id": "currentsidewalkCrosswalks",
         "type": "line",
         "source": "currentSidewalks",
         "source-layer": "cvillesidewalks",
         "layout": {
-            "visibility": "visible",
+            "visibility": "none",
             "line-cap": "round",
             "line-join": "round"
         },
         "minzoom": 12,
         "paint": {
             "line-color": "#020d1f",
-            "line-width": 2,
+            "line-width": 1,
             "line-dasharray": [
                 3,
                 3

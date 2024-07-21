@@ -39,6 +39,8 @@ const Map = () => {
 
   const [zoom] = useState(12);
 
+  const [showExisting, setShowExisting] = useState(false);
+
   const [colorBy, setColorBy] = useState<string | null>();
 
   const findColor = (colorBy: any, properties: any) => {
@@ -199,12 +201,26 @@ const Map = () => {
 
   }, [sidewalksWithColor]);
 
+  const toggleExistingSidewalks = () => {
+    if (showExisting) {
+      map.current?.setLayoutProperty('currentSidewalks', 'visibility', 'none');
+      map.current?.setLayoutProperty('currentsidewalkCrosswalks', 'visibility', 'none');
+    } else {
+      map.current?.setLayoutProperty('currentSidewalks', 'visibility', 'visible');
+      map.current?.setLayoutProperty('currentsidewalkCrosswalks', 'visibility', 'visible');
+    }
+    setShowExisting(!showExisting);
+  }
+
   return (
     <div className="map-wrap">
       <div ref={mapContainer} className="map" />
       <div id="state-legend" className="legend">
         <h3>Planned Sidewalks in Charlottesville</h3>
         <p>Data adapted from <a href="https://charlottesvilleva.portal.civicclerk.com/event/2030/files/attachment/5197">charlottesville.gov</a></p>
+        <input checked={showExisting}
+          type="checkbox"
+          onClick={toggleExistingSidewalks} /> Show existing sidewalks and footpaths
       </div>
     </div>
   );
