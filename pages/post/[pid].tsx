@@ -28,6 +28,12 @@ const components = {
     figure: (props: any) => (
         <figure className={style.PostFigure} {...props} />
     ),
+    li: (props: any) => (
+        <li className={style.List} {...props} />
+    ),
+    ul: (props: any) => (
+        <ul className={style.UnorderedList} {...props} />
+    ),
     h1: (props: any) => (
         <h1 className={style.PostH1} {...props} />
     ),

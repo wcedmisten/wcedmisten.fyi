@@ -24,12 +24,41 @@
 .PostH2 {
     padding-top: 30px;
     padding-bottom: 20px;
-    font-family: 'Roboto', sans-serif;
-    text-decoration: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.8em;
     color: #212529;
 }
 
+.PostH3 {
+    padding-top: 24px;
+    padding-bottom: 6px;
+    font-size: 1.6em;
+    font-family: 'Crimson Pro', serif;
+}
+
+.PostH4 {
+    padding-top: 24px;
+    padding-bottom: 6px;
+    font-size: 1.4em;
+    font-weight: 500;
+    font-family: 'Crimson Pro', serif;
+}
+
+.List {
+    font-size: 24px;
+    font-family: 'Crimson Pro', sans-serif;
+}
+
+.Link {
+    font-size: 24px;
+}
+
+.UnorderedList {
+    font-size: unset;
+}
+
 .HeaderLink {
+    font-family: 'Crimson Pro', serif;
     text-decoration: none;
     color: #212529;
 }
@@ -40,18 +69,6 @@
     opacity: 50%;
     display: inline-block;
     vertical-align: middle;
-}
-
-.PostH3 {
-    padding-top: 20px;
-    padding-bottom: 15px;
-    font-size: 1.4em;
-    font-family: 'Roboto-Light', sans-serif;
-}
-
-.PostH4 {
-    font-size: 1.2em;
-    font-family: 'Roboto-Light', sans-serif;
 }
 
 

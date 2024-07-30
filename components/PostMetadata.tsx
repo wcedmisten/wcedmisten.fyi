@@ -2,6 +2,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import { BsCalendarFill, BsClockFill } from "react-icons/bs";
 import { HiLocationMarker } from "react-icons/hi"
 
+import style from "./PostMetadata.module.css"
+
 const toPrettyDate = (date: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     // hack to force UTC timezone
@@ -26,7 +28,7 @@ export default function PostMetadata({ date, readingLength, location }: PostMeta
                         <div className="align-self-center">
                             <BsCalendarFill style={{ fontSize: "20px" }} /></div>
                         <div className="align-self-center">
-                            <p style={{ margin: "2px 0 0 5px" }}>{toPrettyDate(date)}</p>
+                            <p className={style.Calendar}>{toPrettyDate(date)}</p>
                         </div>
                     </div>
                 </Col>
@@ -37,7 +39,7 @@ export default function PostMetadata({ date, readingLength, location }: PostMeta
                                 <BsClockFill style={{ fontSize: "20px" }} />
                             </div>
                             <div className="align-self-center">
-                                <p style={{ margin: "2px 0 0 5px" }}>{readingLength}</p>
+                                <p className={style.Clock}>{readingLength}</p>
                             </div>
                         </div>
                     </Col>}
@@ -48,7 +50,7 @@ export default function PostMetadata({ date, readingLength, location }: PostMeta
                                 <HiLocationMarker style={{ fontSize: "20px" }} />
                             </div>
                             <div className="align-self-center">
-                                <p style={{ margin: "2px 0 0 5px" }}>{location}</p>
+                                <p className={style.Location}>{location}</p>
                             </div>
                         </div>
                     </Col>}

@@ -50,7 +50,7 @@ export default function PostItem(props: PostItemProps
                         <Container fluid className="justify-content-md-center">
                             <Row>
                                 <Link href={href}>
-                                    <a style={{ fontSize: "22px" }} >{title}</a>
+                                    <a className={style.PostTitleLink} >{title}</a>
                                 </Link>
                             </Row>
                             <Row>

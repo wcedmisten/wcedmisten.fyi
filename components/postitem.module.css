@@ -6,4 +6,11 @@
 
 .PostDescription {
     margin: 8px 0px 2px 0px;
+    font-weight: 400;
+    font-size: 1.4em;
+}
+
+.PostTitleLink {
+    font-size: 1.6em;
+    font-family: 'Crimson Pro', serif;
 }

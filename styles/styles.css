@@ -46,16 +46,29 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Crimson Pro';
+    src: url('/fonts/Crimson_Pro/CrimsonPro-VariableFont_wght.ttf');
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Mono';
+    src: url('/fonts/Fira_Mono/FiraMono-Regular.ttf');
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 1.1em;
     margin: 0 auto;
 }
 
-p,
-li {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.1em;
+p {
+    font-family: 'Crimson Pro', sans-serif;
+    font-size: 1.3em;
 }
 
 h1 {
@@ -64,23 +77,27 @@ h1 {
 }
 
 h2 {
-    font-size: 1.6em;
-    font-family: 'Roboto', sans-serif;
+    font-size: 1.8em;
+    font-family: 'Crimson Pro', sans-serif;
+    margin-top: 20px;
 }
 
 h3 {
-    font-size: 1.4em;
-    font-family: 'Roboto-Light', sans-serif;
+    font-size: 1.6em;
+    font-family: 'Crimson Pro', sans-serif;
+    margin-top: 20px;
 }
 
 h4 {
-    font-size: 1.2em;
-    font-family: 'Roboto-Thin', sans-serif;
+    font-size: 1.4em;
+    font-family: 'Crimson Pro', sans-serif;
+    margin-top: 20px;
+    font-weight: 500;
 }
 
 code {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1em;
+    font-family: 'Fira Mono', monospace;
+    font-size: 0.8em;
 }
 
 .post-wrapper {
