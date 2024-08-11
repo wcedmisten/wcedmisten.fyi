@@ -73,6 +73,30 @@ This query[^osm-italian-query] produces the following map of 291 results after a
 
 ![A screenshot of a map showing all Italian restaurants in Virginia](/how-to-query-osm/italian-restaurants.png)
 
+### Resource Limits
+
+In order to fairly allocate resources for different queries, Overpass has limitations
+on the size and duration of each request.
+  * The default timeout for a query is 180 seconds
+  * The default maximum RAM usage for a query is 512 MiB
+  * These limits can be adjusted by adding fields like `[timeout:600]` or `[maxsize:1073741824]` to a query.
+  (This was required for finding all Italian restaurants in the US without the query timing out)
+  * However, the maximum memory that can be requested depends on the current server load [^overpass-server-load]
+
+For example, if we wanted to find all the Italian restaurants in the US, we'd need to add
+`[timeout:600]` or some other large number in order to get a response.
+
+```
+[out:json][timeout:600];
+area["ISO3166-1"="US"]->.searchArea;
+nwr["amenity"="restaurant"]["cuisine"="italian"](area.searchArea);
+out center;
+```
+
+This query ended up taking 328 seconds (5.46 minutes) to execute and returned 7,116 results.
+
+![Map of all Italian restaurants in the US](/how-to-query-osm/italian-restaurants-us.png)
+
 ### Pros
 
 * Doesn't require any local tools and can be accessed from the browser
@@ -82,12 +106,8 @@ This query[^osm-italian-query] produces the following map of 291 results after a
 ### Cons
 
 * Query language is hard to write and harder to read (in my opinion)
-* Rate limits - since the service is provided to the public for free,
-it has limitations on the size and duration of each request.
-  * Queries that take longer than 180 seconds will be canceled
-  * Queries that use more than 512 MiB of RAM will be canceled
-  * Just for context, this means we can find all Italian restaurants in Virginia,
-    but not in the whole US
+* Performance for large queries can be slow
+* Shared server resources make it unpredictable whether a query will be rejected or not
 
 ## 2. osm2pgsql + PostGIS
 
@@ -577,6 +597,7 @@ who has helped me numerous times over the years.
 
 # 
 
+[^overpass-server-load]: [wiki.openstreetmap.org](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Element_limit_(maxsize:))
 [^planet-osm]: [planet.osm](https://wiki.openstreetmap.org/wiki/Planet.osm)
 [^osm-italian-query]: [Overpass Turbo - Italian Restaurants](https://overpass-turbo.eu/s/1ON4)
 [^postgis]: [PostGIS](https://postgis.net/)
