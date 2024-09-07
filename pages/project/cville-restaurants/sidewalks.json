@@ -1,0 +1,2276 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "8th Street NE",
+                "Location": "West",
+                "Begin": "E Market Street",
+                "End": "700 E Jefferson",
+                "Length (ft)": 290,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $39,530 ",
+                "Engineering/Construction Cost": " $92,800 ",
+                "Total Cost": " $132,330 ",
+                "Survey/Design Begins (Fiscal Year)": 2024,
+                "Engineering/Construction Begins (Fiscal Year)": 2024
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4761007806814,
+                        38.02996668199921
+                    ],
+                    [
+                        -78.47607022294866,
+                        38.03001623782211
+                    ],
+                    [
+                        -78.47561123489074,
+                        38.03093437590354
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Hazel Street",
+                "Location": "Southwest",
+                "Begin": "E High Street",
+                "End": "1424 Hazel",
+                "Length (ft)": 80,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $10,905 ",
+                "Engineering/Construction Cost": " $25,600 ",
+                "Total Cost": " $36,505 ",
+                "Survey/Design Begins (Fiscal Year)": 2024,
+                "Engineering/Construction Begins (Fiscal Year)": 2024
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4628058816911,
+                        38.03279896803369
+                    ],
+                    [
+                        -78.46289496772758,
+                        38.03285258798573
+                    ],
+                    [
+                        -78.46332358922241,
+                        38.03303198284971
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Prospect Avenue",
+                "Location": "Southeast",
+                "Begin": "Existing",
+                "End": "Existing",
+                "Length (ft)": 645,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $87,920 ",
+                "Engineering/Construction Cost": " $206,400 ",
+                "Total Cost": " $294,320 ",
+                "Survey/Design Begins (Fiscal Year)": 2024,
+                "Engineering/Construction Begins (Fiscal Year)": 2024
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.49480186734863,
+                        38.02469857285672
+                    ],
+                    [
+                        -78.49474704805138,
+                        38.024600841388434
+                    ],
+                    [
+                        -78.49472396624182,
+                        38.02448719998296
+                    ],
+                    [
+                        -78.4947297366947,
+                        38.024366739900046
+                    ],
+                    [
+                        -78.49477012986098,
+                        38.02421218705135
+                    ],
+                    [
+                        -78.49494035820553,
+                        38.02397353862986
+                    ],
+                    [
+                        -78.49559242052405,
+                        38.023121216048196
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Sycamore Street",
+                "Location": "North",
+                "Begin": "St. Charles Avenue",
+                "End": "601 Locust Avenue",
+                "Length (ft)": 150,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $21,060 ",
+                "Engineering/Construction Cost": " $57,600 ",
+                "Total Cost": " $78,660 ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2025
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47113367235436,
+                        38.03368618302997
+                    ],
+                    [
+                        -78.47066976995244,
+                        38.03347984367136
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "9th Street SW",
+                "Location": "East",
+                "Begin": "Elm Street",
+                "End": "Existing",
+                "Length (ft)": 760,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $106,704 ",
+                "Engineering/Construction Cost": " $291,840 ",
+                "Total Cost": " $398,544 ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2025
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4952435330638,
+                        38.028062997274105
+                    ],
+                    [
+                        -78.49532735384112,
+                        38.026005864708
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "11th Street NW",
+                "Location": "West",
+                "Begin": "West Street",
+                "End": "Existing",
+                "Length (ft)": 200,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $28,080 ",
+                "Engineering/Construction Cost": " $76,800 ",
+                "Total Cost": " $104,880 ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2026
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            -78.49414479123642,
+                            38.037854639820836
+                        ],
+                        [
+                            -78.49430138853909,
+                            38.037551209242224
+                        ]
+                    ],
+                    [
+                        [
+                            -78.49446491492625,
+                            38.03721830734153
+                        ],
+                        [
+                            -78.49437067938123,
+                            38.03741586570149
+                        ]
+                    ]
+                ],
+                "type": "MultiLineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "10 1/2 Street NW",
+                "Location": "East",
+                "Begin": "Grady Avenue",
+                "End": "West Street",
+                "Length (ft)": 420,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $58,968 ",
+                "Engineering/Construction Cost": " $161,280 ",
+                "Total Cost": " $220,248 ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2026
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.49260936133224,
+                        38.038729046077094
+                    ],
+                    [
+                        -78.49314663486872,
+                        38.03762432927198
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Orange Street",
+                "Location": "West",
+                "Begin": "Poplar Street",
+                "End": "Existing",
+                "Length (ft)": 200,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $28,898 ",
+                "Engineering/Construction Cost": " $76,800 ",
+                "Total Cost": " $105,698 ",
+                "Survey/Design Begins (Fiscal Year)": 2026,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4673685238203,
+                        38.03309771735741
+                    ],
+                    [
+                        -78.46747992557485,
+                        38.03293308868797
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Orange Street",
+                "Location": "East",
+                "Begin": "E High Street",
+                "End": "Existing",
+                "Length (ft)": 80,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $11,559 ",
+                "Engineering/Construction Cost": " $30,720 ",
+                "Total Cost": " $42,279 ",
+                "Survey/Design Begins (Fiscal Year)": 2026,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4680136278384,
+                        38.03201280886995
+                    ],
+                    [
+                        -78.46782732939376,
+                        38.03227672330439
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Blenheim Avenue",
+                "Location": "South",
+                "Begin": "Existing",
+                "End": "Rialto Street",
+                "Length (ft)": 200,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $29,716 ",
+                "Engineering/Construction Cost": " $76,800 ",
+                "Total Cost": " $106,516 ",
+                "Survey/Design Begins (Fiscal Year)": 2027,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47936852327494,
+                        38.02231716810667
+                    ],
+                    [
+                        -78.47876839944867,
+                        38.022041501850936
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Montrose Avenue",
+                "Location": "South",
+                "Begin": "Avon Street",
+                "End": "Rialto Street",
+                "Length (ft)": 350,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $52,002 ",
+                "Engineering/Construction Cost": " $134,400 ",
+                "Total Cost": " $186,402 ",
+                "Survey/Design Begins (Fiscal Year)": 2027,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48077515867512,
+                        38.021953242058146
+                    ],
+                    [
+                        -78.47931526773668,
+                        38.02128258890497
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Riverdale Drive",
+                "Location": "Southwest",
+                "Begin": "1319 Riverdale Drive",
+                "End": "Willow Drive",
+                "Length (ft)": 120,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $18,320 ",
+                "Engineering/Construction Cost": " $46,080 ",
+                "Total Cost": " $64,400 ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2028
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.46112148692389,
+                        38.03471227794975
+                    ],
+                    [
+                        -78.46141169691508,
+                        38.0349324310005
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "St. Claire Avenue",
+                "Location": "Northwest",
+                "Begin": "Peartree Ln",
+                "End": "Smith Street",
+                "Length (ft)": 280,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $42,747 ",
+                "Engineering/Construction Cost": " $107,520 ",
+                "Total Cost": " $150,267 ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2028
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.45842596779437,
+                        38.04217927593538
+                    ],
+                    [
+                        -78.45907499552085,
+                        38.04164157436398
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Blenheim Avenue",
+                "Location": "North",
+                "Begin": "Rialto Street",
+                "End": "Meridian Street",
+                "Length (ft)": 500,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $76,334 ",
+                "Engineering/Construction Cost": " $192,000 ",
+                "Total Cost": " $268,334 ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47859788861412,
+                        38.0220835293448
+                    ],
+                    [
+                        -78.47710596773638,
+                        38.02139959708521
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Blenheim Avenue",
+                "Location": "North",
+                "Begin": "Existing",
+                "End": "Avon Street",
+                "Length (ft)": 260,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $39,694 ",
+                "Engineering/Construction Cost": " $99,840 ",
+                "Total Cost": " $139,534 ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4803463653271,
+                        38.02290697953043
+                    ],
+                    [
+                        -78.48164104920713,
+                        38.02350723428523
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Bolling Avenue",
+                "Location": "Either",
+                "Begin": "Avon Street",
+                "End": "6th Street SE",
+                "Length (ft)": 470,
+                "Tier": "Tier 1",
+                "Survey/Design Cost": " $71,754 ",
+                "Engineering/Construction Cost": " $180,480 ",
+                "Total Cost": " $252,234 ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47980841389025,
+                        38.023556499060874
+                    ],
+                    [
+                        -78.48124473681771,
+                        38.024203052923525
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "W Main Street",
+                "Location": "South",
+                "Begin": "Ridge Street",
+                "End": "Existing",
+                "Length (ft)": 150,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $21,060 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2025
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48537136467364,
+                        38.030263081018376
+                    ],
+                    [
+                        -78.48588079131332,
+                        38.03038818948164
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Little High Street",
+                "Location": "Both",
+                "Begin": "12th Street NE",
+                "End": "Meade Avenue",
+                "Length (ft)": 1050,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $147,420 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2025,
+                "Engineering/Construction Begins (Fiscal Year)": 2025
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            -78.46801322782905,
+                            38.029632252308204
+                        ],
+                        [
+                            -78.46674129984518,
+                            38.029189776863404
+                        ],
+                        [
+                            -78.46626516276616,
+                            38.02893798607175
+                        ],
+                        [
+                            -78.46591474727502,
+                            38.02879365372132
+                        ]
+                    ],
+                    [
+                        [
+                            -78.46805468926829,
+                            38.02974076378621
+                        ],
+                        [
+                            -78.46723081162517,
+                            38.02946685113639
+                        ],
+                        [
+                            -78.46660889100238,
+                            38.029228757000936
+                        ],
+                        [
+                            -78.46628254985775,
+                            38.02904649857814
+                        ],
+                        [
+                            -78.46587328596411,
+                            38.02888109603279
+                        ]
+                    ]
+                ],
+                "type": "MultiLineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Greenleaf Lane",
+                "Location": "North",
+                "Begin": "Gentry Lane",
+                "End": "Rose Hill Drive",
+                "Length (ft)": 2800,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $202,285 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2026,
+                "Engineering/Construction Begins (Fiscal Year)": 2026
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48554749405982,
+                        38.05175203704067
+                    ],
+                    [
+                        -78.48528751702919,
+                        38.05129892194694
+                    ],
+                    [
+                        -78.48552669589778,
+                        38.050979556009
+                    ],
+                    [
+                        -78.48560295582685,
+                        38.050815778064106
+                    ],
+                    [
+                        -78.4856098885475,
+                        38.05070113328475
+                    ],
+                    [
+                        -78.48552669589778,
+                        38.05059194761415
+                    ],
+                    [
+                        -78.48524245434359,
+                        38.05045273564758
+                    ],
+                    [
+                        -78.48499287639358,
+                        38.05030806410713
+                    ],
+                    [
+                        -78.48469476939879,
+                        38.0500350981587
+                    ],
+                    [
+                        -78.48446252325087,
+                        38.0497566718428
+                    ],
+                    [
+                        -78.48425800798645,
+                        38.04959562084309
+                    ],
+                    [
+                        -78.48397376643226,
+                        38.04946186635374
+                    ],
+                    [
+                        -78.48366872671602,
+                        38.04939908354976
+                    ],
+                    [
+                        -78.48320076806024,
+                        38.04941273199
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Oakleaf Lane",
+                "Location": "North",
+                "Begin": "Greenleaf Lane",
+                "End": "RoseHill Drive",
+                "Length (ft)": 1100,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $93,918 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2026,
+                "Engineering/Construction Begins (Fiscal Year)": 2026
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.485246682418,
+                        38.05141865101038
+                    ],
+                    [
+                        -78.48515225616906,
+                        38.051336775049236
+                    ],
+                    [
+                        -78.48509390286867,
+                        38.05131755924913
+                    ],
+                    [
+                        -78.48499947661975,
+                        38.05130669814292
+                    ],
+                    [
+                        -78.48484351416357,
+                        38.05133092676323
+                    ],
+                    [
+                        -78.48447424578114,
+                        38.051412007435175
+                    ],
+                    [
+                        -78.48373262838632,
+                        38.051546517755355
+                    ],
+                    [
+                        -78.48310185876895,
+                        38.0516460844772
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "9th Street NW",
+                "Location": "Both",
+                "Begin": "Preston Avenue",
+                "End": "West Street",
+                "Length (ft)": 450,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $65,020 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2026,
+                "Engineering/Construction Begins (Fiscal Year)": 2026
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            -78.48901238627913,
+                            38.037261215724385
+                        ],
+                        [
+                            -78.48905264834214,
+                            38.037201132056964
+                        ],
+                        [
+                            -78.48995218758377,
+                            38.036399177279776
+                        ]
+                    ],
+                    [
+                        [
+                            -78.4898769610983,
+                            38.036338258399326
+                        ],
+                        [
+                            -78.48947222141594,
+                            38.03668123937854
+                        ],
+                        [
+                            -78.48919462508903,
+                            38.036929085947094
+                        ],
+                        [
+                            -78.4889403383776,
+                            38.037132703376045
+                        ],
+                        [
+                            -78.48889160009152,
+                            38.03714939330416
+                        ]
+                    ]
+                ],
+                "type": "MultiLineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Albemarle Street",
+                "Location": "Northwest",
+                "Begin": "Dale Avenue",
+                "End": "Rivanna Avenue",
+                "Length (ft)": 1300,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $193,152 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2027,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4860046542688,
+                        38.0363281378539
+                    ],
+                    [
+                        -78.48554388722044,
+                        38.03678045838299
+                    ],
+                    [
+                        -78.48522250370102,
+                        38.03710301148294
+                    ],
+                    [
+                        -78.48417142060796,
+                        38.03807180527602
+                    ],
+                    [
+                        -78.48376803356089,
+                        38.03848908406249
+                    ],
+                    [
+                        -78.48318840763116,
+                        38.039059200227825
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Druid Avenue",
+                "Location": "Southwest",
+                "Begin": "Monticello Avenue",
+                "End": "Rialto Street",
+                "Length (ft)": 1500,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $222,867 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2027,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47582888439152,
+                        38.01674854914137
+                    ],
+                    [
+                        -78.4759686492286,
+                        38.01673620911069
+                    ],
+                    [
+                        -78.47611684815118,
+                        38.01674854914137
+                    ],
+                    [
+                        -78.47629155419779,
+                        38.016807401568286
+                    ],
+                    [
+                        -78.47825425839162,
+                        38.01771587334713
+                    ],
+                    [
+                        -78.48076989976452,
+                        38.018848249304
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Poplar Street",
+                "Location": "North",
+                "Begin": "St. Claire Avenue",
+                "End": "Gillespie Avenue",
+                "Length (ft)": 570,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $84,690 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2027,
+                "Engineering/Construction Begins (Fiscal Year)": 2027
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.46772564823041,
+                        38.03333324304458
+                    ],
+                    [
+                        -78.46593258237979,
+                        38.032678902439585
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Kelley Avenue",
+                "Location": "East",
+                "Begin": "Taylor Street",
+                "End": "Lexington Avenue",
+                "Length (ft)": 1000,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $152,668 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2028
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.473157579711,
+                        38.03371904955779
+                    ],
+                    [
+                        -78.47278450241498,
+                        38.034261156956404
+                    ],
+                    [
+                        -78.47222552992527,
+                        38.03505158389865
+                    ],
+                    [
+                        -78.47218436277565,
+                        38.035077928918554
+                    ],
+                    [
+                        -78.47213547678471,
+                        38.035081981997564
+                    ],
+                    [
+                        -78.47161831446417,
+                        38.0348641286767
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Franklin Street",
+                "Location": "Northwest",
+                "Begin": "Carlton Ave",
+                "End": "Nassau St",
+                "Length (ft)": 1300,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $198,468 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2028,
+                "Engineering/Construction Begins (Fiscal Year)": 2028
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.46264210554455,
+                        38.02178785000467
+                    ],
+                    [
+                        -78.46297228534799,
+                        38.021284972974854
+                    ],
+                    [
+                        -78.4632474351841,
+                        38.02088613701443
+                    ],
+                    [
+                        -78.46350607603036,
+                        38.02062819303603
+                    ],
+                    [
+                        -78.46407013319441,
+                        38.020233688724886
+                    ],
+                    [
+                        -78.46483780008309,
+                        38.01975898055292
+                    ],
+                    [
+                        -78.4657843155199,
+                        38.01914120454447
+                    ],
+                    [
+                        -78.46739944111388,
+                        38.01811373566153
+                    ],
+                    [
+                        -78.46767734244864,
+                        38.0179403214845
+                    ],
+                    [
+                        -78.46784793534664,
+                        38.01789263251402
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "E Market Street",
+                "Location": "South",
+                "Begin": "Franklin Street",
+                "End": "Meade Avenue",
+                "Length (ft)": 1400,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $219,460 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2029,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.46136066312043,
+                        38.02384571439583
+                    ],
+                    [
+                        -78.46730200486812,
+                        38.0262459083979
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Blenheim Avenue",
+                "Location": "North",
+                "Begin": "Castalia Street",
+                "End": "Monticello Avenue",
+                "Length (ft)": 435,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $68,189 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2029,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47542585218895,
+                        38.02063740847902
+                    ],
+                    [
+                        -78.47411599932717,
+                        38.02002519587438
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "6th Street SE",
+                "Location": "West",
+                "Begin": "Montrose Avenue",
+                "End": "Blenheim Avenue",
+                "Length (ft)": 100,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $15,676 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2029,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48242756671783,
+                        38.02279226496003
+                    ],
+                    [
+                        -78.48192640878725,
+                        38.0234934003893
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Montrose Avenue",
+                "Location": "Northeast",
+                "Begin": "Avon Street",
+                "End": "6th Street SE",
+                "Length (ft)": 470,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $73,676 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2029,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48086873678066,
+                        38.02211080439278
+                    ],
+                    [
+                        -78.48231059279489,
+                        38.02277958609207
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Cedar Hill Road",
+                "Location": "Either",
+                "Begin": "Hydraulic Road",
+                "End": "N Berkshire Road",
+                "Length (ft)": 1070,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $167,730 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2029,
+                "Engineering/Construction Begins (Fiscal Year)": 2029
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.49654588955717,
+                        38.06251775021582
+                    ],
+                    [
+                        -78.49606191655542,
+                        38.062904243357536
+                    ],
+                    [
+                        -78.49560214220362,
+                        38.06332883910392
+                    ],
+                    [
+                        -78.49471024910034,
+                        38.0641453624591
+                    ],
+                    [
+                        -78.49419862049905,
+                        38.06464071552077
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Elliot Avenue",
+                "Location": "North",
+                "Begin": "Ridge Street",
+                "End": "Avon Street",
+                "Length (ft)": 1320,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $212,317 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2030,
+                "Engineering/Construction Begins (Fiscal Year)": 2030
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48873470730487,
+                        38.02578575514508
+                    ],
+                    [
+                        -78.48774507816232,
+                        38.02493447542864
+                    ],
+                    [
+                        -78.48705204410474,
+                        38.02435384147046
+                    ],
+                    [
+                        -78.48626210249276,
+                        38.02377551281836
+                    ],
+                    [
+                        -78.48553676599927,
+                        38.023287402755614
+                    ],
+                    [
+                        -78.48453832630243,
+                        38.02275070793419
+                    ],
+                    [
+                        -78.48146935679671,
+                        38.021351768658775
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Tarleton Dr",
+                "Location": "Either",
+                "Begin": "Greenbrier Dr",
+                "End": "Banbury St",
+                "Length (ft)": "1050",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $168,888 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2030",
+                "Engineering/Construction Begins (Fiscal Year)": "2030"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47036210027956,
+                        38.06198823880206
+                    ],
+                    [
+                        -78.47048560172959,
+                        38.06176337523169
+                    ],
+                    [
+                        -78.47059623844468,
+                        38.061554717426816
+                    ],
+                    [
+                        -78.47063997854143,
+                        38.061408859190266
+                    ],
+                    [
+                        -78.47062840028087,
+                        38.061275155551556
+                    ],
+                    [
+                        -78.47056021718868,
+                        38.06114752912316
+                    ],
+                    [
+                        -78.4703320835906,
+                        38.060930430209936
+                    ],
+                    [
+                        -78.47013782610186,
+                        38.060760260787305
+                    ],
+                    [
+                        -78.4700027463913,
+                        38.06070252464329
+                    ],
+                    [
+                        -78.46980462948278,
+                        38.060668085518216
+                    ],
+                    [
+                        -78.46956019952982,
+                        38.060668085518216
+                    ],
+                    [
+                        -78.46939038503656,
+                        38.060686317998545
+                    ],
+                    [
+                        -78.46926302416675,
+                        38.060732912093215
+                    ],
+                    [
+                        -78.46918712223379,
+                        38.06078254490109
+                    ],
+                    [
+                        -78.46905847489073,
+                        38.06092333982525
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Meade Ave",
+                "Location": "West",
+                "Begin": "Jefferson St",
+                "End": "E Market Street",
+                "Length (ft)": "340",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $51,907 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2028",
+                "Engineering/Construction Begins (Fiscal Year)": "2028"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4666055962261,
+                        38.02771666134507
+                    ],
+                    [
+                        -78.46741025893081,
+                        38.026518688013056
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48506588046621,
+                        38.019182776394956
+                    ],
+                    [
+                        -78.48577487374693,
+                        38.01817073334172
+                    ]
+                ],
+                "type": "LineString"
+            },
+            "type": "Feature",
+            "properties": {
+                "Street": "6th Street SE",
+                "Location": "West",
+                "Begin": "Rockland Ave",
+                "End": "Palatine Ave",
+                "Length (ft)": "440",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $65,374 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2027",
+                "Engineering/Construction Begins (Fiscal Year)": "2027"
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.51495336238654,
+                        38.02053205554702
+                    ],
+                    [
+                        -78.51622878967447,
+                        38.020505667670335
+                    ],
+                    [
+                        -78.51634989085137,
+                        38.02048942897267
+                    ],
+                    [
+                        -78.51656117375593,
+                        38.02042244430524
+                    ],
+                    [
+                        -78.5167673034184,
+                        38.02032095226835
+                    ],
+                    [
+                        -78.51691417080325,
+                        38.020229609315464
+                    ],
+                    [
+                        -78.51704300184264,
+                        38.02012608716427
+                    ],
+                    [
+                        -78.51718986922691,
+                        38.01999820665753
+                    ],
+                    [
+                        -78.51729808729989,
+                        38.01994949021554
+                    ],
+                    [
+                        -78.5174526845472,
+                        38.01992919168839
+                    ]
+                ],
+                "type": "LineString"
+            },
+            "type": "Feature",
+            "properties": {
+                "Street": "Sunset Ave",
+                "Location": "Either",
+                "Begin": "Jefferson Park Ave",
+                "End": "Sunset Rd",
+                "Length (ft)": "620",
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Rugby Ave",
+                "Location": "North",
+                "Begin": "Rose Hill Dr",
+                "End": "Existing",
+                "Length (ft)": "460",
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $70,227 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": "2028",
+                "Engineering/Construction Begins (Fiscal Year)": "2028"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48374492156955,
+                        38.045405567147526
+                    ],
+                    [
+                        -78.48582643558566,
+                        38.04563858596717
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Fairway Avenue",
+                "Location": "Either",
+                "Begin": "Chesapeake Street",
+                "End": "317 Fairway",
+                "Length (ft)": 400,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $64,338 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2030,
+                "Engineering/Construction Begins (Fiscal Year)": 2030
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4629794384462,
+                        38.02603906511209
+                    ],
+                    [
+                        -78.46224130329965,
+                        38.027249648856895
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Barracks Road",
+                "Location": "Southwest",
+                "Begin": "Existing",
+                "End": "250 Bypass",
+                "Length (ft)": 530,
+                "Tier": "Tier 2",
+                "Survey/Design Cost": " $85,248 ",
+                "Engineering/Construction Cost": " TBD ",
+                "Total Cost": " TBD ",
+                "Survey/Design Begins (Fiscal Year)": 2030,
+                "Engineering/Construction Begins (Fiscal Year)": 2030
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.50264729208362,
+                        38.05595167627581
+                    ],
+                    [
+                        -78.50398355638414,
+                        38.056955186713964
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Jefferson Park Avenue",
+                "Location": "North",
+                "Begin": "McCormick",
+                "End": "W Main Street",
+                "Length (ft)": 3700,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.4981141476264,
+                        38.033253178736175
+                    ],
+                    [
+                        -78.49825473943231,
+                        38.03317449671482
+                    ],
+                    [
+                        -78.49936467473852,
+                        38.032827711984055
+                    ],
+                    [
+                        -78.50158824513645,
+                        38.032259447740444
+                    ],
+                    [
+                        -78.5024132947506,
+                        38.03216036538228
+                    ],
+                    [
+                        -78.50477745695446,
+                        38.032090424767915
+                    ],
+                    [
+                        -78.5069048371802,
+                        38.032137051890345
+                    ],
+                    [
+                        -78.5074191072054,
+                        38.03212248092996
+                    ],
+                    [
+                        -78.50785198197562,
+                        38.03202631251932
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Rugby Road Extended",
+                "Location": "West",
+                "Begin": "Dairy Road",
+                "End": "250 Ramp",
+                "Length (ft)": 2600,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.48893840717808,
+                        38.05130302991293
+                    ],
+                    [
+                        -78.48902279874268,
+                        38.05166483909207
+                    ],
+                    [
+                        -78.48902904996956,
+                        38.05186420256953
+                    ],
+                    [
+                        -78.48895090963184,
+                        38.0520611042368
+                    ],
+                    [
+                        -78.48873836791377,
+                        38.05246721225174
+                    ],
+                    [
+                        -78.48849144444684,
+                        38.0528093257407
+                    ],
+                    [
+                        -78.48837267113406,
+                        38.05301360857203
+                    ],
+                    [
+                        -78.48835902059332,
+                        38.05323477064107
+                    ],
+                    [
+                        -78.48836527182019,
+                        38.05374670428753
+                    ],
+                    [
+                        -78.488330890072,
+                        38.054337392507335
+                    ],
+                    [
+                        -78.48833089047166,
+                        38.05462908447109
+                    ],
+                    [
+                        -78.48840590519632,
+                        38.05487274100213
+                    ],
+                    [
+                        -78.48853092973597,
+                        38.05502287240006
+                    ],
+                    [
+                        -78.48868095918455,
+                        38.05510162973161
+                    ],
+                    [
+                        -78.48891225458395,
+                        38.05515823651152
+                    ],
+                    [
+                        -78.48908103771315,
+                        38.05515085302085
+                    ],
+                    [
+                        -78.48939672467644,
+                        38.055086862738136
+                    ],
+                    [
+                        -78.49011561578283,
+                        38.054887508038235
+                    ],
+                    [
+                        -78.49031252943335,
+                        38.05487027982892
+                    ],
+                    [
+                        -78.49049381501631,
+                        38.054919503273766
+                    ],
+                    [
+                        -78.49062509078355,
+                        38.05501056655933
+                    ],
+                    [
+                        -78.49070323112127,
+                        38.055141008365325
+                    ],
+                    [
+                        -78.49068760305373,
+                        38.05525176066001
+                    ],
+                    [
+                        -78.49057819901172,
+                        38.055416656324894
+                    ],
+                    [
+                        -78.49031877309103,
+                        38.05574398916718
+                    ],
+                    [
+                        -78.49015936680179,
+                        38.05591873016019
+                    ],
+                    [
+                        -78.4899843324457,
+                        38.05605655374765
+                    ],
+                    [
+                        -78.48967177109547,
+                        38.05620422158938
+                    ],
+                    [
+                        -78.4894154707879,
+                        38.05634942800967
+                    ],
+                    [
+                        -78.48921230591048,
+                        38.05645525623589
+                    ],
+                    [
+                        -78.4890716533026,
+                        38.056598001043
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Locust Avenue",
+                "Location": "Northwest",
+                "Begin": "Poplar Street",
+                "End": "Calhoun Street",
+                "Length (ft)": 2920,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.46973955867003,
+                        38.034173517162316
+                    ],
+                    [
+                        -78.46898252447953,
+                        38.03525808798736
+                    ],
+                    [
+                        -78.46855260382756,
+                        38.03587152591328
+                    ],
+                    [
+                        -78.46810790699973,
+                        38.036406597530316
+                    ],
+                    [
+                        -78.46747860285772,
+                        38.037103451689404
+                    ],
+                    [
+                        -78.46668730996726,
+                        38.03775122421669
+                    ],
+                    [
+                        -78.46613589000073,
+                        38.03821987530145
+                    ],
+                    [
+                        -78.46528227641312,
+                        38.03889463492547
+                    ],
+                    [
+                        -78.46347224816189,
+                        38.04041587601344
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Alta Vista Avenue",
+                "Location": "Southwest",
+                "Begin": "Monticello Avenue",
+                "End": "6th Street SE",
+                "Length (ft)": 2600,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47576627561185,
+                        38.017597535523834
+                    ],
+                    [
+                        -78.47883722553571,
+                        38.01899302330668
+                    ],
+                    [
+                        -78.4835015893739,
+                        38.0211383707132
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Emmet Street N",
+                "Location": "West",
+                "Begin": "Stadium Road",
+                "End": "McCormick",
+                "Length (ft)": 485,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.50920684841935,
+                        38.03281718584779
+                    ],
+                    [
+                        -78.50915735133343,
+                        38.03311933273346
+                    ],
+                    [
+                        -78.50896678767938,
+                        38.03366904248546
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Yorktown Drive",
+                "Location": "Northwest",
+                "Begin": "Grove Road",
+                "End": "Bunkerhill Drive",
+                "Length (ft)": 2700,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47802880032854,
+                        38.05724737144783
+                    ],
+                    [
+                        -78.47677151469,
+                        38.05838473497781
+                    ],
+                    [
+                        -78.47655936723756,
+                        38.058635296489996
+                    ],
+                    [
+                        -78.47645017369557,
+                        38.05881216292266
+                    ],
+                    [
+                        -78.47566298574222,
+                        38.06064595873872
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "St. Clair Avenue",
+                "Location": "Northwest",
+                "Begin": "Calhoun Street",
+                "End": "Hazel Street",
+                "Length (ft)": 2270,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            -78.46190030263007,
+                            38.039263268605396
+                        ],
+                        [
+                            -78.46420897922673,
+                            38.037344077511335
+                        ]
+                    ],
+                    [
+                        [
+                            -78.46454324316606,
+                            38.03703897468975
+                        ],
+                        [
+                            -78.46577724644176,
+                            38.03600061600869
+                        ],
+                        [
+                            -78.46633332893023,
+                            38.035449443334755
+                        ],
+                        [
+                            -78.46680232018997,
+                            38.03488445788244
+                        ],
+                        [
+                            -78.46709910578774,
+                            38.03445138738803
+                        ]
+                    ]
+                ],
+                "type": "MultiLineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Rugby Road",
+                "Location": "North",
+                "Begin": "Rugby Place",
+                "End": "Preston Avenue",
+                "Length (ft)": 1400,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.49320882876376,
+                        38.0457518482597
+                    ],
+                    [
+                        -78.49517934552448,
+                        38.04488798413425
+                    ],
+                    [
+                        -78.49740300171692,
+                        38.0439073690639
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Montrose Avenue",
+                "Location": "North",
+                "Begin": "Monticello Avenue",
+                "End": "Avon Street",
+                "Length (ft)": 2000,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47299286027231,
+                        38.01856009098711
+                    ],
+                    [
+                        -78.47314481366946,
+                        38.018567132786586
+                    ],
+                    [
+                        -78.47330235358886,
+                        38.018625227608254
+                    ],
+                    [
+                        -78.4746665822511,
+                        38.01923874132015
+                    ],
+                    [
+                        -78.48069740532188,
+                        38.022046008483244
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "E High Street",
+                "Location": "Both",
+                "Begin": "Locust Ave",
+                "End": "Long St",
+                "Length (ft)": 3750,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        [
+                            -78.47135652282445,
+                            38.03159628008396
+                        ],
+                        [
+                            -78.47023440593799,
+                            38.031689551584435
+                        ],
+                        [
+                            -78.46897977776084,
+                            38.03182501712348
+                        ],
+                        [
+                            -78.46807757322945,
+                            38.031913846849335
+                        ],
+                        [
+                            -78.46758605181067,
+                            38.03195160029543
+                        ],
+                        [
+                            -78.46713776893408,
+                            38.03193383436843
+                        ],
+                        [
+                            -78.46605230410691,
+                            38.03183168020257
+                        ],
+                        [
+                            -78.46579855908257,
+                            38.03180503126586
+                        ],
+                        [
+                            -78.4655617303928,
+                            38.03179836903064
+                        ],
+                        [
+                            -78.4651303638515,
+                            38.03188941953107
+                        ],
+                        [
+                            -78.46433247870016,
+                            38.03207818523174
+                        ],
+                        [
+                            -78.4638447243755,
+                            38.03222697444684
+                        ],
+                        [
+                            -78.46345000989282,
+                            38.03239797063472
+                        ],
+                        [
+                            -78.46206286784363,
+                            38.033057528453014
+                        ],
+                        [
+                            -78.461143746977,
+                            38.03350388922456
+                        ],
+                        [
+                            -78.46056859158793,
+                            38.03386808206784
+                        ],
+                        [
+                            -78.46008929881762,
+                            38.03421006821094
+                        ],
+                        [
+                            -78.45953669854198,
+                            38.03475191021889
+                        ]
+                    ],
+                    [
+                        [
+                            -78.47120679752983,
+                            38.031724724029516
+                        ],
+                        [
+                            -78.47047657573661,
+                            38.03178246344228
+                        ],
+                        [
+                            -78.46911199138283,
+                            38.03192903251701
+                        ],
+                        [
+                            -78.46811674700888,
+                            38.032024524332456
+                        ],
+                        [
+                            -78.46741753101583,
+                            38.03206449673948
+                        ],
+                        [
+                            -78.46641664786304,
+                            38.03198232941594
+                        ],
+                        [
+                            -78.46581611797174,
+                            38.03189794125822
+                        ],
+                        [
+                            -78.46550598516406,
+                            38.031909044968785
+                        ],
+                        [
+                            -78.46508025740091,
+                            38.032000095331654
+                        ],
+                        [
+                            -78.46429928434159,
+                            38.03218663869569
+                        ],
+                        [
+                            -78.46363390849933,
+                            38.03241759461844
+                        ],
+                        [
+                            -78.46285293770163,
+                            38.032792896439446
+                        ],
+                        [
+                            -78.4615278193738,
+                            38.03341913760909
+                        ],
+                        [
+                            -78.46092728948246,
+                            38.03379221361399
+                        ],
+                        [
+                            -78.46022808189569,
+                            38.034351823782856
+                        ],
+                        [
+                            -78.45975442451619,
+                            38.03484703104638
+                        ]
+                    ]
+                ],
+                "type": "MultiLineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "Jefferson Park Avenue",
+                "Location": "Southwest",
+                "Begin": "Park Road",
+                "End": "Camellia Drive",
+                "Length (ft)": 1800,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.51462690292328,
+                        38.01952499473012
+                    ],
+                    [
+                        -78.51428340465809,
+                        38.01928543949916
+                    ],
+                    [
+                        -78.51345563014985,
+                        38.01869542049815
+                    ],
+                    [
+                        -78.51319659867075,
+                        38.018429244957986
+                    ],
+                    [
+                        -78.5128305759296,
+                        38.01777932895229
+                    ],
+                    [
+                        -78.51252649649726,
+                        38.017213695523395
+                    ],
+                    [
+                        -78.51229280505453,
+                        38.01682995105318
+                    ],
+                    [
+                        -78.5120731914096,
+                        38.01662144165516
+                    ],
+                    [
+                        -78.51172687726873,
+                        38.016326421271856
+                    ],
+                    [
+                        -78.51153260365955,
+                        38.016111255830424
+                    ],
+                    [
+                        -78.51136085452696,
+                        38.01585172553936
+                    ],
+                    [
+                        -78.51094133650079,
+                        38.015172949607205
+                    ]
+                ],
+                "type": "LineString"
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Street": "McIntire Road",
+                "Location": "West",
+                "Begin": "Schenk's Greenway",
+                "End": "County Office Building",
+                "Length (ft)": 1000,
+                "Tier": "Tier 3",
+                "Survey/Design Cost": "TBD",
+                "Engineering/Construction Cost": "TBD",
+                "Total Cost": "TBD",
+                "Survey/Design Begins (Fiscal Year)": "TBD",
+                "Engineering/Construction Begins (Fiscal Year)": "TBD"
+            },
+            "geometry": {
+                "coordinates": [
+                    [
+                        -78.47951812187085,
+                        38.03704014283119
+                    ],
+                    [
+                        -78.4795394162927,
+                        38.03686124389375
+                    ],
+                    [
+                        -78.47968137910821,
+                        38.03662364306709
+                    ],
+                    [
+                        -78.47991916682406,
+                        38.03637206488105
+                    ],
+                    [
+                        -78.4802953682839,
+                        38.03616800638363
+                    ],
+                    [
+                        -78.48181126200723,
+                        38.035348281476445
+                    ],
+                    [
+                        -78.48211648206012,
+                        38.035152606220834
+                    ]
+                ],
+                "type": "LineString"
+            }
+        }
+    ]
+}
