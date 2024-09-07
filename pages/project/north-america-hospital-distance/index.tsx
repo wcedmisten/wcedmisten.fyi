@@ -33,7 +33,8 @@ const Map = () => {
         "sources": {
           "openmaptiles": {
             "type": "vector",
-            "url": "pmtiles://https://r2.wcedmisten.fyi/north-america.pmtiles"
+            "url": "https://planet-tiles.wcedmisten.dev/planet-2024-09-06.json",
+            "maxzoom": 14
           },
           "isochrone": {
             "type": "vector",
