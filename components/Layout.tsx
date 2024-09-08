@@ -33,6 +33,7 @@ const Layout: React.FC<LayoutProps> = ({
                 {opengraph?.description && <meta property="og:description" content={opengraph.description} />}
             </>}
             <link rel="icon" href="/favicon.ico" />
+            <link rel="me" href="https://mastodon.social/@wcedmisten"></link>
             <link
                 rel="alternate"
                 type="application/rss+xml"
