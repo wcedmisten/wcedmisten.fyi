@@ -2,9 +2,8 @@ import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
 
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 
-import maplibregl from "maplibre-gl";
+import maplibregl, { LngLatBounds, LngLatLike } from "maplibre-gl";
 import * as pmtiles from "pmtiles";
 import layer from "./positron_style.json"
 import hospitals from "./hospitals_layer.json"
@@ -88,11 +87,6 @@ const Map = () => {
       center: [lng, lat],
       zoom: zoom,
       minZoom: 4,
-      // maxBounds: [
-      //   [-84.71490710282056,
-      //     35.77320086387027],
-      //   [-73.94080914265395,
-      //     39.73148308878754]],
       customAttribution: ["© OpenMapTiles", "© OpenStreetMap"],
     });
 
@@ -126,12 +120,34 @@ const Map = () => {
           'fill-opacity',
           ['match', ['get', 'name'], e?.features?.[0]?.properties?.name, 0.5, 0.1]
         );
+
+        const coordinates = voronoi.features.filter((f: any) => f.properties.name === e?.features?.[0]?.properties?.name).flatMap((f: any) => f.geometry.coordinates).flat()
+        console.log({coordinates})
+
+        const bounds = coordinates.reduce((bounds: LngLatBounds, coord: LngLatLike) => {
+          return bounds.extend(coord);
+        }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+    
+        map?.current?.fitBounds(bounds, {
+          padding: 40
+        });
       } else {
         (map.current as any).setPaintProperty(
           "voronoi",
           'fill-opacity',
           ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
         );
+
+        const coordinates = voronoi.features.filter((f: any) => f.properties.operator === e?.features?.[0]?.properties?.operator).flatMap((f: any) => f.geometry.coordinates).flat()
+        console.log({coordinates})
+
+        const bounds = coordinates.reduce((bounds: LngLatBounds, coord: LngLatLike) => {
+          return bounds.extend(coord);
+        }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+    
+        map?.current?.fitBounds(bounds, {
+          padding: 40
+        });
       }
 
     });
@@ -142,11 +158,19 @@ const Map = () => {
     });
 
     map.current.on('mousemove', 'voronoi', (e) => {
-      (map.current as any).setPaintProperty(
-        "voronoi",
-        'fill-opacity',
-        ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
-      );
+      if (e?.features?.[0]?.properties?.operator === "UNKNOWN") {
+        (map.current as any).setPaintProperty(
+          "voronoi",
+          'fill-opacity',
+          ['match', ['get', 'name'], e?.features?.[0]?.properties?.name, 0.5, 0.1]
+        );
+      } else {
+        (map.current as any).setPaintProperty(
+          "voronoi",
+          'fill-opacity',
+          ['match', ['get', 'operator'], e?.features?.[0]?.properties?.operator, 0.5, 0.1]
+        );
+      }
     });
 
 
@@ -197,22 +221,29 @@ const Map = () => {
               <p>Hospital Operators (click to focus)</p>
               <div className="legend-group">
                 {Object.entries(colorMap).map(([operator, color]) => {
+                  const onClick = () => {
+                    map.current?.setPaintProperty(
+                      "voronoi",
+                      'fill-opacity',
+                      ['match', ['get', 'operator'], operator, 0.5, 0.1]
+                    );
+
+                    const coordinates = voronoi.features.filter((f: any) => f.properties.operator === operator).flatMap((f: any) => f.geometry.coordinates).flat()
+                    console.log({coordinates})
+
+                    const bounds = coordinates.reduce((bounds: LngLatBounds, coord: LngLatLike) => {
+                      return bounds.extend(coord);
+                    }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
+                
+                    map?.current?.fitBounds(bounds, {
+                      padding: 40
+                    });
+                  }
+
                   return <><div className="legend-element"
-                    onClick={() => {
-                      map.current?.setPaintProperty(
-                        "voronoi",
-                        'fill-opacity',
-                        ['match', ['get', 'operator'], operator, 0.5, 0.1]
-                      );
-                    }}>
+                    onClick={onClick}>
                     <span
-                      onClick={() => {
-                        map.current?.setPaintProperty(
-                          "voronoi",
-                          'fill-opacity',
-                          ['match', ['get', 'operator'], operator, 0.5, 0.1]
-                        );
-                      }}
+                      onClick={onClick}
                       className="legend-color"
                       style={{ backgroundColor: color as any }} />{operator}</div>
                   </>
