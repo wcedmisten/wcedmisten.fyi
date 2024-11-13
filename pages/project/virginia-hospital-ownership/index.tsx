@@ -109,9 +109,11 @@ const Map = () => {
     // When a click event occurs on a feature in the states layer, open a popup at the
     // location of the click, with description HTML from its properties.
     map.current.on('click', 'voronoi', (e) => {
+
+      const popupHtml = `<p>🏥 Hospital Name: </p><p><b>${e?.features?.[0]?.properties?.name}</b></p><p>🔗 Network:</p><p><b>${e?.features?.[0]?.properties?.operator}</b></p>`
       new maplibregl.Popup()
         .setLngLat(e.lngLat)
-        .setHTML(e?.features?.[0]?.properties?.operator)
+        .setHTML(popupHtml)
         .addTo(map.current as any);
 
       if (e?.features?.[0]?.properties?.operator === "UNKNOWN") {
