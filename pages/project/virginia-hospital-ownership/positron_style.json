@@ -2377,7 +2377,7 @@
         "layout": {
             "icon-image": "hospitalMarker",
             "icon-size": 0.5,
-            "icon-allow-overlap": true
+            "icon-allow-overlap": false
         },
         "paint": {
             "icon-color": "rgb(24, 26, 24)"
