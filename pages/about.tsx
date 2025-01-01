@@ -7,12 +7,11 @@ function AboutPage() {
             <Row>
                 <Col xs={{ span: 12 }} md={{ span: 6 }}>
                     <p>Hello! I'm William Edmisten, a full stack software engineer working
-                        for OneStudyTeam (but all opinions are my own).
+                        for Capital One (but all opinions are my own).
                     </p>
 
                     <p>
-                        I have a Bachelor of Science
-                        in Computer Science from Virginia Tech.
+                        I have a B.S. in Computer Science from Virginia Tech.
                     </p>
 
                     <p>I frequently start hobby projects, and I'm hoping this blog
