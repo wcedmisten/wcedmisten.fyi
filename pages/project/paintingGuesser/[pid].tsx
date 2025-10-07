@@ -57,7 +57,7 @@ export const Guesser = (props: GuesserProps) => {
                 </Row>
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <Link href={"/project/paintingGuesser"}>
+                        <Link legacyBehavior href={"/project/paintingGuesser"}>
                             <a>Back to the game</a>
                         </Link>
                     </Col>

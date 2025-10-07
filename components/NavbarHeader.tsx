@@ -11,7 +11,7 @@ export default function NavbarHeader() {
     return (
         <Navbar className={style.Navbar} expand="lg" expanded={expanded}>
             <Container>
-                <Link href="/" passHref>
+                <Link legacyBehavior href="/" passHref>
                     <Navbar.Brand >
                         <div>
                             <img
@@ -29,19 +29,19 @@ export default function NavbarHeader() {
                 <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                     <div className="d-flex justify-content-end">
                         <Nav onSelect={() => setExpanded(false)}>
-                            <Link href="/" passHref>
+                            <Link legacyBehavior href="/" passHref>
                                 <Nav.Link>Posts</Nav.Link>
                             </Link>
-                            <Link href="/about" passHref>
+                            <Link legacyBehavior href="/about" passHref>
                                 <Nav.Link>About</Nav.Link>
                             </Link>
-                            <Link href="/projects" passHref>
+                            <Link legacyBehavior href="/projects" passHref>
                                 <Nav.Link>Projects</Nav.Link>
                             </Link>
-                            <Link href="/talks" passHref>
+                            <Link legacyBehavior href="/talks" passHref>
                                 <Nav.Link>Talks</Nav.Link>
                             </Link>
-                            <Link href="/william-edmisten-resume-2024.pdf" passHref>
+                            <Link legacyBehavior href="/william-edmisten-resume-2024.pdf" passHref>
                                 <Nav.Link>Résumé</Nav.Link>
                             </Link>
                         </Nav>

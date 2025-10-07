@@ -32,7 +32,7 @@ export default function PostItem(props: PostItemProps
                     <Col xs={12} md={4} >
                         <Container fluid className="justify-content-md-center" style={{ padding: "2 0 2 0" }}>
                             <Row>
-                                <Link href={href}>
+                                <Link legacyBehavior href={href}>
                                     <a>
                                         <Image
                                             src={thumbnailURL}
@@ -49,7 +49,7 @@ export default function PostItem(props: PostItemProps
                     <Col>
                         <Container fluid className="justify-content-md-center">
                             <Row>
-                                <Link href={href}>
+                                <Link legacyBehavior href={href}>
                                     <a className={style.PostTitleLink} >{title}</a>
                                 </Link>
                             </Row>

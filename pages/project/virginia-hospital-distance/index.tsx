@@ -42,7 +42,7 @@ const Map = () => {
           },
           "hospitals": {
             "type": "geojson",
-            "data": hospitals
+            "data": hospitals as any
           },
         },
         layers: layer as any,
@@ -50,12 +50,6 @@ const Map = () => {
       center: [lng, lat],
       zoom: zoom,
       minZoom: 4,
-      // maxBounds: [
-      //   [-84.71490710282056,
-      //     35.77320086387027],
-      //   [-73.94080914265395,
-      //     39.73148308878754]],
-      customAttribution: ["© OpenMapTiles", "© OpenStreetMap contributors"],
     });
 
     if (!popup.current) {
@@ -66,13 +60,7 @@ const Map = () => {
       });
     }
 
-    map.current.loadImage(
-      '/virginia-hospital-distance/hospital-solid.png',
-      // Add an image to use as a custom marker
-      function (error, image: any) {
-        if (error) throw error;
-        map.current?.addImage('hospitalMarker', image);
-      })
+    map.current.loadImage('/virginia-hospital-distance/hospital-solid.png')
 
     map.current.fitBounds([
       [

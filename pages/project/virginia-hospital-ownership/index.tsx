@@ -75,19 +75,18 @@ const Map = () => {
           },
           "hospitals": {
             "type": "geojson",
-            "data": hospitals
+            "data": hospitals as any
           },
           "voronoi": {
             "type": "geojson",
-            "data": voronoi
+            "data": voronoi as any
           }
         },
         layers: layer as any,
       },
       center: [lng, lat],
       zoom: zoom,
-      minZoom: 4,
-      customAttribution: ["© OpenMapTiles", "© OpenStreetMap"],
+      minZoom: 4
     });
 
     if (!popup.current) {
@@ -98,13 +97,7 @@ const Map = () => {
       });
     }
 
-    map.current.loadImage(
-      '/virginia-hospital-distance/hospital-solid.png',
-      // Add an image to use as a custom marker
-      function (error, image: any) {
-        if (error) throw error;
-        map.current?.addImage('hospitalMarker', image);
-      })
+    map.current.loadImage('/virginia-hospital-distance/hospital-solid.png')
 
     // When a click event occurs on a feature in the states layer, open a popup at the
     // location of the click, with description HTML from its properties.

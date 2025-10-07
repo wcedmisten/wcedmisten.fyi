@@ -6,12 +6,9 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import '../styles/styles.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <SSRProvider>
-      <Layout opengraph={pageProps.opengraph}>
+  return <Layout opengraph={pageProps.opengraph}>
         <Component {...pageProps} />
       </Layout>
-    </SSRProvider>)
 }
 
 export default MyApp
