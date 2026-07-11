@@ -30,19 +30,22 @@ export default function NavbarHeader() {
                     <div className="d-flex justify-content-end">
                         <Nav onSelect={() => setExpanded(false)}>
                             <Link href="/" passHref>
-                                <Nav.Link>Posts</Nav.Link>
+                                <Nav.Link className={style.NavLink}>Posts</Nav.Link>
                             </Link>
                             <Link href="/about" passHref>
-                                <Nav.Link>About</Nav.Link>
+                                <Nav.Link className={style.NavLink}>About</Nav.Link>
                             </Link>
                             <Link href="/projects" passHref>
-                                <Nav.Link>Projects</Nav.Link>
+                                <Nav.Link className={style.NavLink}>Projects</Nav.Link>
                             </Link>
                             <Link href="/talks" passHref>
-                                <Nav.Link>Talks</Nav.Link>
+                                <Nav.Link className={style.NavLink}>Talks</Nav.Link>
                             </Link>
                             <Link href="/william-edmisten-resume-2024.pdf" passHref>
-                                <Nav.Link>Résumé</Nav.Link>
+                                <Nav.Link className={style.NavLink}>Résumé</Nav.Link>
+                            </Link>
+                            <Link href="https://square.link/u/nVH6Yoq7" passHref>
+                                <Nav.Link className={style.BuyMeACoffeeLink}>Buy Me a Coffee</Nav.Link>
                             </Link>
                         </Nav>
                     </div>
